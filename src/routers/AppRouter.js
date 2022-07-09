@@ -21,11 +21,10 @@ export const AppRouter = () => {
                     component={AuthRouter}
                 />
                 <Route 
-                    exact
                     path="/"
                     component={AppScreen}
                 />
-                <Route exact component={AppScreen}/>
+                <Redirect to="/notFound"/>
             </Switch>
         </div>        
     </Router>

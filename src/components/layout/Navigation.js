@@ -1,8 +1,5 @@
-// import React, { useState } from 'react'
-// import Navbar from 'react-bootstrap/Navbar';
-// import Nav from 'react-bootstrap/Nav';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
-// import Container from 'react-bootstrap/Container';
+import React from 'react'
+import { Link } from "react-router-dom"
 
 export const Navigation = () => {
 
@@ -14,14 +11,14 @@ export const Navigation = () => {
             <a href="#" className="nk-nav-toggle nk-quick-nav-icon" data-target="headerNav"><em className="icon ni ni-menu" /></a>
           </div>
           <div className="nk-header-brand">
-            <a href="html/index.html" className="logo-link">
+            <a href="#"  className="logo-link">
               <img className="logo-light logo-img" src="~/images/logo.png" srcSet="~/images/logo2x.png 2x" />             
             </a>
           </div>{/* .nk-header-brand */}
           <div className="nk-header-menu" data-content="headerNav">
             <div className="nk-header-mobile">
               <div className="nk-header-brand">
-                <a href="html/index.html" className="logo-link">
+                <a href="#"  className="logo-link">
                   <img className="logo-light logo-img" src="~/images/logo.png" srcSet="~/images/logo2x.png 2x"  />
                   <img className="logo-dark logo-img" src="~/images/logo-dark.png" srcSet="~/images/logo-dark2x.png 2x"  />
                 </a>
@@ -37,22 +34,22 @@ export const Navigation = () => {
                 </a>
                 <ul className="nk-menu-sub">
                   <li className="nk-menu-item">
-                    <a href="html/index.html" className="nk-menu-link">
+                    <a href="#"  className="nk-menu-link">
                       <span className="nk-menu-text">Default Dashboard</span>
                     </a>
                   </li>{/* .nk-menu-item */}
                   <li className="nk-menu-item">
-                    <a href="html/index-sales.html" className="nk-menu-link">
+                    <a href="#" className="nk-menu-link">
                       <span className="nk-menu-text">Sales Dashboard</span>
                     </a>
                   </li>{/* .nk-menu-item */}
                   <li className="nk-menu-item">
-                    <a href="html/index-crypto.html" className="nk-menu-link">
+                    <a href="#"  className="nk-menu-link">
                       <span className="nk-menu-text">Crypto Dashboard</span>
                     </a>
                   </li>{/* .nk-menu-item */}
                   <li className="nk-menu-item">
-                    <a href="html/index-analytics.html" className="nk-menu-link">
+                    <a href="#"  className="nk-menu-link">
                       <span className="nk-menu-text">Analytics Dashboard</span>
                     </a>
                   </li>{/* .nk-menu-item */}
@@ -60,7 +57,7 @@ export const Navigation = () => {
                     <h6 className="overline-title text-primary">Use-Case Concept</h6>
                   </li>{/* .nk-menu-item */}
                   <li className="nk-menu-item">
-                    <a href="html/invest/index.html" className="nk-menu-link" target="_blank">
+                    <a href="#"  className="nk-menu-link" target="_blank">
                       <span className="nk-menu-text">Investment Panel</span>
                       <span className="nk-menu-badge">HOT</span>
                     </a>
@@ -73,7 +70,11 @@ export const Navigation = () => {
                 </a>
                 <ul className="nk-menu-sub">
                   <li className="nk-menu-item">
-                    <a href="html/apps-messages.html" className="nk-menu-link"><span className="nk-menu-text">Cargue Masivo</span></a>
+                  <Link 
+                    className="nk-menu-link"
+                    to="/CargueMasivo">
+                      <span className="nk-menu-text">Cargue Masivo</span> 
+                  </Link>  
                   </li>
                   <li className="nk-menu-item">
                     <a href="html/apps-messages.html" className="nk-menu-link"><span className="nk-menu-text">Administrar Cargas</span></a>
@@ -86,7 +87,7 @@ export const Navigation = () => {
                 </a>
                 <ul className="nk-menu-sub">
                   <li className="nk-menu-item">
-                    <a href="html/apps-messages.html" className="nk-menu-link"><span className="nk-menu-text">Asignar Documentos</span></a>
+                    <a href="#"  className="nk-menu-link"><span className="nk-menu-text">Asignar Documentos</span></a>
                   </li>
                 </ul>{/* .nk-menu-sub */}
               </li>{/* .nk-menu-item */}
@@ -96,10 +97,10 @@ export const Navigation = () => {
                 </a>
                 <ul className="nk-menu-sub">
                   <li className="nk-menu-item">
-                    <a href="html/_blank.html" className="nk-menu-link"><span className="nk-menu-text">Tareas Asignadas</span></a>
+                    <Link to="/tareasAnalista" className="nk-menu-link"><span className="nk-menu-text">Tareas Asignadas</span> </Link>
                   </li>
                   <li className="nk-menu-item">
-                    <a href="html/pages/terms-policy.html" className="nk-menu-link"><span className="nk-menu-text">Documentos Indexados</span></a>
+                    <a href="#"  className="nk-menu-link"><span className="nk-menu-text">Documentos Indexados</span></a>
                   </li>
                 </ul>{/* .nk-menu-sub */}
               </li>{/* .nk-menu-item */}
@@ -127,10 +128,10 @@ export const Navigation = () => {
                     </a>
                     <ul className="nk-menu-sub">
                       <li className="nk-menu-item">
-                        <a href="html/pages/auths/auth-login.html" className="nk-menu-link" target="_blank"><span className="nk-menu-text">Tabla de retención documental</span></a>
+                        <a href="#"  className="nk-menu-link" target="_blank"><span className="nk-menu-text">Tabla de retención documental</span></a>
                       </li>
                       <li className="nk-menu-item">
-                        <a href="html/pages/auths/auth-login.html" className="nk-menu-link" target="_blank"><span className="nk-menu-text">Campos personalizados</span></a>
+                        <a href="#"  className="nk-menu-link" target="_blank"><span className="nk-menu-text">Campos personalizados</span></a>
                       </li>
                     </ul>{/* .nk-menu-sub */}
                   </li>{/* .nk-menu-item */}

@@ -5,43 +5,50 @@ import {
     Route,   
     Redirect
   } from "react-router-dom";
+import { Dashboard } from '../components/app/dashboard/Dashboard';
+import { CargueMasivo } from '../components/app/digitalizar/CargueMasivo';
 import { IndexarDocumento } from '../components/app/indexar/IndexarDocumento';
 import { TareasAsignadas } from '../components/app/indexar/TareasAsignadas';
+import { PageNotFound } from '../components/app/notFound/PageNotFound';
   
 export const AppScreenRouter = () => {
   return (
-    <Router>
         <div>
             <Switch>
+                
                 <Route 
-                    exact path="/"
-                    //component={AuthRouter}
-                >
-                    home
-                </Route>
+                    exact
+                    path="/"
+                    component={ Dashboard }
+                 />   
 
                 <Route 
                     exact
-                    path="/tareasanalista"
-                    component={TareasAsignadas}>                    
-                </Route>
+                    path="/tareasAnalista"
+                    component={TareasAsignadas}
+                />  
 
                 <Route 
                     exact
                     path="/indexar"
-                    component={IndexarDocumento}>                    
-                </Route>
+                    component={IndexarDocumento}
+                /> 
+                
+                <Route
+                    exact
+                    path="/CargueMasivo"
+                    component={CargueMasivo}
+                />                    
 
-                <Route exact path="/notFound" 
-                    //component={AppScreen}
-                >
-                    404 not found
-                </Route>
+                <Route 
+                    exact 
+                    path="/notFound" 
+                    component={PageNotFound}
+                />
                     
                 <Redirect to="/notFound"/> 
                 
             </Switch>
         </div>        
-    </Router>
   )
 }

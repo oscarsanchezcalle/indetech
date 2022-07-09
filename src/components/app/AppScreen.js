@@ -12,10 +12,11 @@ export const AppScreen = () => {
         <div className="container-xl wide-xl">
           <div className="nk-content-inner">
             <div className="nk-content-body">
+
               
               {/* Rutas con el navbar */}
               <AppScreenRouter />
-             
+
             </div>
           </div>
         </div>
