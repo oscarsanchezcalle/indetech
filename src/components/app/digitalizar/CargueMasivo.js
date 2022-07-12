@@ -1,85 +1,64 @@
-import React from 'react'
-const {
-    AnonymousCredential,
-    ShareServiceClient,
-    newPipeline,
-  } = require("@azure/storage-file-share");
+import React, { useState } from 'react'
+import { CajaCard } from './CajaCard';
 
 export const CargueMasivo = () => {
 
-  // Fill in following settings before running this sample
-  const account = process.env.ACCOUNT_NAME || "indetechstorage";
-  const accountSas = process.env.ACCOUNT_SAS || "?sv=2021-06-08&ss=f&srt=sco&sp=rwdlc&se=2023-07-09T13:03:55Z&st=2022-07-09T05:03:55Z&spr=https&sig=QncaMFN7BQ44GIJkIyQAhHuMp98oPQUv9ZtkKUc3n8U%3D";
+  // toDo pasa para el estado global
+  const [cardCajas, setCardCajas] = useState([1,2]); 
 
-  const shareName = "proyectoa";
-  const directoryName = "cargue";
-  
-  const  uploadFile = async (browserFile) => {
-
-    
-    const pipeline = newPipeline(new AnonymousCredential(), {
-        // httpClient: MyHTTPClient, // A customized HTTP client implementing IHttpClient interface
-        retryOptions: { maxTries: 4 },
-        userAgentOptions: { userAgentPrefix: "AdvancedSample V1.0.0" },
-        keepAliveOptions: {
-          // Keep alive is enabled by default, disable keep alive by setting false
-          enable: false,
-        },
-      });
-    
-      const serviceClient = new ShareServiceClient(
-        `https://${account}.file.core.windows.net${accountSas}`,
-        pipeline
-      );
-    
-    //indico el share
-    const shareClient = serviceClient.getShareClient(shareName);
-    
-    //indico el directorio
-    const directoryClient = shareClient.getDirectoryClient(directoryName);
-    
-    //indico en que carpeta cargo el archivo
-    const fileClient = directoryClient.getFileClient(browserFile.name);
-    
-    console.log(browserFile);
-
-    await fileClient.uploadData(browserFile, {
-        rangeSize: 4 * 1024 * 1024, // 4MB range size
-        concurrency: 20, // 20 concurrency
-        onProgress: ev => {
-            console.log(browserFile.name + ": ");
-            console.log(ev);
-        }
-      });
+  const handleNewCaja = () => {
+    const i = cardCajas[cardCajas.length-1] + 1;
+    setCardCajas([...cardCajas, i]);
   }
 
-  const handleFileChange = (e) => {
-    console.log(e.target.files);
-    
-    
-    const file = e.target.files[0];
-    // if(file){
-    //     // uploading file
-    //     uploadFile(file);
-    // }
-
-    e.target.files.forEach(file =>  {
-        uploadFile(file)
-    });
-
-
-  }
 
   return (
     <>
-    <div>CargueMasivo</div>
+    <div className="nk-block-head nk-block-head-sm">
+      <div className="nk-block-between">
+        <div className="nk-block-head-content">
+          <h3 className="nk-block-title page-title">Cargue Masivo</h3>
+          <div className="nk-block-des text-soft">
+            <p>Subir masivamente las carpetas que contienen la(s) caja(s)</p>
+          </div>
+        </div>
+        <div className="nk-block-head-content">
+          <div className="toggle-wrap nk-block-tools-toggle">
+            <a
+              href="#"
+              className="btn btn-icon btn-trigger toggle-expand me-n1"
+              data-target="pageMenu"
+            >
+              <em className="icon ni ni-menu-alt-r" />
+            </a>
+            <div className="toggle-expand-content" data-content="pageMenu">
+              <ul className="nk-block-tools g-3">
+                <li className="nk-block-tools-opt d-none d-sm-block">
+                  <button onClick={handleNewCaja} className="btn btn-primary">
+                    <em className="icon ni ni-plus" />
+                    <span>Agregar Caja</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-     <input 
+    <div className='row'>
+      {
+        cardCajas.map(cajaIndex => (
+          <CajaCard key={cajaIndex} cardNumber={cajaIndex}/>
+        ))
+      }
+    </div>
+     {/* <input 
           id="fileSelector"
           type="file" 
           name="file"
           multiple
-          onChange={handleFileChange}/>
+          onChange={handleFileChange}/> */}
     </>
   )
 }
