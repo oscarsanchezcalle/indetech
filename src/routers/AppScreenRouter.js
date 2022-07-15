@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-    BrowserRouter as Router,
     Switch,
     Route,   
     Redirect
@@ -10,6 +9,7 @@ import { CargueMasivo } from '../components/app/digitalizar/CargueMasivo';
 import { IndexarDocumento } from '../components/app/indexar/IndexarDocumento';
 import { TareasAsignadas } from '../components/app/indexar/TareasAsignadas';
 import { PageNotFound } from '../components/app/notFound/PageNotFound';
+import { CarpetasScreen } from '../components/app/organizar/CarpetasScreen';
   
 export const AppScreenRouter = () => {
   return (
@@ -40,6 +40,12 @@ export const AppScreenRouter = () => {
                     component={CargueMasivo}
                 />                    
 
+                <Route 
+                    exact 
+                    path="/administrarCarpetas" 
+                    component={CarpetasScreen}
+                />
+                
                 <Route 
                     exact 
                     path="/notFound" 

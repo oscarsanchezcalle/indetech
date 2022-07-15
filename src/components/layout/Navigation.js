@@ -66,6 +66,20 @@ export const Navigation = () => {
               </li>{/* .nk-menu-item */}
               <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
+                  <span className="nk-menu-text">FUID</span>
+                </a>
+                <ul className="nk-menu-sub">
+                  <li className="nk-menu-item">
+                  <Link 
+                    className="nk-menu-link"
+                    to="/administrarCarpetas">
+                      <span className="nk-menu-text">Gestionar FUID</span> 
+                  </Link>  
+                  </li>
+                </ul>{/* .nk-menu-sub */}
+              </li>{/* .nk-menu-item */}
+              <li className="nk-menu-item has-sub">
+                <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">Digitalización</span>
                 </a>
                 <ul className="nk-menu-sub">
