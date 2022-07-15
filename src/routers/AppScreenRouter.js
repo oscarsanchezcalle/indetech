@@ -9,7 +9,7 @@ import { CargueMasivo } from '../components/app/digitalizar/CargueMasivo';
 import { IndexarDocumento } from '../components/app/indexar/IndexarDocumento';
 import { TareasAsignadas } from '../components/app/indexar/TareasAsignadas';
 import { PageNotFound } from '../components/app/notFound/PageNotFound';
-import { CarpetasScreen } from '../components/app/organizar/CarpetasScreen';
+import { FUIDScreen } from '../components/app/organizar/FUIDScreen';
   
 export const AppScreenRouter = () => {
   return (
@@ -42,8 +42,8 @@ export const AppScreenRouter = () => {
 
                 <Route 
                     exact 
-                    path="/administrarCarpetas" 
-                    component={CarpetasScreen}
+                    path="/administrarFuid" 
+                    component={FUIDScreen}
                 />
                 
                 <Route 

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { baseUrl } from '../helpers';
 
-const carpetaApi = axios.create({
+const indetechApi = axios.create({
     baseURL: baseUrl
 });
 
 //interceptors
-carpetaApi.interceptors.request.use( config => {
+indetechApi.interceptors.request.use( config => {
 
     config.headers = {
         ...config.headers,
@@ -16,4 +16,4 @@ carpetaApi.interceptors.request.use( config => {
     return config;
 })
 
-export default carpetaApi;
+export default indetechApi;

@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Titulo } from '../Titulo';
-import { useCarpetaStore } from './../../../hooks';
+import { useCajaStore } from '../../../hooks';
+import { cajaSlice } from '../../../store';
 
-export const CarpetasScreen = () => {
+export const FUIDScreen = () => {
   
    // const dispatch = useDispatch();
-    const { startLoadingCarpetas } = useCarpetaStore();
-    const { carpetas } = useCarpetaStore();
+    const { startLoadingCajas } = useCajaStore();
+    const { cajas } = useCajaStore();
 
     //cargo la primera vez
     useEffect(() => {
-        startLoadingCarpetas();
+        startLoadingCajas();
     }, [])
     
     
@@ -46,15 +47,15 @@ export const CarpetasScreen = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {carpetas.map( carpeta => (
-                                    <tr key={carpeta.id }>
+                                {cajas.map( caja => (
+                                    <tr key={caja.id }>
                                         <td>
                                             <span className="tb-odr-id">
-                                                {carpeta.id}
+                                                {caja.id}
                                             </span>
                                         </td>
                                         <td>
-                                            <span className="tb-odr-date">{ carpeta.descripcion }</span>
+                                            <span className="tb-odr-date">{ caja.descripcion }</span>
                                         </td>
                                      </tr>         
                                 ))}

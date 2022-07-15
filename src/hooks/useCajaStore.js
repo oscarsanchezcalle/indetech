@@ -1,36 +1,36 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { indetechApi } from '../api';
-import { onLoadCarpetas } from '../store';
+import { onLoadCajas } from '../store';
 
-export const useCarpetaStore = () => {
+export const useCajaStore = () => {
   
     const dispatch = useDispatch();
-    const { carpetas } = useSelector( state => state.carpeta );
+    const { cajas } = useSelector( state => state.caja );
 
-    const startLoadingCarpetas = async() => {
+    const startLoadingCajas = async() => {
+       
         try {
 
-            const { data } = await indetechApi.get('/carpeta');
+            const { data } = await indetechApi.get('/caja');
             //const { data } = await carpetaApi.post('/caja',{criteria1, criteria2});
             
-            // es un mapeo para formatear las fechas carpetas = convertEventsToDateEvents( data.eventos ); 
             console.log(data);
             //escribo en el store
-            dispatch( onLoadCarpetas( data.carpetas ) );
+            dispatch( onLoadCajas( data.cajas ) );
 
         } catch (error) {
-          console.log('Error cargando carpetas');
+          console.log('Error cargando cajas');
           console.log(error)
         }
     }
     
     return {
         //* Propiedades
-        carpetas,
+        cajas,
         // events,
         // hasEventSelected: !!activeEvent,
 
         //* Métodos
-        startLoadingCarpetas
+        startLoadingCajas
     }
 }

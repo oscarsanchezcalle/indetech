@@ -72,7 +72,7 @@ export const Navigation = () => {
                   <li className="nk-menu-item">
                   <Link 
                     className="nk-menu-link"
-                    to="/administrarCarpetas">
+                    to="/administrarFuid">
                       <span className="nk-menu-text">Gestionar FUID</span> 
                   </Link>  
                   </li>
