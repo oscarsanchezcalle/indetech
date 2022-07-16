@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CajaCard } from './CajaCard';
 
 export const CargueMasivo = () => {
@@ -10,6 +10,11 @@ export const CargueMasivo = () => {
     const i = cardCajas[cardCajas.length-1] + 1;
     setCardCajas([...cardCajas, i]);
   }
+  
+  useEffect(() => {
+    //startLoadingCajas();
+    document.body.style.zoom = "90%";
+  }, []);
 
 
   return (
