@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react'
 import Select from 'react-select'
 
-import { useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore } from '../../../hooks';
+import 
+{ 
+    useAuthStore, useDependieciaStore, useOficinaStore, 
+    useSerieStore, useForm, useFormStore
+} from '../../../hooks';
+
 
 export const Filtros = () => {
    
@@ -9,20 +14,55 @@ export const Filtros = () => {
     const { startLoadingDependencias, dependencias } = useDependieciaStore();
     const { startLoadingOficinas, oficinas } = useOficinaStore();
     const { startLoadingSeries } = useSerieStore();
-
+    const { setFuidFormValues, resetFuidFormValues, fuidForm } = useFormStore();
+    
+    //useForm
+    const documentoForm = {};
+    const [formValues, handleInputChange, handleSelectChange, reset] = useForm(documentoForm);
+    
     //cargo la primera vez
     useEffect(() => {
          startLoadingDependencias(proyectoId);
     }, [])
 
-    const handleSelectDependenciaChange = ( selectedOption) => {   
-        //ToDo: agregar al estado de formularioFuid el campo dependencia
+    const handleSelectDependenciaChange = ( selectedOption, name ) => {           
         startLoadingOficinas(selectedOption.value);
+        handleSelectChange(selectedOption, name);
+        
+        // actualizo el storage
+        setFuidFormValues({
+            ...fuidForm,
+            [ name ]: selectedOption.value
+        });
     }
 
-    const handleSelectSubDependenciaChange = ( selectedOption) => {   
-        //ToDo: agregar al estado de formularioFuid el campo dependencia        
+    const handleSelectSubDependenciaChange = ( selectedOption, name ) => {           
         startLoadingSeries(selectedOption.value);
+        handleSelectChange(selectedOption, name);        
+
+         // actualizo el storage
+         setFuidFormValues({
+            ...fuidForm,
+            [ name ]: selectedOption.value
+        });
+    }
+
+    const handleInputCajaChange = ( {target} ) => {           
+        
+        handleInputChange({target});        
+
+         // actualizo el storage
+         setFuidFormValues({
+            ...fuidForm,
+            [ target.name ]: target.value
+        });
+    }
+
+
+    const handleBtnBuscarCaja = () => {
+        // console.log(formValues);
+        // console.log(proyectoId);
+        //resetFuidFormValues();
     }
 
   return (
@@ -40,7 +80,7 @@ export const Filtros = () => {
             <Select
                     options={dependencias}         
                     placeholder='Selecciona la dependencia'
-                    onChange={(selecteOption) => handleSelectDependenciaChange(selecteOption)}
+                    onChange={(selectedOption) => handleSelectDependenciaChange(selectedOption, "dependecia")}
                     />
             </div>
         </div>
@@ -50,7 +90,7 @@ export const Filtros = () => {
             <Select
                     options={oficinas}   
                     placeholder='Selecciona la sub dependencia'
-                    onChange={(selecteOption) => handleSelectSubDependenciaChange(selecteOption)}
+                    onChange={(selecteOption) => handleSelectSubDependenciaChange(selecteOption,"subDependencia")}
                     />
             </div>
         </div>
@@ -65,9 +105,14 @@ export const Filtros = () => {
             <div className="col-sm-9">
                 <div className="form-control-wrap">
                     <div className="input-group">
-                        <input type="text" className="form-control" placeholder='Número de la caja' />
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder='Número de la caja'  
+                            name="numeroCaja"                            
+                            onChange={handleInputCajaChange}/>
                         <div className="input-group-append">
-                            <button className="btn btn-outline-primary btn-dim">Buscar Caja</button>
+                            <button onClick={handleBtnBuscarCaja} className="btn btn-outline-primary btn-dim">Buscar Caja</button>
                         </div>
                     </div>
                 </div>

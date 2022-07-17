@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { 
           carpetaSlice, cajaSlice, oficinaSlice, serieSlice,
-          subserieSlice, tipoDocumentoSlice, dependenciaSlice, authSlice, formularioSlice 
+          subserieSlice, tipoDocumentoSlice, dependenciaSlice, authSlice, formSlice 
        } 
 from "./";
 
@@ -15,6 +15,6 @@ export const store = configureStore({
         caja: cajaSlice.reducer,
         carpeta: carpetaSlice.reducer,
         auth: authSlice.reducer,
-        formularios: formularioSlice.reducer
+        form: formSlice.reducer
     }
 });

@@ -6,6 +6,6 @@ export * from './subserie/subserieSlice';
 export * from './tipoDocumental/tipoDocumentoSlice';
 export * from './dependencia/dependenciaSlice';
 export * from './auth/authSlice';
-export * from './formularios/formularioSlice';
+export * from './forms/formSlice';
 
 export * from './store';

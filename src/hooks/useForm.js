@@ -9,7 +9,6 @@ export const useForm = ( initialState = {} ) => {
         setValues( newFormState );
     }
 
-
     const handleInputChange = ({ target }) => {
 
         setValues({
@@ -21,7 +20,7 @@ export const useForm = ( initialState = {} ) => {
     const handleSelectChange = ( selectedOption, fieldName ) => {   
         setValues({
             ...values,
-            [ fieldName ]: selectedOption.label
+            [ fieldName ]: selectedOption.value
         });
     }
 

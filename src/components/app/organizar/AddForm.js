@@ -1,22 +1,48 @@
 import React from "react";
 import Select from "react-select";
 
-import { useSerieStore, useSubserieStore, useTipoDocumentoStore } from '../../../hooks';
+import 
+{ 
+    useSerieStore, useSubserieStore, useTipoDocumentoStore,
+    useForm, useFormStore, useCarpetaService
+} from '../../../hooks';
 
 export const AddForm = () => {
 
    const { series } = useSerieStore();
    const { subseries, startLoadingSubseries } = useSubserieStore();
    const { tipoDocumentos, startLoadingTipoDocumentos } = useTipoDocumentoStore();
+   const { fuidForm } = useFormStore();
+   const { crearCarpeta } = useCarpetaService();
    
+   //useForm
+   const documentoForm = {};
+   const [formValues, handleInputChange, handleSelectChange, reset] = useForm(documentoForm);
+    
    const handleSelectSerieChange = ( selectedOption) => {   
-        //ToDo: agregar al estado de formularioFuid el campo dependencia        
         startLoadingSubseries(selectedOption.value);
+        handleSelectChange(selectedOption, "serie");
    }
 
    const handleSelectSubserieChange = ( selectedOption) => {   
-        //ToDo: agregar al estado de formularioFuid el campo dependencia        
         startLoadingTipoDocumentos(selectedOption.value);
+        handleSelectChange(selectedOption, "subserie");
+   }
+
+   const handleSelectTipoDocumentoChange = ( selectedOption) => {    
+        handleSelectChange(selectedOption, "tipoDocumento");
+   }
+
+   const handleSelectSoporteChange = ( selectedOption ) => {   
+        handleSelectChange(selectedOption, "soporte");
+   }
+
+   const handleSelectFrecuenciaChange = ( selectedOption ) => {   
+        handleSelectChange(selectedOption, "frecuencia");
+   }
+
+   const handleBtnAgregar = () => {
+        crearCarpeta(fuidForm, formValues);
    }
 
   return (
@@ -51,16 +77,25 @@ export const AddForm = () => {
                         <label className='form-label'>Tipo Documental</label>
                         <Select
                             options={tipoDocumentos}   
-                            //onChange={(selectedOption) => handleSelectSubserieChange(selectedOption)}
-                            placeholder='Tipo Documental.'
+                            onChange={(selectedOption) => handleSelectTipoDocumentoChange(selectedOption)}
+                            placeholder='Tipo Documental'
                             />
                     </div>
                     <div className='col-md-3'>
                         <label className='form-label'>Fehas extremas</label>
                         <div className="form-control-wrap">
                             <div className="input-group">
-                                <input type="date" className="form-control" />
-                                <input type="date" className="form-control" />
+                                <input 
+                                    name="fechaExtremaInicial" 
+                                    onChange={handleInputChange} 
+                                    type="date" 
+                                    className="form-control"/>
+                                <input 
+                                    name="fechaExtremaFinal"
+                                    onChange={handleInputChange}
+                                    type="date" 
+                                    min={formValues.fechaExtremaInicial}
+                                    className="form-control" />
                             </div>
                         </div>
                     </div>
@@ -70,42 +105,68 @@ export const AddForm = () => {
                         <label className='form-label'>Tomos</label>
                         <div className="form-control-wrap">
                             <div className="input-group">
-                                <input type="number" className="form-control" placeholder='Inicial'/>
-                                <input type="number" className="form-control" placeholder='Final'/>
+                                <input 
+                                    name="tomoActual"
+                                    onChange={handleInputChange}
+                                    type="number" 
+                                    className="form-control" 
+                                    placeholder='Actual'/>
+                                <input 
+                                    name="tomoFinal"
+                                    onChange={handleInputChange}
+                                    min={formValues.tomoActual}
+                                    type="number" 
+                                    className="form-control" 
+                                    placeholder='Final'/>
                             </div>
                         </div>
                     </div>
                     <div className='col-md-2'>
                         <label className='form-label'>Folios</label>
-                        <input type="number" className="form-control" min="0"/>
+                        <input
+                            name="folios"
+                            onChange={handleInputChange}
+                            type="number" 
+                            className="form-control" 
+                            min="0"/>
                     </div>
                     <div className='col-md-2'>
                         <label className='form-label'>Soporte</label>
                         <Select
                             options={[{ value: '1', label: 'Serie  jhsdgfjhsdgfjshgfkjshgfkhjsdgfkjhsdf1' }]}
                             placeholder=''         
-                            //onChange={(name) => handleSelectChange(name,"objeto")}
+                            onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
                             />
                     </div>
                     <div className='col-md-2'>
                         <label className='form-label'>Frecuencia</label>
                         <Select
-                            options={[{ value: '1', label: 'Serie 1' }]}    
+                            options={[{ value: '2', label: 'Serie 1' }]}    
                             placeholder=''         
-                            //onChange={(name) => handleSelectChange(name,"objeto")}
+                            onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
                             />
                     </div>
                     <div className='col-md-2'>
                         <label className='form-label'>Notas</label>
                         <div className="form-control-wrap">
                             <div className="input-group">
-                                <input type="text" className="input-xs form-control" />
+                                <input 
+                                    type="text" 
+                                    className="input-xs form-control"
+                                    name="notas"
+                                    onChange={handleInputChange} />
                             </div>
                         </div>
                     </div>
                     <div className='col-md-2'>
                         <br />
-                        <button type="button"  className="btn btn-outline-primary btn-dim  mt-1 btn-block">Agregar</button>
+                        <button 
+                          onClick={handleBtnAgregar}
+                          type="button"
+                          className="btn btn-outline-primary btn-dim  mt-1 btn-block"
+                        >
+                            Agregar
+                        </button>
                     </div>
                 </div>
 

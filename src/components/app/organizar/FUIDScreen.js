@@ -4,7 +4,10 @@ import { Filtros } from './Filtros';
 import { RotuloCaja } from './RotuloCaja';
 import { AddForm } from './AddForm';
 import { TablaCarpetas } from './TablaCarpetas';
-import { useOficinaStore, useSerieStore, useAuthStore, useDependieciaStore, useSubserieStore, useTipoDocumentoStore } from '../../../hooks';
+import { 
+        useOficinaStore, useSerieStore, useAuthStore, 
+        useDependieciaStore, useSubserieStore, useTipoDocumentoStore, useFormStore 
+       } from '../../../hooks';
 
 
 export const FUIDScreen = () => {
@@ -13,6 +16,7 @@ export const FUIDScreen = () => {
    const { resetSerie } = useSerieStore();
    const { resetSubserie } = useSubserieStore();
    const { resetTipoDocumento } = useTipoDocumentoStore();
+   const { resetFuidFormValues } = useFormStore();
 
    const { proyectoId } = useAuthStore();
    const { startLoadingDependencias } = useDependieciaStore();
@@ -21,8 +25,8 @@ export const FUIDScreen = () => {
 
    //cargo la primera vez
    useEffect(() => {
-        resetForm();
-        //startLoadingDependencias(proyectoId);
+        resetFuidFormValues();
+        console.log('resetear Fuid form store');
         startLoadingDependencias(1);
    }, [])
 
