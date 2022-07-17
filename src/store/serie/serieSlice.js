@@ -1,20 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const serieSlice = createSlice({
-    name: 'series',
+    name: 'serie',
     initialState:{
-        isLoadingSeries: true,
+        isLoadingSerie: true,
+        isSuccessSerie: true,
         series: [
             // temp
         ],
     },
     reducers: {
         onLoadSeries: (state, { payload = [] }) => {
-            state.isLoadingSeries = false;
+            state.isLoadingSerie = false;
             state.series = payload;
         },
-        onAddNewserie: ( state, { payload }) => {
+        onAddNewDependiencia: ( state, { payload }) => {
             state.series.push( payload );
+        },
+        isSuccessSeries: (state, { payload }) => {
+            state.isSuccessSerie = payload;
+        },
+        isLoadingSeries: (state, { payload }) => {
+            state.isLoadingSerie = payload;
+        },
+        resetSeries: (state) => {
+            state.series = [];
         },
     }
 });
@@ -22,5 +32,8 @@ export const serieSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
     onLoadSeries,
-    onAddNewserie
+    onAddNewSerie,
+    isSuccessSeries,
+    isLoadingSeries,
+    resetSeries
 } = serieSlice.actions;

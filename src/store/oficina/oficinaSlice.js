@@ -3,18 +3,29 @@ import { createSlice } from '@reduxjs/toolkit';
 export const oficinaSlice = createSlice({
     name: 'oficina',
     initialState:{
-        isLoadingOficinas: true,
-        Oficinas: [
+        isLoadingOficina: true,
+        isSuccessOficina: true,
+        oficinas: [
             // temp
         ],
     },
     reducers: {
         onLoadOficinas: (state, { payload = [] }) => {
-            state.isLoadingOficinas = false;
-            state.Oficinas = payload;
+            state.isLoadingOficina = false;
+            state.isSuccessOficina = true;
+            state.oficinas = payload;
         },
         onAddNewOficina: ( state, { payload }) => {
-            state.Oficinas.push( payload );
+            state.oficinas.push( payload );
+        },
+        isSuccessOficinas: (state, { payload }) => {
+            state.isSuccessOficina = payload;
+        },
+        isLoadingOficinas: (state, { payload }) => {
+            state.isLoadingOficina = payload;
+        },
+        resetOficinas: (state) => {
+            state.oficinas = [];
         },
     }
 });
@@ -22,5 +33,9 @@ export const oficinaSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
     onLoadOficinas,
-    onAddNewOficina
+    onAddNewOficina,
+    isSuccessOficinas,
+    isLoadingOficinas,
+    resetOficinas
 } = oficinaSlice.actions;
+

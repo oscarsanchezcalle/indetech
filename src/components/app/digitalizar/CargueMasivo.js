@@ -10,13 +10,7 @@ export const CargueMasivo = () => {
     const i = cardCajas[cardCajas.length-1] + 1;
     setCardCajas([...cardCajas, i]);
   }
-  
-  useEffect(() => {
-    //startLoadingCajas();
-    document.body.style.zoom = "90%";
-  }, []);
-
-
+ 
   return (
     <>
     <div className="nk-block-head nk-block-head-sm">

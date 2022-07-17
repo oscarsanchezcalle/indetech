@@ -1,24 +1,37 @@
 import React, { useEffect } from 'react'
 
-import { useDispatch } from 'react-redux'
-import { useCajaStore } from '../../../hooks';
-
 import { Filtros } from './Filtros';
 import { RotuloCaja } from './RotuloCaja';
 import { AddForm } from './AddForm';
 import { TablaCarpetas } from './TablaCarpetas';
+import { useOficinaStore, useSerieStore, useAuthStore, useDependieciaStore, useSubserieStore, useTipoDocumentoStore } from '../../../hooks';
+
 
 export const FUIDScreen = () => {
-  
-    // const dispatch = useDispatch();
-    const { startLoadingCajas } = useCajaStore();
-    const { cajas } = useCajaStore();
+    
+   const { resetOficina } = useOficinaStore();
+   const { resetSerie } = useSerieStore();
+   const { resetSubserie } = useSubserieStore();
+   const { resetTipoDocumento } = useTipoDocumentoStore();
 
-    //cargo la primera vez
-    useEffect(() => {
-        //startLoadingCajas();
-        document.body.style.zoom = "90%";
-    }, [])
+   const { proyectoId } = useAuthStore();
+   const { startLoadingDependencias } = useDependieciaStore();
+   
+   //Al refrescar mantener el estado.
+
+   //cargo la primera vez
+   useEffect(() => {
+        resetForm();
+        //startLoadingDependencias(proyectoId);
+        startLoadingDependencias(1);
+   }, [])
+
+   const resetForm = () => {
+    resetOficina();
+    resetSerie();
+    resetSubserie();
+    resetTipoDocumento();
+   }
     
   return (
     <>

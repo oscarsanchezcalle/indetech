@@ -1,20 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const subserieSlice = createSlice({
-    name: 'subseries',
+    name: 'subserie',
     initialState:{
-        isLoadingSubseries: true,
+        isLoadingSubserie: true,
+        isSuccessSubserie: true,
         subseries: [
             // temp
         ],
     },
     reducers: {
         onLoadSubseries: (state, { payload = [] }) => {
-            state.isLoadingSubseries = false;
+            state.isLoadingSubserie = false;
             state.subseries = payload;
         },
         onAddNewSubserie: ( state, { payload }) => {
             state.subseries.push( payload );
+        },
+        isSuccessSubseries: (state, { payload }) => {
+            state.isSuccessSubserie = payload;
+        },
+        isLoadingSubseries: (state, { payload }) => {
+            state.isLoadingSubserie = payload;
+        },
+        resetSubseries: (state) => {
+            state.subseries = [];
         },
     }
 });
@@ -22,5 +32,8 @@ export const subserieSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
     onLoadSubseries,
-    onAddNewsubSerie
+    onAddNewSubserie,
+    isSuccessSubseries,
+    isLoadingSubseries,
+    resetSubseries
 } = subserieSlice.actions;

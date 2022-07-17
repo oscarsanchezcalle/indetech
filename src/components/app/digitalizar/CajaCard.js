@@ -95,7 +95,7 @@ export const CajaCard = (cardNumber) => {
     }
     
     useEffect(() => {
-        console.log(archivos);
+        //console.log(archivos);
     }, [archivos])
 
   return (
