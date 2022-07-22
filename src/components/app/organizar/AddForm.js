@@ -4,7 +4,7 @@ import Select from "react-select";
 import 
 { 
     useSerieStore, useSubserieStore, useTipoDocumentoStore,
-    useForm, useFormStore, useCarpetaService
+    useForm, useFormStore, useCarpetaStore
 } from '../../../hooks';
 
 export const AddForm = () => {
@@ -13,10 +13,24 @@ export const AddForm = () => {
    const { subseries, startLoadingSubseries } = useSubserieStore();
    const { tipoDocumentos, startLoadingTipoDocumentos } = useTipoDocumentoStore();
    const { fuidForm } = useFormStore();
-   const { crearCarpeta } = useCarpetaService();
+   const { crearCarpeta } = useCarpetaStore();
    
    //useForm
-   const documentoForm = {};
+   const documentoForm = {
+      folioInicial: 0,
+      folioFinal: 0,
+      codigo: '',
+      fechaExtremaFinal: '1900-01-01T00:00:00.0Z',
+      fechaExtremaInicial: '1900-01-01T00:00:00.0Z', 
+      frecuencia: 0,
+      notas: '',
+      soporte: 0,
+      tomoActual: 0,
+      tomoFinal: 0,
+      serie: 0,
+      subserie:0,
+      tipoDocumento:0
+   };
    const [formValues, handleInputChange, handleSelectChange, reset] = useForm(documentoForm);
     
    const handleSelectSerieChange = ( selectedOption) => {   
@@ -57,7 +71,7 @@ export const AddForm = () => {
             <div className="accordion-inner">
 
                 <div className='row'>
-                    <div className='col-md-3'>
+                    <div className='col-md-4'>
                         <label className='form-label'>Serie</label>
                         <Select
                             options={series}   
@@ -65,7 +79,7 @@ export const AddForm = () => {
                             placeholder='Series'
                             />
                     </div>
-                    <div className='col-md-3'>
+                    <div className='col-md-4'>
                         <label className='form-label'>Subserie</label>
                         <Select
                             options={subseries}   
@@ -73,7 +87,7 @@ export const AddForm = () => {
                             placeholder='Subseries'
                             />
                     </div>
-                    <div className='col-md-3'>
+                    <div className='col-md-4'>
                         <label className='form-label'>Tipo Documental</label>
                         <Select
                             options={tipoDocumentos}   
@@ -81,7 +95,9 @@ export const AddForm = () => {
                             placeholder='Tipo Documental'
                             />
                     </div>
-                    <div className='col-md-3'>
+                </div>
+                <div className='row mt-2'>
+                <div className='col-md-3'>
                         <label className='form-label'>Fehas extremas</label>
                         <div className="form-control-wrap">
                             <div className="input-group">
@@ -99,8 +115,6 @@ export const AddForm = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className='row mt-2'>
                     <div className='col-md-2'>
                         <label className='form-label'>Tomos</label>
                         <div className="form-control-wrap">
@@ -123,30 +137,52 @@ export const AddForm = () => {
                     </div>
                     <div className='col-md-2'>
                         <label className='form-label'>Folios</label>
-                        <input
-                            name="folios"
+                        <div className="form-control-wrap">
+                            <div className="input-group">
+                                <input 
+                                    name="folioInicial"
+                                    onChange={handleInputChange}
+                                    type="number" 
+                                    className="form-control" 
+                                    placeholder='Inicial'/>
+                                <input 
+                                    name="folioFinal"
+                                    onChange={handleInputChange}
+                                    min={formValues.folioInicial}
+                                    type="number" 
+                                    className="form-control" 
+                                    placeholder='Final'/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-2">
+                       <label className='form-label'>Código</label>
+                        <input 
+                            name="Código"
                             onChange={handleInputChange}
                             type="number" 
                             className="form-control" 
-                            min="0"/>
+                            placeholder=''/>
                     </div>
-                    <div className='col-md-2'>
+                    <div className='col-md-3'>
                         <label className='form-label'>Soporte</label>
                         <Select
-                            options={[{ value: '1', label: 'Serie  jhsdgfjhsdgfjshgfkjshgfkhjsdgfkjhsdf1' }]}
+                            options={[{ value: 1, label: 'Serie  jhsdgfjhsdgfjshgfkjshgfkhjsdgfkjhsdf1' }]}
                             placeholder=''         
                             onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
                             />
                     </div>
-                    <div className='col-md-2'>
+                </div>
+                <div className='row mt-2'>
+                <div className='col-md-3'>
                         <label className='form-label'>Frecuencia</label>
                         <Select
-                            options={[{ value: '2', label: 'Serie 1' }]}    
+                            options={[{ value: 1, label: 'Serie 1' }]}    
                             placeholder=''         
                             onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
                             />
                     </div>
-                    <div className='col-md-2'>
+                    <div className='col-md-3'>
                         <label className='form-label'>Notas</label>
                         <div className="form-control-wrap">
                             <div className="input-group">

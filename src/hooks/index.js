@@ -8,4 +8,3 @@ export * from './useSuberieStore';
 export * from './useTipoDocumentoStore';
 export * from './useForm';
 export * from './useFormStore';
-export * from './useCarpetaService';

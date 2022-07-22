@@ -7,6 +7,9 @@ export const carpetaSlice = createSlice({
         carpetas: [
             // tempCarpeta
         ],
+        carpetasByCajaId : [
+            
+        ]
     },
     reducers: {
         onLoadCarpetas: (state, { payload = [] }) => {
@@ -16,11 +19,15 @@ export const carpetaSlice = createSlice({
         onAddNewCarpeta: ( state, { payload }) => {
             state.carpetas.push( payload );
         },
+        onLoadCarpetasByCaja: ( state, { payload }) => {
+            state.carpetasByCajaId = payload ;
+        },
     }
 });
 
 // Action creators are generated for each case reducer function
 export const {
     onLoadCarpetas,
-    onAddNewCarpeta
+    onAddNewCarpeta,
+    onLoadCarpetasByCaja
 } = carpetaSlice.actions;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
 import { Filtros } from './Filtros';
 import { RotuloCaja } from './RotuloCaja';
@@ -6,7 +6,7 @@ import { AddForm } from './AddForm';
 import { TablaCarpetas } from './TablaCarpetas';
 import { 
         useOficinaStore, useSerieStore, useAuthStore, 
-        useDependieciaStore, useSubserieStore, useTipoDocumentoStore, useFormStore 
+        useDependieciaStore, useSubserieStore, useTipoDocumentoStore, useFormStore, useCarpetaStore
        } from '../../../hooks';
 
 
@@ -21,10 +21,9 @@ export const FUIDScreen = () => {
    const { proyectoId } = useAuthStore();
    const { startLoadingDependencias } = useDependieciaStore();
    
-   //Al refrescar mantener el estado.
-
    //cargo la primera vez
    useEffect(() => {
+        resetForm();
         resetFuidFormValues();
         console.log('resetear Fuid form store');
         startLoadingDependencias(1);
