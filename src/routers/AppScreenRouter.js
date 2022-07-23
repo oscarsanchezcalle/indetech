@@ -9,7 +9,7 @@ import { CargueMasivo } from '../components/app/digitalizar/CargueMasivo';
 import { IndexarDocumento } from '../components/app/indexar/IndexarDocumento';
 import { TareasAsignadas } from '../components/app/indexar/TareasAsignadas';
 import { PageNotFound } from '../components/app/notFound/PageNotFound';
-import { FUIDScreen } from '../components/app/organizar/FUIDScreen';
+import { FuidScreen } from '../components/app/organizar/FuidScreen';
   
 export const AppScreenRouter = () => {
   return (
@@ -43,7 +43,7 @@ export const AppScreenRouter = () => {
                 <Route 
                     exact 
                     path="/administrarFuid" 
-                    component={FUIDScreen}
+                    component={FuidScreen}
                 />
                 
                 <Route 

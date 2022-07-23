@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react'
-import { Estado } from '../indexar/Estado'
 import { format, parseISO } from 'date-fns'
-import { Link } from 'react-router-dom'
 
 import 
 { 

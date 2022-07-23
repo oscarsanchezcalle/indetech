@@ -31,11 +31,12 @@ export const useCarpetaStore = () => {
         }
     }
 
-    const crearCarpeta = async (fuidForm = {}, addForm = {} ) => {
+    const crearCarpeta = async (criteria = {} ) => {
 
         //Todo: Implementar Loading
-
-        const {isValid, validationConditions} = isValidFormForSave(fuidForm, addForm);
+        console.log(criteria);
+        return;
+        const {isValid, validationConditions} = isValidFormForSave(criteria);
         
         if (!isValid){
 
@@ -50,11 +51,10 @@ export const useCarpetaStore = () => {
 
             return;
         }
-        
-        const {dependecia, subDependencia, numeroCaja } = fuidForm;  
 
-        const {serie, subserie, tipoDocumento, fechaExtremaFinal,  fechaExtremaInicial, 
-            frecuencia, notas, soporte, tomoActual, tomoFinal, folioInicial, folioFinal, codigo } = addForm;
+        const {dependecia, subDependencia, numeroCaja, serie, subserie, tipoDocumento, fechaExtremaFinal,  fechaExtremaInicial, 
+            frecuencia, notas, soporte, tomoActual, tomoFinal, folioInicial, folioFinal, codigo } = criteria;
+
 
             
         //llamar al end point que crea las carpetas y las asigna a la caja
@@ -85,33 +85,33 @@ export const useCarpetaStore = () => {
 
     }
 
-    const isValidFormForSave = (fuidForm = {}, addForm = {}) => {
+    const isValidFormForSave = (criteria = {}) => {
 
-        const {dependecia, subDependencia, numeroCaja } = fuidForm;        
-        const {serie, subserie, tipoDocumento } = addForm;
+        const {dependeciaId, subDependenciaId, numeroCaja, serieId, subserieId, tipoDocumentoId } = criteria;
+
         const validationConditions = [];
         let isValid = true;
 
-        if (    typeof dependecia === 'undefined' || typeof subDependencia === 'undefined'
-             || (typeof numeroCaja === 'undefined' || numeroCaja == "" ) || typeof serie === 'undefined'
-             || typeof subserie   === 'undefined' || typeof tipoDocumento === 'undefined')
+        if (    typeof dependeciaId === 'undefined' || typeof subDependenciaId === 'undefined'
+             || (typeof numeroCaja === 'undefined' || numeroCaja == "" ) || typeof serieId === 'undefined'
+             || typeof subserieId   === 'undefined' || typeof tipoDocumentoId === 'undefined')
         {            
-            if(typeof dependecia === 'undefined'){
+            if(typeof dependeciaId === 'undefined'){
                 validationConditions.push(' Dependencia');
             }
-            if(typeof subDependencia === 'undefined'){
+            if(typeof subDependenciaId === 'undefined'){
                 validationConditions.push(' Sub Dependencia');
             }
             if(typeof numeroCaja === 'undefined' || numeroCaja == ""){
                 validationConditions.push(' Número de Caja');
             }
-            if(typeof serie === 'undefined'){
+            if(typeof serieId === 'undefined'){
                 validationConditions.push(' Serie');
             }
-            if(typeof subserie === 'undefined'){
+            if(typeof subserieId === 'undefined'){
                 validationConditions.push(' Subserie');
             }
-            if(typeof tipoDocumento === 'undefined'){
+            if(typeof tipoDocumentoId === 'undefined'){
                 validationConditions.push(' Tipo Documental');
             }
             isValid = false;

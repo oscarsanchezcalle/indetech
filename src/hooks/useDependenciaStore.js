@@ -10,22 +10,23 @@ export const useDependieciaStore = () => {
     
 
     const startLoadingDependencias = async(id) => {
-       
         try 
         {
+            dispatch( isSuccessDependencias( true ) );
             dispatch( isLoadingDependencias( true ) );
             
             const { data } = await indetechApi.get('/Dependencia/GetDependenciasByProyectoID?id='+id);
             
             const dependeciasForSelect = convertDependenciasToSelect(data);
-
+            
             dispatch( onLoadDependiencias( dependeciasForSelect ) );
+
+            dispatch( isLoadingDependencias( false ) );
 
         } catch (error) 
         {
             dispatch( isSuccessDependencias( false ) );
-            dispatch( isLoadingDependencias( false ) );
-
+            console.log(error);
         }
     }
     
