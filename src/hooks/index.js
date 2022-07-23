@@ -7,3 +7,7 @@ export * from './useSerieStore';
 export * from './useSuberieStore';
 export * from './useTipoDocumentoStore';
 export * from './useForm';
+export * from './useVigenciaStore';
+export * from './useSoporteStore';
+export * from './useFrecuenciaStore';
+

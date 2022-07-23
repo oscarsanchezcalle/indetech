@@ -20,7 +20,7 @@ export const useForm = ( initialState = {} ) => {
     const handleSelectChange = ( selectedOption, fieldName ) => {   
         setValues({
             ...values,
-            [ fieldName ]: selectedOption.value
+            [ fieldName ]: selectedOption
         });
     }
 
