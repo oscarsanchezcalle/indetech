@@ -37,18 +37,18 @@ export const FuidScreen = () => {
             frecuenciaUso:{},
             fechaExtremaInicial: '', 
             fechaExtremaFinal: '',
-            tomoActual: 0,
-            tomoFinal: 0,
-            folioInicial: 0,
-            folioFinal: 0,
+            tomoActual: '',
+            tomoFinal: '',
+            folioInicial: '',
+            folioFinal: '',
             codigo: '',
             notas: '',
             cedulaCatastral: '',
-            duplicidad:0,
+            duplicidad:'',
             autoDeCierre: ''
     };
 
-    const [formValues, handleInputChange, handleSelectChange] = useForm(documentoForm);
+    const [formValues, handleInputChange, handleSelectChange, resetFuidForm] = useForm(documentoForm);
 
     const {
         dependencia,
@@ -141,12 +141,20 @@ export const FuidScreen = () => {
     }
 
     const handleBtnAgregar = () => {
-        crearCarpeta(formValues, proyectoId);
+        crearCarpeta(formValues, proyectoId).then(() => {
+
+            const frecuenciaDefault = frecuencias.find(f => f.label == 'Sin Frecuencia');
+            const tipoSoporteDefault = soportes.find(f => f.label == 'Sin Soporte');
+
+            resetFuidForm(frecuenciaDefault, tipoSoporteDefault);
+        });
     }
 
     const handleBtnBuscarCaja = () => {
-        console.log(formValues);
-        console.log(proyectoId);
+        
+
+        //console.log(formValues)
+        // console.log(proyectoId);
     }    
 
   return (
@@ -281,7 +289,7 @@ export const FuidScreen = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='col-md-2'>
+                                <div className='col-md-3'>
                                     <label className='form-label'>Tomos</label>
                                     <div className="form-control-wrap">
                                         <div className="input-group">
@@ -290,6 +298,7 @@ export const FuidScreen = () => {
                                                 onChange={handleInputChange}
                                                 value={tomoActual}
                                                 type="number" 
+                                                autoComplete="off"
                                                 className="form-control" 
                                                 placeholder='Actual'/>
                                             <input 
@@ -298,12 +307,13 @@ export const FuidScreen = () => {
                                                 min={formValues.tomoActual}
                                                 value={tomoFinal}
                                                 type="number" 
+                                                autoComplete="off"
                                                 className="form-control" 
                                                 placeholder='Final'/>
                                         </div>
                                     </div>
                                 </div>
-                                <div className='col-md-2'>
+                                <div className='col-md-3'>
                                     <label className='form-label'>Folios</label>
                                     <div className="form-control-wrap">
                                         <div className="input-group">
@@ -313,7 +323,8 @@ export const FuidScreen = () => {
                                                 type="number" 
                                                 className="form-control"
                                                 value={folioInicial} 
-                                                placeholder='Inicial'/>
+                                                placeholder='Inicial'
+                                                autoComplete="off"/>
                                             <input 
                                                 name="folioFinal"
                                                 onChange={handleInputChange}
@@ -321,7 +332,8 @@ export const FuidScreen = () => {
                                                 min={formValues.folioInicial}
                                                 type="number" 
                                                 className="form-control" 
-                                                placeholder='Final'/>
+                                                placeholder='Final'
+                                                autoComplete="off"/>
                                         </div>
                                     </div>
                                 </div>
@@ -333,7 +345,28 @@ export const FuidScreen = () => {
                                             onChange={handleInputChange}
                                             type="text" 
                                             className="form-control" 
-                                            placeholder=''/>
+                                            placeholder=''
+                                            autoComplete="off"/>
+                                </div>
+                            </div>
+                            <div className='row mt-2'>
+                                <div className='col-md-3'>
+                                    <label className='form-label'>Soporte</label>
+                                    <Select
+                                        options={soportes}
+                                        placeholder='' 
+                                        value={tipoSoporte}    
+                                        onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
+                                        />
+                                </div>
+                                <div className='col-md-3'>
+                                    <label className='form-label'>Frecuencia</label>
+                                    <Select
+                                        options={frecuencias}    
+                                        placeholder='' 
+                                        value={frecuenciaUso}    
+                                        onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
+                                        />
                                 </div>
                                 <div className="col-md-2">
                                     <label className='form-label'>Cédula Catastral</label>
@@ -345,9 +378,7 @@ export const FuidScreen = () => {
                                             className="form-control" 
                                             placeholder=''/>
                                 </div>
-                            </div>
-                            <div className='row mt-2'>
-                                <div className='col-md-1'>
+                                <div className='col-md-2'>
                                     <label className='form-label'>Duplicidad</label>
                                     <div className="form-control-wrap">
                                         <div className="input-group">
@@ -357,8 +388,9 @@ export const FuidScreen = () => {
                                                 onChange={handleInputChange}
                                                 type="text" 
                                                 className="form-control" 
-                                                placeholder=''
-                                                min={0}/>
+                                                placeholder='#'
+                                                min={0}
+                                                autoComplete="off"/>
                                         </div>
                                     </div>
                                 </div>
@@ -371,33 +403,19 @@ export const FuidScreen = () => {
                                         onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
                                         />
                                 </div>
-                                <div className='col-md-2'>
-                                    <label className='form-label'>Soporte</label>
-                                    <Select
-                                        options={soportes}
-                                        placeholder='' 
-                                        value={tipoSoporte}    
-                                        onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
-                                        />
-                                </div>
-                                <div className='col-md-2'>
-                                    <label className='form-label'>Frecuencia</label>
-                                    <Select
-                                        options={frecuencias}    
-                                        placeholder='' 
-                                        value={frecuenciaUso}    
-                                        onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
-                                        />
-                                </div>
-                                <div className='col-md-3'>
+                            </div>
+                            <div className='row mt-2'>
+                                <div className='col-md-10'>
                                     <label className='form-label'>Notas</label>
                                     <div className="form-control-wrap">
                                         <div className="input-group">
-                                            <textarea 
+                                            <input 
+                                                type="text"
                                                 className='form-control no-resize'
                                                 value={notas}
                                                 onChange={handleInputChange} 
-                                                name="notas"></textarea>
+                                                name="notas"
+                                                autoComplete="off"/>
                                         </div>
                                     </div>
                                 </div>
@@ -411,7 +429,6 @@ export const FuidScreen = () => {
                                     </button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
