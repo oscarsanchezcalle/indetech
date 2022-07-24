@@ -4,6 +4,7 @@ export const carpetaSlice = createSlice({
     name: 'carpeta',
     initialState:{
         isLoadingCarpetas: true,
+        isLoadingAddCarpeta: false,
         carpetas: [
             // tempCarpeta
         ],
@@ -22,6 +23,9 @@ export const carpetaSlice = createSlice({
         onLoadCarpetasByCaja: ( state, { payload }) => {
             state.carpetasByCajaId = payload ;
         },
+        setIsLoadingAddCarpeta: ( state, {payload} ) => {
+            state.isLoadingAddCarpeta = payload ;
+        }
     }
 });
 
@@ -29,5 +33,6 @@ export const carpetaSlice = createSlice({
 export const {
     onLoadCarpetas,
     onAddNewCarpeta,
-    onLoadCarpetasByCaja
+    onLoadCarpetasByCaja,
+    setIsLoadingAddCarpeta
 } = carpetaSlice.actions;

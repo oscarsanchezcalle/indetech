@@ -3,12 +3,14 @@ import Select from 'react-select';
 
 import { RotuloCaja } from './RotuloCaja';
 import { TablaCarpetas } from './TablaCarpetas';
+import { LoadingInButton } from './../LoadingInButton';
 
 import 
 { 
     useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore, useSubserieStore, useTipoDocumentoStore,
     useForm, useCarpetaStore, useVigenciaStore, useSoporteStore, useFrecuenciaStore
 } from '../../../hooks';
+import Swal from 'sweetalert2';
 
 export const FuidScreen = () => {
 
@@ -22,8 +24,9 @@ export const FuidScreen = () => {
     const { soportes, startLoadingSoportes } = useSoporteStore();
     const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
 
-    const { crearCarpeta } = useCarpetaStore();
+    const { crearCarpeta, isLoadingAddCarpeta } = useCarpetaStore();
     
+
     //useForm
     const documentoForm = {
             dependencia: {},
@@ -100,6 +103,18 @@ export const FuidScreen = () => {
         }
     }, [series]);
 
+    useEffect(() => {
+        if(frecuencias?.length > 0){
+            handleSelectFrecuenciaChange(frecuencias[0]);
+        }
+    }, [frecuencias]);
+
+    useEffect(() => {
+        if(soportes?.length > 0){
+            handleSelectSoporteChange(soportes[0]);
+        }
+    }, [soportes]);
+
     const handleSelectDependenciaChange = ( selectedOption ) => {           
         startLoadingOficinas(selectedOption.value);
         handleSelectChange(selectedOption, "dependencia");
@@ -139,23 +154,86 @@ export const FuidScreen = () => {
     const handleSelectAutoDeCierreChange = ( selectedOption ) => {   
         handleSelectChange(selectedOption, "autoDeCierre");
     }
+    
+    const handleBtnAgregar = async () => {
 
-    const handleBtnAgregar = () => {
-        crearCarpeta(formValues, proyectoId).then(() => {
+        const {isValid, validationConditions} = isValidFormForSave(formValues);
+        
+        if (!isValid){
 
-            const frecuenciaDefault = frecuencias.find(f => f.label == 'Sin Frecuencia');
-            const tipoSoporteDefault = soportes.find(f => f.label == 'Sin Soporte');
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'warning',
+                title: 'Campos incompletos',
+                text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
 
-            resetFuidForm(frecuenciaDefault, tipoSoporteDefault);
-        });
+            return;
+        }
+
+        await crearCarpeta(formValues, proyectoId);
+        
+        const frecuenciaDefault = frecuencias.find(f => f.label == 'Sin Frecuencia');
+        const tipoSoporteDefault = soportes.find(f => f.label == 'Sin Soporte');
+
+        resetFuidForm(frecuenciaDefault, tipoSoporteDefault);
     }
 
     const handleBtnBuscarCaja = () => {
-        
 
         //console.log(formValues)
         // console.log(proyectoId);
     }    
+
+    const isValidFormForSave = (criteria = {}) => {
+
+        const {
+             dependencia, oficina, numeroCaja,
+             serie, subserie, tipoDocumento, 
+             autoDeCierre, vigencia } = criteria;
+
+        const validationConditions = [];
+        let isValid = true;
+
+        if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
+             || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" ) || typeof serie.value === 'undefined'
+             || typeof  subserie.value   === 'undefined' || typeof tipoDocumento.value === 'undefined'
+             || typeof  autoDeCierre.value   === 'undefined' || typeof vigencia.value === 'undefined')
+        {            
+            if(typeof dependencia.value === 'undefined'){
+                validationConditions.push(' Dependencia');
+            }
+            if(typeof oficina.value === 'undefined'){
+                validationConditions.push(' Sub Dependencia');
+            }
+            if(typeof vigencia.value === 'undefined'){
+                validationConditions.push(' Vigencia');
+            }
+            if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
+                validationConditions.push(' Número de Caja');
+            }
+            if(typeof serie.value === 'undefined'){
+                validationConditions.push(' Serie');
+            }
+            if(typeof subserie.value === 'undefined'){
+                validationConditions.push(' Subserie');
+            }
+            if(typeof tipoDocumento.value === 'undefined'){
+                validationConditions.push(' Tipo Documental');
+            }
+            if(typeof autoDeCierre.value === 'undefined'){
+                validationConditions.push(' Auto de cierre');
+            }
+            isValid = false;
+        }
+       
+        return {
+            isValid,
+            validationConditions
+        };            
+    }  
 
   return (
     <>
@@ -213,7 +291,8 @@ export const FuidScreen = () => {
                                 className="form-control" 
                                 placeholder='Número de la caja'  
                                 name="numeroCaja"   
-                                value={numeroCaja}                         
+                                value={numeroCaja}  
+                                autoComplete="off"                       
                                 onChange={handleInputChange}/>
                             <div className="input-group-append">
                                 <button onClick={handleBtnBuscarCaja} className="btn btn-outline-primary btn-dim">Buscar Caja</button>
@@ -424,8 +503,9 @@ export const FuidScreen = () => {
                                     <button 
                                         onClick={handleBtnAgregar}
                                         type="button"
+                                        disabled={isLoadingAddCarpeta}
                                         className="btn btn-outline-primary btn-dim  mt-1 btn-block">
-                                        Agregar
+                                            <LoadingInButton isLoading={isLoadingAddCarpeta} btnText="Agregar" />
                                     </button>
                                 </div>
                             </div>
@@ -442,4 +522,4 @@ export const FuidScreen = () => {
     </div>
     </>
   )
-}
+}   
