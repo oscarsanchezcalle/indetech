@@ -8,7 +8,7 @@ import { LoadingInButton } from './../LoadingInButton';
 import 
 { 
     useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore, useSubserieStore, useTipoDocumentoStore,
-    useForm, useCarpetaStore, useVigenciaStore, useSoporteStore, useFrecuenciaStore
+    useForm, useCarpetaStore, useVigenciaStore, useSoporteStore, useFrecuenciaStore, useCajaStore
 } from '../../../hooks';
 import Swal from 'sweetalert2';
 
@@ -23,8 +23,8 @@ export const FuidScreen = () => {
     const { vigencias, startLoadingVigencias } = useVigenciaStore();
     const { soportes, startLoadingSoportes } = useSoporteStore();
     const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
-
-    const { crearCarpeta, isLoadingAddCarpeta } = useCarpetaStore();
+    const { isLoadingRotuloCaja, buscarRotuloCaja, rotuloCaja } = useCajaStore();
+    const { crearCarpeta, isLoadingAddCarpeta, getCarpetasByCajaId } = useCarpetaStore();
     
 
     //useForm
@@ -115,6 +115,12 @@ export const FuidScreen = () => {
         }
     }, [soportes]);
 
+    useEffect(() => {
+        if(rotuloCaja.cajaId > 0){
+            getCarpetasByCajaId(rotuloCaja.cajaId);
+        }
+    }, [rotuloCaja]);
+
     const handleSelectDependenciaChange = ( selectedOption ) => {           
         startLoadingOficinas(selectedOption.value);
         handleSelectChange(selectedOption, "dependencia");
@@ -183,8 +189,31 @@ export const FuidScreen = () => {
 
     const handleBtnBuscarCaja = () => {
 
-        //console.log(formValues)
-        // console.log(proyectoId);
+        const {isValid, validationConditions} = isValidFormForBuscarRotulo(formValues);
+        
+        if (!isValid){
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'warning',
+                title: 'Campos incompletos',
+                text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
+
+            return;
+        }
+
+        const criteria = {
+            "numero": parseInt(numeroCaja),
+            "proyectoId": proyectoId,
+            "dependenciaId": formValues.dependencia.value,
+            "oficinaId": formValues.oficina.value,
+            "vigenciaId": formValues.vigencia.value
+        };
+
+        buscarRotuloCaja(criteria);
     }    
 
     const isValidFormForSave = (criteria = {}) => {
@@ -225,6 +254,40 @@ export const FuidScreen = () => {
             }
             if(typeof autoDeCierre.value === 'undefined'){
                 validationConditions.push(' Auto de cierre');
+            }
+            isValid = false;
+        }
+       
+        return {
+            isValid,
+            validationConditions
+        };            
+    } 
+    
+    const isValidFormForBuscarRotulo = (criteria = {}) => {
+
+        const {
+             numeroCaja, dependencia,
+             oficina, vigencia } = criteria;
+
+        const validationConditions = [];
+        let isValid = true;
+
+        if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
+             || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" ) 
+             || typeof vigencia.value === 'undefined')
+        {            
+            if(typeof dependencia.value === 'undefined'){
+                validationConditions.push(' Dependencia');
+            }
+            if(typeof oficina.value === 'undefined'){
+                validationConditions.push(' Sub Dependencia');
+            }
+            if(typeof vigencia.value === 'undefined'){
+                validationConditions.push(' Vigencia');
+            }
+            if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
+                validationConditions.push(' Número de Caja');
             }
             isValid = false;
         }
@@ -295,7 +358,9 @@ export const FuidScreen = () => {
                                 autoComplete="off"                       
                                 onChange={handleInputChange}/>
                             <div className="input-group-append">
-                                <button onClick={handleBtnBuscarCaja} className="btn btn-outline-primary btn-dim">Buscar Caja</button>
+                                <button onClick={handleBtnBuscarCaja}  disabled={isLoadingRotuloCaja} className="btn btn-outline-primary btn-dim">
+                                    <LoadingInButton isLoading={isLoadingRotuloCaja} btnText="Buscar Caja" />
+                                </button>
                             </div>
                         </div>
                     </div>

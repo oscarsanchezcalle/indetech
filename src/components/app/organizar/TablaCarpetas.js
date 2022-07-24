@@ -5,6 +5,7 @@ import
 { 
      useCarpetaStore
 } from '../../../hooks';
+import { Titulo } from '../Titulo';
 
 export const TablaCarpetas = () => {
 
@@ -19,6 +20,20 @@ export const TablaCarpetas = () => {
                 <div className="nk-block">
                     <div className="card card-bordered card-stretch">
                         <div className="card-inner-group">
+                            <div className="card-inner">
+                                <div className="card-title-group">
+                                    <div className="card-title">
+                                    <h5 className="title">
+                                        <h6>Inventario Carpetas</h6>
+                                    </h5>
+                                    </div>
+                                    <div className="card-tools me-n1">
+                                        <ul className="btn-toolbar">                           
+                                            {/* todo: dropdown aqui */}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         
                             <div className="card-inner p-0">
                                 <table className="table table-sm table-hover">

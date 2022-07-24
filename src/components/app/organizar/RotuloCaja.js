@@ -1,16 +1,23 @@
 import React from 'react'
 import { RotuloLine } from './RotuloLine'
+import 
+{ 
+   useCajaStore
+} from '../../../hooks';
 
 export const RotuloCaja = () => {
+
+  const { rotuloCaja } = useCajaStore();
+
   return (
     <>
     <div className="code-block">
         <h6 className="overline-title title">Rótulo de caja</h6>
-        <RotuloLine name="Serie" value={'7.2 EQUIPO DE TRABAJO GESTION FJKHSDFKJHSDLFJKSHDLFKJSDHLFKJHSDLKFJHSDLKJFHSDLKJFHLSKDJHFLKJSDHF'} />
-        <RotuloLine name="Subserie" value={'7.2.1 SUBSERIE'} />
-        <RotuloLine name="Expediente" value={'EXPEDIENTE EJEMPLO'}/>
-        <RotuloLine name="# Expediente" value={'2013-c-0001'} />
-        <RotuloLine name="Fechas" value={'20/12/2012 - 03/02/2014'} />
+        <RotuloLine name="Serie" value={rotuloCaja.series} />
+        <RotuloLine name="Subserie" value={rotuloCaja.subseries} />
+        <RotuloLine name="Expediente" value={rotuloCaja.expedientes}/>
+        <RotuloLine name="# Expediente" value={rotuloCaja.numeroExpedientes} />
+        <RotuloLine name="Fechas" value={rotuloCaja.fechasExtremas} />
       </div>
     </>
   )
