@@ -18,7 +18,7 @@ export const FuidScreen = () => {
     const { series, startLoadingSeries } = useSerieStore();
     const { subseries, startLoadingSubseries } = useSubserieStore();
     const { tipoDocumentos, startLoadingTipoDocumentos } = useTipoDocumentoStore();
-    //const { vigencias, startLoadingVigencias } = useVigenciaStore();
+    const { vigencias, startLoadingVigencias } = useVigenciaStore();
     const { soportes, startLoadingSoportes } = useSoporteStore();
     const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
 
@@ -45,7 +45,7 @@ export const FuidScreen = () => {
             notas: '',
             cedulaCatastral: '',
             duplicidad:0,
-            autoDeCierre: false
+            autoDeCierre: ''
     };
 
     const [formValues, handleInputChange, handleSelectChange] = useForm(documentoForm);
@@ -78,6 +78,7 @@ export const FuidScreen = () => {
             startLoadingDependencias(proyectoId);
             startLoadingFrecuencias();
             startLoadingSoportes();
+            startLoadingVigencias();
         }
     }, [proyectoId]);
 
@@ -140,7 +141,7 @@ export const FuidScreen = () => {
     }
 
     const handleBtnAgregar = () => {
-        crearCarpeta(formValues);
+        crearCarpeta(formValues, proyectoId);
     }
 
     const handleBtnBuscarCaja = () => {
@@ -187,7 +188,7 @@ export const FuidScreen = () => {
                 <label className="col-sm-3 col-form-label form-label">Vigencia</label>
                 <div className="col-sm-9">
                     <Select
-                        options={[{ value: 1, label: 'Serie 1' }]}    
+                        options={vigencias}    
                         placeholder='' 
                         value={vigencia}    
                         onChange={(selectedOption) => handleSelectVigenciaChange(selectedOption)}

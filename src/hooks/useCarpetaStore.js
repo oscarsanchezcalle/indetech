@@ -1,16 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import { format } from 'date-fns'
 
 import { indetechApi } from '../api';
 import { onLoadCarpetas, onLoadCarpetasByCaja } from '../store';
-import { useAuthStore } from './';
 
 export const useCarpetaStore = () => {
   
     const dispatch = useDispatch();
-
-    const { proyectoId } = useAuthStore();    
 
     const { carpetas, carpetasByCajaId} = useSelector( state => state.carpeta );
 
@@ -31,11 +27,12 @@ export const useCarpetaStore = () => {
         }
     }
 
-    const crearCarpeta = async (criteria = {} ) => {
+    const crearCarpeta = async (criteria = {}, proyectoId ) => {
 
         //Todo: Implementar Loading
+        
         console.log(criteria);
-        return;
+        
         const {isValid, validationConditions} = isValidFormForSave(criteria);
         
         if (!isValid){
@@ -52,67 +49,109 @@ export const useCarpetaStore = () => {
             return;
         }
 
-        const {dependecia, subDependencia, numeroCaja, serie, subserie, tipoDocumento, fechaExtremaFinal,  fechaExtremaInicial, 
-            frecuencia, notas, soporte, tomoActual, tomoFinal, folioInicial, folioFinal, codigo } = criteria;
+        try
+        {
+            const {
+                dependencia, oficina, vigencia, numeroCaja, serie, subserie, tipoDocumento,
+                tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
+                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre 
+            } = criteria;
 
+            const carpetaCajaCriteria = {
+                "proyectoId": proyectoId,
+                "dependenciaId": dependencia.value,
+                "oficinaId": oficina.value,
+                "numeroCaja": parseInt(numeroCaja),
+                "serieId": serie.value,
+                "subserieId": subserie.value,
+                "tipoDocumentoId": tipoDocumento.value,
+                "fechaInicial": fechaExtremaInicial == '' ? '0001-01-01' : fechaExtremaInicial,
+                "fechaFinal": fechaExtremaFinal == '' ? '0001-01-01' : fechaExtremaFinal,
+                "tomoActual": tomoActual,
+                "tomoFinal": tomoFinal,
+                "folioInicial": folioInicial,
+                "folioFinal": folioFinal,
+                "codigo": codigo,
+                "tipoSoporteId": tipoSoporte.value == 'undefined' ? 0 : tipoSoporte.value,
+                "frecuenciaUsoId": frecuenciaUso.value == 'undefined' ? 0 : frecuenciaUso.value,
+                "notas": notas,
+                "vigenciaId": vigencia.value,
+                "cedulaCatastral": cedulaCatastral,
+                "duplicidad": duplicidad,
+                "autoDeCierre": autoDeCierre.value == 1 ? true : false
+            }
 
+            console.log(carpetaCajaCriteria);
             
-        //llamar al end point que crea las carpetas y las asigna a la caja
-        // const {data} = await indetechApi.post('/Carpeta/AgregarCarpetaACaja', {            
-        //     "numeroCaja": numeroCaja,
-        //     "proyectoId": proyectoId,
-        //     "dependenciaId": dependecia,
-        //     "oficinaId": subDependencia              
-        // }).catch(function (error) {
 
-        //     Swal.fire({
-        //         //position: 'top-end',
-        //         icon: 'error',
-        //         title: 'Error de conexión al servidor',
-        //         text: `Por favor intente nuevamente`,
-        //         showConfirmButton: true,
-        //         //timer: 1500
-        //     });
+            //llamar al end point que crea las carpetas y las asigna a la caja
+            const {data} = await indetechApi.post('/Carpeta/AgregarCarpetaACaja', carpetaCajaCriteria);
+            
+            //Actualizar la tabla de las carpetas by Caja.
+            getCarpetasByCajaId(data.cajaId);
 
-        //     console.log(error.response);
-        //     return;
-        // });    
-        
-        // const cajas = data.cajas;
-        
-        // Actualizar la tabla de las carpetas by Caja.
-        //getCarpetasByCajaId(data.cajaId);
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Registro corecto',
+                text: ``,
+                showConfirmButton: true,
+                //timer: 1500
+            });
 
+        }
+        catch(error)
+        {
+            console.log(error);
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'Error de conexión al servidor',
+                text: `Por favor intente nuevamente`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
+        }
     }
 
     const isValidFormForSave = (criteria = {}) => {
 
-        const {dependeciaId, subDependenciaId, numeroCaja, serieId, subserieId, tipoDocumentoId } = criteria;
+        const {
+             dependencia, oficina, numeroCaja,
+             serie, subserie, tipoDocumento, 
+             autoDeCierre, vigencia } = criteria;
 
         const validationConditions = [];
         let isValid = true;
 
-        if (    typeof dependeciaId === 'undefined' || typeof subDependenciaId === 'undefined'
-             || (typeof numeroCaja === 'undefined' || numeroCaja == "" ) || typeof serieId === 'undefined'
-             || typeof subserieId   === 'undefined' || typeof tipoDocumentoId === 'undefined')
+        if (     typeof dependencia.value == 'undefined' || typeof oficina.value == 'undefined'
+             || (typeof numeroCaja == 'undefined' || numeroCaja == 0 ) || typeof serie.value == 'undefined'
+             || typeof  subserie.value   == 'undefined' || typeof tipoDocumento.value == 'undefined'
+             || typeof  autoDeCierre.value   == 'undefined' || typeof vigencia.value == 'undefined')
         {            
-            if(typeof dependeciaId === 'undefined'){
+            if(typeof dependencia.value == 'undefined'){
                 validationConditions.push(' Dependencia');
             }
-            if(typeof subDependenciaId === 'undefined'){
+            if(typeof oficina.value == 'undefined'){
                 validationConditions.push(' Sub Dependencia');
             }
-            if(typeof numeroCaja === 'undefined' || numeroCaja == ""){
+            if(typeof vigencia.value == 'undefined'){
+                validationConditions.push(' Vigencia');
+            }
+            if(typeof numeroCaja == 'undefined' || numeroCaja == ""){
                 validationConditions.push(' Número de Caja');
             }
-            if(typeof serieId === 'undefined'){
+            if(typeof serie.value == 'undefined'){
                 validationConditions.push(' Serie');
             }
-            if(typeof subserieId === 'undefined'){
+            if(typeof subserie.value == 'undefined'){
                 validationConditions.push(' Subserie');
             }
-            if(typeof tipoDocumentoId === 'undefined'){
+            if(typeof tipoDocumento.value == 'undefined'){
                 validationConditions.push(' Tipo Documental');
+            }
+            if(typeof autoDeCierre.value == 'undefined'){
+                validationConditions.push(' Auto de cierre');
             }
             isValid = false;
         }

@@ -17,12 +17,13 @@ export const useVigenciaStore = () => {
             
             const { data } = await indetechApi.get('/Vigencia');
             
-            const dataForSelect = convertVigenciasToSelect(data);
+            const dataForSelect = convertVigenciasToSelect(data.vigencias);
 
             dispatch( onLoadVigencias( dataForSelect ) );
 
         } catch (error) 
         {
+            console.log(error)
             dispatch( isSuccessVigencias( false ) );
             dispatch( isLoadingVigencias( false ) );
         }
