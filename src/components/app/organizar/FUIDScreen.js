@@ -24,7 +24,7 @@ export const FuidScreen = () => {
     const { soportes, startLoadingSoportes } = useSoporteStore();
     const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
     const { isLoadingRotuloCaja, buscarRotuloCaja, rotuloCaja } = useCajaStore();
-    const { crearCarpeta, isLoadingAddCarpeta, getCarpetasByCajaId } = useCarpetaStore();
+    const { crearCarpeta, isLoadingAddCarpeta, getCarpetasByCajaId, isDeletingCarpeta } = useCarpetaStore();
     
 
     //useForm
@@ -120,6 +120,22 @@ export const FuidScreen = () => {
             getCarpetasByCajaId(rotuloCaja.cajaId);
         }
     }, [rotuloCaja]);
+
+    useEffect(() => {
+        if(isDeletingCarpeta === 'deleted' && rotuloCaja.cajaId && numeroCaja != ""){
+            
+            getCarpetasByCajaId(rotuloCaja.cajaId);
+            const criteria = {
+                "numero": parseInt(numeroCaja),
+                "proyectoId": proyectoId,
+                "dependenciaId": formValues.dependencia.value,
+                "oficinaId": formValues.oficina.value,
+                "vigenciaId": formValues.vigencia.value
+            };
+            buscarRotuloCaja(criteria);
+            
+        }
+    }, [isDeletingCarpeta]);
 
     const handleSelectDependenciaChange = ( selectedOption ) => {           
         startLoadingOficinas(selectedOption.value);

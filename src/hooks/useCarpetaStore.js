@@ -4,13 +4,13 @@ import Swal from 'sweetalert2';
 import { indetechApi } from '../api';
 import { 
      onLoadCarpetas, onLoadCarpetasByCaja, setIsLoadingAddCarpeta,
-     setResetFuidForm } from '../store';
+     setIsDeletingCarpeta } from '../store';
 
 export const useCarpetaStore = () => {
   
     const dispatch = useDispatch();
 
-    const { carpetas, carpetasByCajaId, isLoadingAddCarpeta } = useSelector( state => state.carpeta );
+    const { carpetas, carpetasByCajaId, isLoadingAddCarpeta, isDeletingCarpeta } = useSelector( state => state.carpeta );
 
     const startLoadingCarpetas = async() => {
 
@@ -112,14 +112,32 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const deleteCarpetaById = async (carpetaId) => {
+
+        dispatch( setIsDeletingCarpeta('') );
+
+        try {
+
+            await indetechApi.delete('/carpeta/'+carpetaId); 
+            
+            dispatch( setIsDeletingCarpeta('deleted') );
+
+        } catch (error) {
+          console.log('Error eliminando la carpeta'+ carpetaId);
+          console.log(error)
+        }
+    }
+
     return {
         //* Propiedades
         carpetas,
         carpetasByCajaId,
         isLoadingAddCarpeta,
+        isDeletingCarpeta,
         
         //* Métodos
         crearCarpeta, 
-        getCarpetasByCajaId
+        getCarpetasByCajaId,
+        deleteCarpetaById
     }
 }

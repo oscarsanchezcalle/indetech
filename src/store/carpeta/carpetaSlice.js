@@ -10,7 +10,8 @@ export const carpetaSlice = createSlice({
         ],
         carpetasByCajaId : [
             
-        ]
+        ],
+        isDeletingCarpeta: ''
     },
     reducers: {
         onLoadCarpetas: (state, { payload = [] }) => {
@@ -25,6 +26,9 @@ export const carpetaSlice = createSlice({
         },
         setIsLoadingAddCarpeta: ( state, {payload} ) => {
             state.isLoadingAddCarpeta = payload ;
+        },
+        setIsDeletingCarpeta: ( state, {payload} ) => {
+            state.isDeletingCarpeta = payload ;
         }
     }
 });
@@ -34,5 +38,6 @@ export const {
     onLoadCarpetas,
     onAddNewCarpeta,
     onLoadCarpetasByCaja,
-    setIsLoadingAddCarpeta
+    setIsLoadingAddCarpeta,
+    setIsDeletingCarpeta
 } = carpetaSlice.actions;

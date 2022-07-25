@@ -5,14 +5,17 @@ import
 { 
      useCarpetaStore
 } from '../../../hooks';
-import { Titulo } from '../Titulo';
 
 export const TablaCarpetas = () => {
 
-    const { carpetasByCajaId } = useCarpetaStore();
+    const { carpetasByCajaId, deleteCarpetaById } = useCarpetaStore();
    
     if(carpetasByCajaId === undefined){
         return null;
+    }
+
+    const handleBtnEliminar = async (carpetaId) => {
+        await deleteCarpetaById(carpetaId);
     }
 
     return (
@@ -23,9 +26,9 @@ export const TablaCarpetas = () => {
                             <div className="card-inner">
                                 <div className="card-title-group">
                                     <div className="card-title">
-                                    <h5 className="title">
-                                        <h6>Inventario Carpetas</h6>
-                                    </h5>
+                                    <h6 className="title">
+                                        Inventario Carpetas
+                                    </h6>
                                     </div>
                                     <div className="card-tools me-n1">
                                         <ul className="btn-toolbar">                           
@@ -104,14 +107,36 @@ export const TablaCarpetas = () => {
                                                     {carpeta.descripcion}
                                                 </td>
                                                 <td>
-                                                <div className="drodown">
-                                                        <a href="#" className="dropdown-toggle btn btn-icon btn-trigger me-n1 show" data-bs-toggle="dropdown" aria-expanded="true"><em className="icon ni ni-more-h" /></a>
-                                                        <div className="dropdown-menu dropdown-menu-end show" style={{position: 'absolute', inset: '0px 0px auto auto', margin: '0px', transform: 'translate3d(-18px, 349px, 0px)'}} data-popper-placement="bottom-end">
-                                                        <ul className="link-list-opt no-bdr">
-                                                            <li><a href="#"><em className="icon ni ni-external"></em><span>Mover Carpeta</span></a></li>
-                                                            <li><a href="#"><em className="icon ni ni-edit"></em><span>Editar</span></a></li>
-                                                            <li><a href="#"><em className="icon ni ni-trash"></em><span>Eliminar</span></a></li>
-                                                        </ul>
+                                                    <div className="drodown">
+                                                        <a
+                                                            href="#"
+                                                            className="dropdown-toggle btn btn-icon btn-trigger"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <em className="icon ni ni-more-h" />
+                                                        </a>
+                                                        <div className="dropdown-menu dropdown-menu-end" style={{}}>
+                                                            <ul className="link-list-opt no-bdr">
+                                                                <li>
+                                                                    <a href="#">
+                                                                        <em className="icon ni ni-external" />
+                                                                        <span>Mover Carpeta</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#">
+                                                                        <em className="icon ni ni-edit" />
+                                                                        <span>Editar</span>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a onClick={() => handleBtnEliminar(carpeta.id)}>
+                                                                        <em className="icon ni ni-trash" />
+                                                                        <span>Eliminar</span>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </td>
