@@ -8,7 +8,8 @@ export const authSlice = createSlice({
         rol: '',
         proyectoId: 0,
         proyecto:'',
-        objetoContrato: ''
+        objetoContrato: '',
+        authenticated: false
     },
     reducers: {
         onLoadAuth: (state, { payload }) => {
@@ -18,11 +19,15 @@ export const authSlice = createSlice({
             state.proyectoId = payload.proyectoId;
             state.proyecto = payload.proyecto;
             state.objetoContrato = payload.objetoContrato;
-        }
+        },
+        setIsAuthenticated: (state, { payload }) => {
+            state.authenticated = payload;
+        },
     }
 });
 
 // Action creators are generated for each case reducer function
 export const {
-    onLoadAuth
+    onLoadAuth,
+    setIsAuthenticated
 } = authSlice.actions;

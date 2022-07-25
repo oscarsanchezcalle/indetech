@@ -1,51 +1,116 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import 
+{ 
+    useAuthStore, useForm
+} from '../../hooks';
 
 export const LoginScreen = () => {
+
+  const { startLogIn, authenticated } = useAuthStore();
+
+  const [formValues, handleInputChange] = useForm({
+    username:'',
+    password:''
+  });
+ 
+  const {username, password} = formValues;
+
+  const handleBtnLogin = () => {
+    startLogIn(username,password);
+  }
+
   return (
     <>
-      <h3 className='auth__title'>Log In</h3>
-
-      <form>
-
-        <input
-          type='text'
-          placeholder='Email'
-          name='email'
-          className='auth__input'
-          autoComplete='off'
-        />
-
-         <input
-          type='password'
-          placeholder='Password'
-          name='password'
-          className='auth__input'
-        />
-
-        <button type='submit' className='btn btn-primary btn-block'>
-          LogIn
-        </button>
-
-        <div className='auth__social-networks'>          
-          <p>Login with social networks</p>
-          <div className="google-btn">
-            <div className="google-icon-wrapper">
-                <img className="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+    <div className="nk-main ">
+      {/* wrap @s */}
+      <div className="nk-wrap nk-wrap-nosidebar">
+        {/* content @s */}
+        <div className="nk-content ">
+          <div className="nk-block nk-block-middle nk-auth-body  wide-xs">
+            <div className="brand-logo pb-4 text-center">
+              <a href="html/index.html" className="logo-link">
+                <img
+                  className="logo-light logo-img logo-img-lg"
+                  src="./images/logo.png"
+                  srcSet="./images/logo2x.png 2x"
+                  alt="logo"
+                />
+                {/* <img
+                  className="logo-dark logo-img logo-img-lg"
+                  src="./images/logo-dark.png"
+                  srcSet="./images/logo-dark2x.png 2x"
+                  alt="logo-dark"
+                /> */}
+              </a>
             </div>
-            <p className="btn-text">
-                <b>Sign in with google</b>
-            </p>
+            <div className="card card-bordered">
+              <div className="card-inner card-inner-lg">
+                <div className="nk-block-head">
+                  <div className="nk-block-head-content">
+                    <h4 className="nk-block-title">Iniciar Sesión</h4>
+                    <div className="nk-block-des">
+                      <p>
+                        Acceso a Indetech Sistema de Gestión Documental
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                  <div className="form-group">
+                    <div className="form-label-group">
+                      <label className="form-label" htmlFor="default-01">
+                        Usuario
+                      </label>
+                    </div>
+                    <div className="form-control-wrap">
+                      <input
+                        type='text'
+                        onChange={handleInputChange}
+                        value={username}
+                        autoComplete="off"
+                        placeholder='Ingresa el nombre de usuario'
+                        name='username'
+                        className='form-control'
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <div className="form-label-group">
+                      <label className="form-label" htmlFor="password">
+                        Clave
+                      </label>
+                      
+                    </div>
+                    <div className="form-control-wrap">                  
+                      <input
+                        type='password'
+                        onChange={handleInputChange}
+                        value={password}
+                        autoComplete="off"
+                        placeholder='Ingresa la clave de acceso'
+                        name='password'
+                        className='form-control'
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <button  onClick={handleBtnLogin} className="btn btn-lg btn-primary btn-block">
+                      Entrar
+                    </button>
+                  </div>
+                
+              
+                
+              </div>
+            </div>
           </div>
+        
         </div>
-
-        {/*
-          Link de react router para navegar entre paginas
-        */}
-        <Link to="/auth/register" className='link'>
-          Create new Account
-        </Link>    
-      </form>
+        {/* wrap @e */}
+      </div>
+      {/* content @e */}
+    </div>
+      
     </>
   )
 }

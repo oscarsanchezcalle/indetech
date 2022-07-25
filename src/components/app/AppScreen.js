@@ -3,36 +3,46 @@ import { Navigation } from '../layout/Navigation'
 import { Footer } from '../layout/Footer'
 import { AppScreenRouter } from '../../routers/AppScreenRouter'
 import { useAuthStore } from '../../hooks'
+import { LoginScreen } from '../auth/LoginScreen'
 
 export const AppScreen = () => {
 
-  const { startLoadingAuth } = useAuthStore();
+  const { startLoadingAuth, authenticated } = useAuthStore();
 
    //cargo la primera vez
   useEffect(() => {
     document.body.style.zoom = "90%";
     startLoadingAuth();
-  }, [])
+  }, []);
+
+  if(!authenticated){
+    return (
+      <>
+        <LoginScreen />
+      </>
+    );
+  }
 
   return (
+  
    <div className="nk-app-root">
      <div className="nk-wrap ">
-      <Navigation />
-      <div className="nk-content nk-content-fluid">
-        <div className="container-xl wide-xl">
-          <div className="nk-content-inner">
-            <div className="nk-content-body">
+        <Navigation />
+        <div className="nk-content nk-content-fluid">
+          <div className="container-xl wide-xl">
+            <div className="nk-content-inner">
+              <div className="nk-content-body">
 
-              
-              {/* Rutas con el navbar */}
-              <AppScreenRouter />
+                
+                {/* Rutas con el navbar */}
+                <AppScreenRouter />
 
+              </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
-  </div>
-</div>
+    </div>
   )
 }
