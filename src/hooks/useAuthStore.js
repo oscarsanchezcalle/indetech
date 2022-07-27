@@ -34,7 +34,7 @@ export const useAuthStore = () => {
         try 
         {
              //get user from api
-             if(user === "analista" && pass === "Indetech2022"){
+             if(user === "analista" && pass === "Protech2022"){
                 const user = {
                     persona:  'Moises Sánchez', 
                     username: 'moise', 

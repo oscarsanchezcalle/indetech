@@ -98,10 +98,28 @@ export const FuidScreen = () => {
     }, [oficinas]);
 
     useEffect(() => {
+        if(vigencias?.length > 0 && proyectoId == 1){
+            handleSelectVigenciaChange(vigencias[2]);
+        }
+    }, [vigencias]);
+
+    useEffect(() => {
         if(series?.length > 0 && proyectoId == 1){
             handleSelectSerieChange(series[0]);
         }
     }, [series]);
+
+    useEffect(() => {
+        if(subseries?.length > 0 && proyectoId == 1){
+            handleSelectSubserieChange(subseries[0]);
+        }
+    }, [subseries]);
+
+    useEffect(() => {
+        if(tipoDocumentos?.length > 0 && proyectoId == 1){
+            handleSelectTipoDocumentoChange(tipoDocumentos[0]);
+        }
+    }, [tipoDocumentos]);
 
     useEffect(() => {
         if(frecuencias?.length > 0){
@@ -354,7 +372,8 @@ export const FuidScreen = () => {
                 <div className="col-sm-9">
                     <Select
                         options={vigencias}    
-                        placeholder='' 
+                        placeholder=''
+                        isDisabled={proyectoId== 1 ? true : false}
                         value={vigencia}    
                         onChange={(selectedOption) => handleSelectVigenciaChange(selectedOption)}
                         />
@@ -414,6 +433,7 @@ export const FuidScreen = () => {
                                     <Select
                                         options={subseries}  
                                         value={subserie}    
+                                        isDisabled={proyectoId== 1 ? true : false}
                                         onChange={(selectedOption) => handleSelectSubserieChange(selectedOption)}
                                         placeholder='Subseries'
                                         />
@@ -422,7 +442,8 @@ export const FuidScreen = () => {
                                     <label className='form-label'>Tipo Documental</label>
                                     <Select
                                         options={tipoDocumentos}  
-                                        value={tipoDocumento}    
+                                        value={tipoDocumento}   
+                                        isDisabled={proyectoId== 1 ? true : false} 
                                         onChange={(selectedOption) => handleSelectTipoDocumentoChange(selectedOption)}
                                         placeholder='Tipo Documental'
                                         />
@@ -430,16 +451,18 @@ export const FuidScreen = () => {
                             </div>
                             <div className='row mt-2'>
                                 <div className='col-md-4'>
-                                    <label className='form-label'>Fehas extremas</label>
+                                    <label className='form-label'>Fechas extremas</label>
                                     <div className="form-control-wrap">
                                         <div className="input-group">
                                             <input 
+                                                disabled={true}
                                                 name="fechaExtremaInicial" 
                                                 onChange={handleInputChange} 
                                                 type="date" 
                                                 value={fechaExtremaInicial}
                                                 className="form-control"/>
                                             <input 
+                                                disabled={true}
                                                 name="fechaExtremaFinal"
                                                 onChange={handleInputChange}
                                                 value={fechaExtremaFinal}
@@ -458,6 +481,7 @@ export const FuidScreen = () => {
                                                 onChange={handleInputChange}
                                                 value={tomoActual}
                                                 type="number" 
+                                                disabled={true}
                                                 autoComplete="off"
                                                 className="form-control" 
                                                 placeholder='Actual'/>
@@ -467,6 +491,7 @@ export const FuidScreen = () => {
                                                 min={formValues.tomoActual}
                                                 value={tomoFinal}
                                                 type="number" 
+                                                disabled={true}
                                                 autoComplete="off"
                                                 className="form-control" 
                                                 placeholder='Final'/>
@@ -483,6 +508,7 @@ export const FuidScreen = () => {
                                                 type="number" 
                                                 className="form-control"
                                                 value={folioInicial} 
+                                                disabled={true}
                                                 placeholder='Inicial'
                                                 autoComplete="off"/>
                                             <input 
@@ -491,6 +517,7 @@ export const FuidScreen = () => {
                                                 value={folioFinal}
                                                 min={formValues.folioInicial}
                                                 type="number" 
+                                                disabled={true}
                                                 className="form-control" 
                                                 placeholder='Final'
                                                 autoComplete="off"/>
@@ -498,7 +525,7 @@ export const FuidScreen = () => {
                                     </div>
                                 </div>
                                 <div className="col-md-2">
-                                    <label className='form-label'>Código</label>
+                                    <label className='form-label'>Núm. Expediente</label>
                                         <input 
                                             value={codigo}
                                             name="codigo"
@@ -515,6 +542,7 @@ export const FuidScreen = () => {
                                     <Select
                                         options={soportes}
                                         placeholder='' 
+                                        isDisabled={true}
                                         value={tipoSoporte}    
                                         onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
                                         />
@@ -524,6 +552,7 @@ export const FuidScreen = () => {
                                     <Select
                                         options={frecuencias}    
                                         placeholder='' 
+                                        isDisabled={true}
                                         value={frecuenciaUso}    
                                         onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
                                         />
@@ -544,6 +573,7 @@ export const FuidScreen = () => {
                                         <div className="input-group">
                                             <input 
                                                 name="duplicidad"
+                                                disabled={true}
                                                 value={duplicidad}
                                                 onChange={handleInputChange}
                                                 type="text" 
@@ -557,9 +587,10 @@ export const FuidScreen = () => {
                                 <div className="col-md-2">
                                     <label className='form-label'>Auto de Cierre</label>
                                     <Select
-                                        options={[{ value: 1, label: 'Si' }, { value: 0, label: 'No'}]}    
+                                        options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
                                         placeholder='' 
-                                        value={autoDeCierre}    
+                                        isDisabled={proyectoId== 1 ? true : false}
+                                        value={{value: 0, label: 'No'}}    
                                         onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
                                         />
                                 </div>

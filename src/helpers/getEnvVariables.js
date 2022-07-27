@@ -7,6 +7,6 @@
 //     }
 // }
 
-const baseUrl = 'https://indetechapi.azurewebsites.net/api';
+const baseUrl = 'https://protechapi.azurewebsites.net/api';
 
 export { baseUrl };

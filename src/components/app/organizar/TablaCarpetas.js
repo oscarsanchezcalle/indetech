@@ -52,7 +52,7 @@ export const TablaCarpetas = () => {
                                                 <span>Número</span>
                                             </th>
                                             <th >
-                                                <span>FechasExtremas</span>
+                                                <span>Fechas Extremas</span>
                                             </th>
                                             <th >
                                                 <span>Tomo</span>
