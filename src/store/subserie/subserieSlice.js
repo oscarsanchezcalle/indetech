@@ -8,11 +8,16 @@ export const subserieSlice = createSlice({
         subseries: [
             // temp
         ],
+        subseriesEdit: []
     },
     reducers: {
         onLoadSubseries: (state, { payload = [] }) => {
             state.isLoadingSubserie = false;
             state.subseries = payload;
+        },
+        onLoadSubseriesEdit: (state, { payload = [] }) => {
+            state.isLoadingSubserie = false;
+            state.subseriesEdit = payload;
         },
         onAddNewSubserie: ( state, { payload }) => {
             state.subseries.push( payload );
@@ -35,5 +40,6 @@ export const {
     onAddNewSubserie,
     isSuccessSubseries,
     isLoadingSubseries,
-    resetSubseries
+    resetSubseries,
+    onLoadSubseriesEdit
 } = subserieSlice.actions;

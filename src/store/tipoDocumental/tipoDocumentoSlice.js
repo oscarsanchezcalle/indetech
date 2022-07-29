@@ -8,11 +8,18 @@ export const tipoDocumentoSlice = createSlice({
         tipoDocumentos: [
             // temp
         ],
+        tipoDocumentosEdit: [
+
+        ]
     },
     reducers: {
         onLoadTipoDocumentos: (state, { payload = [] }) => {
             state.isLoadingTipoDocumentos = false;
             state.tipoDocumentos = payload;
+        },
+        onLoadTipoDocumentosEdit: (state, { payload = [] }) => {
+            state.isLoadingTipoDocumentos = false;
+            state.tipoDocumentosEdit = payload;
         },
         onAddNewTipoDocumento: ( state, { payload }) => {
             state.tipoDocumentos.push( payload );
@@ -35,5 +42,6 @@ export const {
     onAddNewTipoDocumento,
     isSuccessTipoDocumentos,
     isLoadingTipoDocumentos,
-    resetTipoDocumentos
+    resetTipoDocumentos,
+    onLoadTipoDocumentosEdit
 } = tipoDocumentoSlice.actions;

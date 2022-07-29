@@ -207,7 +207,7 @@ export const FuidScreen = () => {
                 title: 'Campos incompletos',
                 text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
                 showConfirmButton: true,
-                //timer: 1500
+                timer: 1500
             });
 
             return;
@@ -348,7 +348,7 @@ export const FuidScreen = () => {
                 <label className="col-sm-3 col-form-label form-label">Dependecia</label>
                 <div className="col-sm-9">
                      <Select
-                        isDisabled={proyectoId== 1 ? true : false}
+                        // isDisabled={proyectoId== 1 ? true : false}
                         options={dependencias}    
                         value={dependencia}    
                         placeholder=''
@@ -360,7 +360,7 @@ export const FuidScreen = () => {
             <label className="col-sm-3 col-form-label form-label">Sub Dependencia</label>
                 <div className="col-sm-9">
                     <Select
-                        isDisabled={proyectoId== 1 ? true : false}
+                        // isDisabled={proyectoId== 1 ? true : false}
                         options={oficinas}   
                         placeholder=''
                         value={oficina}    
@@ -374,7 +374,6 @@ export const FuidScreen = () => {
                     <Select
                         options={vigencias}    
                         placeholder=''
-                        isDisabled={proyectoId== 1 ? true : false}
                         value={vigencia}    
                         onChange={(selectedOption) => handleSelectVigenciaChange(selectedOption)}
                         />

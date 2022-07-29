@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { indetechApi } from '../api';
 import { convertTipoDocumentosToSelect } from '../helpers';
-import { onLoadTipoDocumentos, isLoadingTipoDocumentos, isSuccessTipoDocumentos, resetTipoDocumentos } from '../store';
+import { onLoadTipoDocumentos, isLoadingTipoDocumentos, isSuccessTipoDocumentos, resetTipoDocumentos, onLoadTipoDocumentosEdit } from '../store';
 
 export const useTipoDocumentoStore = () => {
   
     const dispatch = useDispatch();
-    const { tipoDocumentos, isLoadingTipoDocumento, isSuccessTipoDocumento } = useSelector( state => state.tipoDocumento );
+    const { tipoDocumentos, isLoadingTipoDocumento, isSuccessTipoDocumento, tipoDocumentosEdit } = useSelector( state => state.tipoDocumento );
     
 
     const startLoadingTipoDocumentos = async(id) => {
@@ -29,6 +29,26 @@ export const useTipoDocumentoStore = () => {
         }
     }
 
+    const startLoadingTipoDocumentosEdit = async(id) => {
+       
+        try 
+        {
+            dispatch( isLoadingTipoDocumentos( true ) );
+            
+            const { data } = await indetechApi.get('/TipoDocumento/GetTipoDocumentoBySubserieID?id='+id);
+            
+            const tipoDocumentosForSelect = convertTipoDocumentosToSelect(data);
+
+            dispatch( onLoadTipoDocumentosEdit( tipoDocumentosForSelect ) );
+
+        } catch (error) 
+        {
+            dispatch( isSuccessTipoDocumentos( false ) );
+            dispatch( isLoadingTipoDocumentos( false ) );
+
+        }
+    }
+
     const resetTipoDocumento = async() => {
         dispatch( resetTipoDocumentos() );
     }
@@ -38,9 +58,11 @@ export const useTipoDocumentoStore = () => {
         tipoDocumentos,
         isLoadingTipoDocumento,
         isSuccessTipoDocumento,
+        tipoDocumentosEdit,
 
         //* Métodos
         startLoadingTipoDocumentos,
-        resetTipoDocumento
+        resetTipoDocumento,
+        startLoadingTipoDocumentosEdit
     }
 }

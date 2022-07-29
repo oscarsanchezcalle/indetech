@@ -12,20 +12,17 @@ import
     useForm, useCarpetaStore, useVigenciaStore, useSoporteStore, useFrecuenciaStore, useCajaStore
 } from '../../../hooks';
 import { NumeroCaja } from './NumeroCaja';
+import { convertSeriesToSelect, convertSubseriesToSelect, convertTipoDocumentosToSelect } from '../../../helpers';
 
 export const TablaCarpetas = () => {
 
-    const { proyectoId, proyecto } = useAuthStore();
-    const { startLoadingDependencias, dependencias } = useDependieciaStore();
-    const { startLoadingOficinas, oficinas } = useOficinaStore();
-    const { series, startLoadingSeries } = useSerieStore();
-    const { subseries, startLoadingSubseries } = useSubserieStore();
-    const { tipoDocumentos, startLoadingTipoDocumentos } = useTipoDocumentoStore();
-    const { vigencias, startLoadingVigencias } = useVigenciaStore();
-    const { soportes, startLoadingSoportes } = useSoporteStore();
-    const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
-    const { isLoadingRotuloCaja, buscarRotuloCaja, rotuloCaja } = useCajaStore();
-    const { crearCarpeta, isLoadingAddCarpeta, getCarpetasByCajaId, isDeletingCarpeta } = useCarpetaStore();
+    const { proyectoId } = useAuthStore();
+    const { series } = useSerieStore();
+    const { subseriesEdit, startLoadingSubseriesEdit } = useSubserieStore();
+    const { tipoDocumentosEdit, startLoadingTipoDocumentosEdit } = useTipoDocumentoStore();
+    const { soportes } = useSoporteStore();
+    const { frecuencias,  } = useFrecuenciaStore();
+    const { isLoadingAddCarpeta, getCarpetasByCajaId, isDeletingCarpeta } = useCarpetaStore();
 
     //useForm
     const documentoForm = {
@@ -54,10 +51,6 @@ export const TablaCarpetas = () => {
     const [formValues, handleInputChange, handleSelectChange, resetFuidForm, setEditFuidForm] = useForm(documentoForm);
 
     const {
-        dependencia,
-        oficina,
-        vigencia,
-        numeroCaja,
         serie,
         subserie,
         tipoDocumento,
@@ -76,86 +69,87 @@ export const TablaCarpetas = () => {
         autoDeCierre
     } = formValues;
 
-    useEffect(() => {
-        if(proyectoId > 0){
-            startLoadingDependencias(proyectoId);
-            startLoadingFrecuencias();
-            startLoadingSoportes();
-            startLoadingVigencias();
-        }
-    }, [proyectoId]);
+    Modal.setAppElement('#root');
 
-    useEffect(() => {
-        if(dependencias?.length > 0 && proyectoId == 1){
-            handleSelectDependenciaChange(dependencias[0]);
-        }
-    }, [dependencias]);
+    const [modalIsOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-        if(oficinas?.length > 0 && proyectoId == 1){
-            handleSelectSubDependenciaChange(oficinas[0]);
-        }
-    }, [oficinas]);
 
-    useEffect(() => {
-        if(vigencias?.length > 0 && proyectoId == 1){
-            handleSelectVigenciaChange(vigencias[2]);
-        }
-    }, [vigencias]);
-
-    useEffect(() => {
-        if(series?.length > 0 && proyectoId == 1){
-            handleSelectSerieChange(series[0]);
-        }
-    }, [series]);
-
-    useEffect(() => {
-        if(subseries?.length > 0 && proyectoId == 1){
-            handleSelectSubserieChange(subseries[0]);
-        }
-    }, [subseries]);
-
-    useEffect(() => {
-        if(tipoDocumentos?.length > 0 && proyectoId == 1){
-            handleSelectTipoDocumentoChange(tipoDocumentos[0]);
-        }
-    }, [tipoDocumentos]);
-
-    useEffect(() => {
-        if(frecuencias?.length > 0){
-            handleSelectFrecuenciaChange(frecuencias[0]);
-        }
-    }, [frecuencias]);
-
-    useEffect(() => {
-        if(soportes?.length > 0){
-            handleSelectSoporteChange(soportes[0]);
-        }
-    }, [soportes]);
-
-    useEffect(() => {
-        if(rotuloCaja.cajaId > 0){
-            getCarpetasByCajaId(rotuloCaja.cajaId);
-        }
-    }, [rotuloCaja]);
-
-    const handleSelectDependenciaChange = ( selectedOption ) => {           
-        startLoadingOficinas(selectedOption.value);
-        handleSelectChange(selectedOption, "dependencia");
+    const { carpetasByCajaId, deleteCarpetaById } = useCarpetaStore();
+   
+    if(carpetasByCajaId === undefined){
+        return null;
     }
 
-    const handleSelectSubDependenciaChange = ( selectedOption ) => {           
-        startLoadingSeries(selectedOption.value);
-        handleSelectChange(selectedOption, "oficina");  
+    const handleBtnEliminar = async (carpetaId) => {
+        await deleteCarpetaById(carpetaId);
     }
+
+    function openModal(carpeta) {
+        
+        console.log(carpeta);
+        const serieOption = convertSeriesToSelect([carpeta.serie]);
+        const subserieOption = convertSubseriesToSelect([carpeta.subserie]);
+        const tipoDocumentoOption = convertTipoDocumentosToSelect([carpeta.tipoDocumento]);
+        const tipoSoporteOption = convertTipoDocumentosToSelect([carpeta.tipoSoporte]); 
+        const frecuenciaUsoOption = convertTipoDocumentosToSelect([carpeta.frecuenciaUso]); 
+
+        startLoadingSubseriesEdit(serieOption[0].value);
+        startLoadingTipoDocumentosEdit(subserieOption[0].value);
+
+        const formValues = {
+            serie:serieOption[0],
+            subserie:subserieOption[0],
+            tipoDocumento:tipoDocumentoOption[0],
+            cedulaCatastral:'',
+            notas:carpeta.descripcion,
+            fechaExtremaInicial: format(parseISO(carpeta.fechaInicial), 'yyyy-MM-dd') ,
+            fechaExtremaFinal:format(parseISO(carpeta.fechaFinal), 'yyyy-MM-dd'),
+            folioInicial:carpeta.folioInicial,
+            folioFinal:carpeta.folioFinal,
+            tomoActual:carpeta.tomoInicial,
+            tomoFinal:carpeta.tomoFinal,
+            codigo: carpeta.codigo,
+            cedulaCatastral: carpeta.cedulaCatastral,
+            duplicidad: carpeta.duplicidad,
+            autoDeCierre: carpeta.autoDeCierre ? { value: 1, label: 'Si'} : { value: 0, label: 'No'},
+            tipoSoporte: tipoSoporteOption[0],
+            frecuenciaUso: frecuenciaUsoOption[0]
+        }
+
+        setEditFuidForm(formValues);
+
+        document.body.style.overflow = 'hidden';
+        setIsOpen(true);
+     }
+    
+     function afterOpenModal() {
+        // references are now sync'd and can be accessed.
+     }
+    
+     function closeModal() {
+        setIsOpen(false);
+        document.body.style.overflow = 'unset';
+     }
+
+    // useEffect(() => {
+    //     if(proyectoId > 0){
+    //         startLoadingDependencias(proyectoId);
+    //         startLoadingFrecuencias();
+    //         startLoadingSoportes();
+    //         startLoadingVigencias();
+    //     }
+    // }, [proyectoId]);
+
+   
+   
 
     const handleSelectSerieChange = ( selectedOption) => {   
-        startLoadingSubseries(selectedOption.value);
+        startLoadingSubseriesEdit(selectedOption.value);
         handleSelectChange(selectedOption, "serie");
     }
 
     const handleSelectSubserieChange = ( selectedOption) => {   
-        startLoadingTipoDocumentos(selectedOption.value);
+        startLoadingTipoDocumentosEdit(selectedOption.value);
         handleSelectChange(selectedOption, "subserie");
     }
 
@@ -169,10 +163,6 @@ export const TablaCarpetas = () => {
 
     const handleSelectFrecuenciaChange = ( selectedOption ) => {   
         handleSelectChange(selectedOption, "frecuenciaUso");
-    }
-
-    const handleSelectVigenciaChange = ( selectedOption ) => {   
-        handleSelectChange(selectedOption, "vigencia");
     }
 
     const handleSelectAutoDeCierreChange = ( selectedOption ) => {   
@@ -259,47 +249,7 @@ export const TablaCarpetas = () => {
         },
     };
 
-    Modal.setAppElement('#root');
-
-    const [modalIsOpen, setIsOpen] = useState(false);
-
-
-    const { carpetasByCajaId, deleteCarpetaById } = useCarpetaStore();
    
-    if(carpetasByCajaId === undefined){
-        return null;
-    }
-
-    const handleBtnEliminar = async (carpetaId) => {
-        await deleteCarpetaById(carpetaId);
-    }
-
-    function openModal(carpeta) {
-
-        console.log(carpeta);
-
-        const formValues = {
-            cedulaCatastral:'',
-            notas:carpeta.descripcion,
-            fechaExtremaInicial: format(parseISO(carpeta.fechaInicial), 'yyyy-MM-dd') ,
-            fechaExtremaFinal:format(parseISO(carpeta.fechaFinal), 'yyyy-MM-dd'),
-        }
-
-        setEditFuidForm(formValues);
-
-        document.body.style.overflow = 'hidden';
-        setIsOpen(true);
-     }
-    
-     function afterOpenModal() {
-        // references are now sync'd and can be accessed.
-     }
-    
-     function closeModal() {
-        setIsOpen(false);
-        document.body.style.overflow = 'unset';
-
-     }
 
 
     return (
@@ -461,7 +411,6 @@ export const TablaCarpetas = () => {
                                         <div className='col-md-4'>
                                             <label className='form-label'>Serie</label>
                                             <Select
-                                                isDisabled={proyectoId== 1 ? true : false}
                                                 options={series}   
                                                 value={serie}    
                                                 onChange={(selectedOption) => handleSelectSerieChange(selectedOption)}
@@ -471,9 +420,8 @@ export const TablaCarpetas = () => {
                                         <div className='col-md-4'>
                                             <label className='form-label'>Subserie</label>
                                             <Select
-                                                options={subseries}  
+                                                options={subseriesEdit}  
                                                 value={subserie}    
-                                                isDisabled={proyectoId== 1 ? true : false}
                                                 onChange={(selectedOption) => handleSelectSubserieChange(selectedOption)}
                                                 placeholder='Subseries'
                                                 />
@@ -481,9 +429,8 @@ export const TablaCarpetas = () => {
                                         <div className='col-md-4'>
                                             <label className='form-label'>Tipo Documental</label>
                                             <Select
-                                                options={{tipoDocumentos}}  
+                                                options={tipoDocumentosEdit}
                                                 value={tipoDocumento}   
-                                                isDisabled={proyectoId== 1 ? true : false} 
                                                 onChange={(selectedOption) => handleSelectTipoDocumentoChange(selectedOption)}
                                                 placeholder='Tipo Documental'
                                                 />
@@ -521,7 +468,6 @@ export const TablaCarpetas = () => {
                                                         onChange={handleInputChange}
                                                         value={tomoActual}
                                                         type="number" 
-                                                        disabled={true}
                                                         autoComplete="off"
                                                         className="form-control" 
                                                         placeholder='Actual'/>
@@ -531,7 +477,6 @@ export const TablaCarpetas = () => {
                                                         min={formValues.tomoActual}
                                                         value={tomoFinal}
                                                         type="number" 
-                                                        disabled={true}
                                                         autoComplete="off"
                                                         className="form-control" 
                                                         placeholder='Final'/>
@@ -548,7 +493,6 @@ export const TablaCarpetas = () => {
                                                         type="number" 
                                                         className="form-control"
                                                         value={folioInicial} 
-                                                        disabled={true}
                                                         placeholder='Inicial'
                                                         autoComplete="off"/>
                                                     <input 
@@ -557,7 +501,6 @@ export const TablaCarpetas = () => {
                                                         value={folioFinal}
                                                         min={formValues.folioInicial}
                                                         type="number" 
-                                                        disabled={true}
                                                         className="form-control" 
                                                         placeholder='Final'
                                                         autoComplete="off"/>
@@ -582,7 +525,6 @@ export const TablaCarpetas = () => {
                                             <Select
                                                 options={soportes}
                                                 placeholder='' 
-                                                isDisabled={true}
                                                 value={tipoSoporte}    
                                                 onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
                                                 />
@@ -592,7 +534,6 @@ export const TablaCarpetas = () => {
                                             <Select
                                                 options={frecuencias}    
                                                 placeholder='' 
-                                                isDisabled={true}
                                                 value={frecuenciaUso}    
                                                 onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
                                                 />
@@ -613,7 +554,6 @@ export const TablaCarpetas = () => {
                                                 <div className="input-group">
                                                     <input 
                                                         name="duplicidad"
-                                                        disabled={true}
                                                         value={duplicidad}
                                                         onChange={handleInputChange}
                                                         type="text" 
