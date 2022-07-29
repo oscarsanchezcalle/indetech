@@ -29,6 +29,10 @@ export const useForm = ( initialState = {} ) => {
         });
     }
 
+    const setEditFuidForm = () => {
+     
+    }
+
     const handleInputChange = ({ target }) => {
 
         setValues({
@@ -44,6 +48,6 @@ export const useForm = ( initialState = {} ) => {
         });
     }
 
-    return [ values, handleInputChange, handleSelectChange, resetFuidForm, reset ];
+    return [ values, handleInputChange, handleSelectChange, resetFuidForm, reset, setEditFuidForm ];
 
 }

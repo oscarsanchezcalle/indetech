@@ -2728,7 +2728,7 @@ div.dataTables_wrapper div.dataTables_filter .form-floating > input:not(:placeho
 }
 .input-group .btn, .input-group .dual-listbox .dual-listbox__button, .dual-listbox .input-group .dual-listbox__button {
   position: relative;
-  z-index: 2;
+  /* z-index: 2; */
 }
 .input-group .btn:focus, .input-group .dual-listbox .dual-listbox__button:focus, .dual-listbox .input-group .dual-listbox__button:focus {
   z-index: 3;
@@ -16538,7 +16538,7 @@ div.dataTables_wrapper div.dataTables_length .input-group > select:not(:first-ch
 .input-group-append .dual-listbox .dual-listbox__button,
 .dual-listbox .input-group-append .dual-listbox__button {
   position: relative;
-  z-index: 2;
+  /* z-index: 2; */
 }
 .input-group-prepend .btn:focus, .input-group-prepend .dual-listbox .dual-listbox__button:focus, .dual-listbox .input-group-prepend .dual-listbox__button:focus,
 .input-group-append .btn:focus,

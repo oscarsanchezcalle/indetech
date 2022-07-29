@@ -15,13 +15,13 @@ export const AppScreen = () => {
     startLoadingAuth();
   }, []);
 
-  if(!authenticated){
-    return (
-      <>
-        <LoginScreen />
-      </>
-    );
-  }
+  // if(!authenticated){
+  //   return (
+  //     <>
+  //       <LoginScreen />
+  //     </>
+  //   );
+  // }
 
   return (
   

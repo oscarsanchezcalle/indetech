@@ -262,8 +262,9 @@ export const FuidScreen = () => {
 
         if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
              || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" ) || typeof serie.value === 'undefined'
-             || typeof  subserie.value   === 'undefined' || typeof tipoDocumento.value === 'undefined'
-             || typeof  autoDeCierre.value   === 'undefined' || typeof vigencia.value === 'undefined')
+             || typeof  subserie.value   === 'undefined' 
+            //|| typeof tipoDocumento.value === 'undefined'
+             || typeof vigencia.value === 'undefined')
         {            
             if(typeof dependencia.value === 'undefined'){
                 validationConditions.push(' Dependencia');
@@ -283,12 +284,12 @@ export const FuidScreen = () => {
             if(typeof subserie.value === 'undefined'){
                 validationConditions.push(' Subserie');
             }
-            if(typeof tipoDocumento.value === 'undefined'){
-                validationConditions.push(' Tipo Documental');
-            }
-            if(typeof autoDeCierre.value === 'undefined'){
-                validationConditions.push(' Auto de cierre');
-            }
+            // if(typeof tipoDocumento.value === 'undefined'){
+            //     validationConditions.push(' Tipo Documental');
+            // }
+            // if(typeof autoDeCierre.value === 'undefined'){
+            //     validationConditions.push(' Auto de cierre');
+            // }
             isValid = false;
         }
        
@@ -441,7 +442,7 @@ export const FuidScreen = () => {
                                 <div className='col-md-4'>
                                     <label className='form-label'>Tipo Documental</label>
                                     <Select
-                                        options={tipoDocumentos}  
+                                        options={{tipoDocumentos}}  
                                         value={tipoDocumento}   
                                         isDisabled={proyectoId== 1 ? true : false} 
                                         onChange={(selectedOption) => handleSelectTipoDocumentoChange(selectedOption)}
@@ -590,7 +591,7 @@ export const FuidScreen = () => {
                                         options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
                                         placeholder='' 
                                         isDisabled={proyectoId== 1 ? true : false}
-                                        value={{value: 0, label: 'No'}}    
+                                        value={{ value: 0, label: 'No'}}    
                                         onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
                                         />
                                 </div>

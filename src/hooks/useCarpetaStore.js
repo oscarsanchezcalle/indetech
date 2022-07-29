@@ -48,7 +48,7 @@ export const useCarpetaStore = () => {
                 "numeroCaja": parseInt(numeroCaja),
                 "serieId": serie.value,
                 "subserieId": subserie.value,
-                "tipoDocumentoId": tipoDocumento.value,
+                "tipoDocumentoId": 1,
                 "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
                 "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
                 "tomoActual": tomoActual == "" ? 0 : tomoActual,
@@ -62,7 +62,7 @@ export const useCarpetaStore = () => {
                 "vigenciaId": vigencia.value,
                 "cedulaCatastral": cedulaCatastral,
                 "duplicidad": duplicidad == "" ? 0 : duplicidad,
-                "autoDeCierre": autoDeCierre.value === 1 ? true : false
+                "autoDeCierre": false//autoDeCierre.value === 1 ? true : false
             }
 
             //llamar al end point que crea las carpetas y las asigna a la caja
