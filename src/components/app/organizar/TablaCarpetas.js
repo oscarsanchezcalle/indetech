@@ -5,13 +5,14 @@ import Select from 'react-select';
 import Swal from 'sweetalert2';
 
 import { LoadingInButton } from './../LoadingInButton';
+import { NumeroCaja } from './NumeroCaja';
 
 import 
 { 
-    useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore, useSubserieStore, useTipoDocumentoStore,
-    useForm, useCarpetaStore, useVigenciaStore, useSoporteStore, useFrecuenciaStore, useCajaStore
+    useAuthStore, useSubserieStore, useTipoDocumentoStore, useSerieStore,
+    useForm, useCarpetaStore, useSoporteStore, useFrecuenciaStore
 } from '../../../hooks';
-import { NumeroCaja } from './NumeroCaja';
+
 import { convertSeriesToSelect, convertSubseriesToSelect, convertTipoDocumentosToSelect } from '../../../helpers';
 
 export const TablaCarpetas = () => {
@@ -22,7 +23,7 @@ export const TablaCarpetas = () => {
     const { tipoDocumentosEdit, startLoadingTipoDocumentosEdit } = useTipoDocumentoStore();
     const { soportes } = useSoporteStore();
     const { frecuencias,  } = useFrecuenciaStore();
-    const { isLoadingAddCarpeta, getCarpetasByCajaId, isDeletingCarpeta } = useCarpetaStore();
+    const { isLoadingAddCarpeta, editarCarpeta } = useCarpetaStore();
 
     //useForm
     const documentoForm = {
@@ -86,7 +87,6 @@ export const TablaCarpetas = () => {
 
     function openModal(carpeta) {
         
-        console.log(carpeta);
         const serieOption = convertSeriesToSelect([carpeta.serie]);
         const subserieOption = convertSubseriesToSelect([carpeta.subserie]);
         const tipoDocumentoOption = convertTipoDocumentosToSelect([carpeta.tipoDocumento]);
@@ -131,18 +131,6 @@ export const TablaCarpetas = () => {
         document.body.style.overflow = 'unset';
      }
 
-    // useEffect(() => {
-    //     if(proyectoId > 0){
-    //         startLoadingDependencias(proyectoId);
-    //         startLoadingFrecuencias();
-    //         startLoadingSoportes();
-    //         startLoadingVigencias();
-    //     }
-    // }, [proyectoId]);
-
-   
-   
-
     const handleSelectSerieChange = ( selectedOption) => {   
         startLoadingSubseriesEdit(selectedOption.value);
         handleSelectChange(selectedOption, "serie");
@@ -169,65 +157,57 @@ export const TablaCarpetas = () => {
         handleSelectChange(selectedOption, "autoDeCierre");
     }
 
-    const handleBtnAgregar = async () => {
+    const handleBtnModificar = async () => {
 
-        // const {isValid, validationConditions} = isValidFormForSave(formValues);
+        const numeroCaja = carpetasByCajaId[0]?.numeroCaja;
+
+        const {isValid, validationConditions} = isValidFormForSave(formValues);
         
-        // if (!isValid){
+        if (!isValid){
 
-        //     Swal.fire({
-        //         //position: 'top-end',
-        //         icon: 'warning',
-        //         title: 'Campos incompletos',
-        //         text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
-        //         showConfirmButton: true,
-        //         //timer: 1500
-        //     });
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'warning',
+                title: 'Campos incompletos',
+                text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
 
-        //     return;
-        // }
+            return;
+        }
 
-        console.log(formValues);
-        // await crearCarpeta(formValues, proyectoId);
-        
-        // const frecuenciaDefault = frecuencias.find(f => f.label == 'Sin Frecuencia');
-        // const tipoSoporteDefault = soportes.find(f => f.label == 'Sin Soporte');
-
-        // resetFuidForm(frecuenciaDefault, tipoSoporteDefault);
-
+        document.body.style.overflow = 'unset';
+        await editarCarpeta(formValues, proyectoId, numeroCaja);
+        //setIsOpen(false);
     } 
 
     const isValidFormForSave = (criteria = {}) => {
 
         const {
-            dependencia, oficina, numeroCaja,
             serie, subserie, tipoDocumento, 
-            autoDeCierre, vigencia } = criteria;
+            cedulaCatastral, codigo } = criteria;
 
         const validationConditions = [];
         let isValid = true;
 
-        if ( typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
-                || typeof serie.value === 'undefined' || typeof  subserie.value   === 'undefined' 
-                || typeof vigencia.value === 'undefined' || typeof autoDeCierre.value === 'undefined'){            
-                
-                if(typeof dependencia.value === 'undefined'){
-                    validationConditions.push(' Dependencia');
-                }
-                if(typeof oficina.value === 'undefined'){
-                    validationConditions.push(' Sub Dependencia');
-                }
-                if(typeof vigencia.value === 'undefined'){
-                    validationConditions.push(' Vigencia');
-                }
+        if (       typeof serie.value === 'undefined' || typeof  subserie.value   === 'undefined' 
+                || typeof tipoDocumento.value === 'undefined' || cedulaCatastral === '' || codigo === ''){            
+               
                 if(typeof serie.value === 'undefined'){
                     validationConditions.push(' Serie');
                 }
                 if(typeof subserie.value === 'undefined'){
                     validationConditions.push(' Subserie');
                 }
-                if(typeof autoDeCierre.value === 'undefined'){
-                    validationConditions.push(' Auto de cierre');
+                if(typeof tipoDocumento.value === 'undefined'){
+                    validationConditions.push(' Tipo Documento');
+                }
+                if(cedulaCatastral === ''){
+                    validationConditions.push(' Cédula catastral');
+                }
+                if(codigo === ''){
+                    validationConditions.push(' Número del expediente');
                 }
                 isValid = false;
             }
@@ -409,7 +389,7 @@ export const TablaCarpetas = () => {
                                 <div className='col-md-12'>
                                     <div className='row'>
                                         <div className='col-md-4'>
-                                            <label className='form-label'>Serie</label>
+                                            <label className='form-label'>Serie <span className='text-danger'>*</span></label>
                                             <Select
                                                 options={series}   
                                                 value={serie}    
@@ -418,7 +398,7 @@ export const TablaCarpetas = () => {
                                                 />
                                         </div>
                                         <div className='col-md-4'>
-                                            <label className='form-label'>Subserie</label>
+                                            <label className='form-label'>Subserie <span className='text-danger'>*</span></label>
                                             <Select
                                                 options={subseriesEdit}  
                                                 value={subserie}    
@@ -508,7 +488,7 @@ export const TablaCarpetas = () => {
                                             </div>
                                         </div>
                                         <div className="col-md-2">
-                                            <label className='form-label'>Núm. Expediente</label>
+                                            <label className='form-label'>Núm. Expediente <span className='text-danger'>*</span></label>
                                                 <input 
                                                     value={codigo}
                                                     name="codigo"
@@ -539,7 +519,7 @@ export const TablaCarpetas = () => {
                                                 />
                                         </div>
                                         <div className="col-md-2">
-                                            <label className='form-label'>Cédula Catastral</label>
+                                            <label className='form-label'>Cédula Catastral <span className='text-danger'>*</span></label>
                                                 <input 
                                                     name="cedulaCatastral"
                                                     value={cedulaCatastral}
@@ -565,7 +545,7 @@ export const TablaCarpetas = () => {
                                             </div>
                                         </div>
                                         <div className="col-md-2">
-                                            <label className='form-label'>Auto de Cierre</label>
+                                            <label className='form-label'>Auto de Cierre <span className='text-danger'>*</span></label>
                                             <Select
                                                 options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
                                                 placeholder='' 
@@ -592,7 +572,7 @@ export const TablaCarpetas = () => {
                                         <div className='col-md-2'>
                                             <br />
                                             <button 
-                                                onClick={handleBtnAgregar}
+                                                onClick={handleBtnModificar}
                                                 type="button"
                                                 disabled={isLoadingAddCarpeta}
                                                 className="btn btn-outline-primary btn-dim  mt-1 btn-block">

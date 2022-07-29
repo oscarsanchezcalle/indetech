@@ -79,6 +79,75 @@ export const useCarpetaStore = () => {
                 title: 'Registro corecto',
                 text: ``,
                 showConfirmButton: true,
+                timer: 1500
+            });
+        }
+        catch(error)
+        {
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            console.log(error);
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'Error de conexión al servidor',
+                text: `Por favor intente nuevamente`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
+        }
+    }
+
+    const editarCarpeta = async (criteria = {}, proyectoId, numeroCaja ) => {
+        
+        dispatch(setIsLoadingAddCarpeta(true));
+
+        try
+        {
+            const {
+                dependencia, oficina, vigencia, numeroCaja, serie, subserie, tipoDocumento,
+                tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
+                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre 
+            } = criteria;
+
+            const carpetaCajaCriteria = {
+                "proyectoId": proyectoId,
+                "dependenciaId": dependencia.value,
+                "oficinaId": oficina.value,
+                "numeroCaja": parseInt(numeroCaja),
+                "serieId": serie.value,
+                "subserieId": subserie.value,
+                "tipoDocumentoId": 1,
+                "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
+                "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
+                "tomoActual": tomoActual == "" ? 0 : tomoActual,
+                "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
+                "folioInicial": folioInicial == "" ? 0 : folioInicial,
+                "folioFinal": folioFinal == "" ? 0 : folioFinal,
+                "codigo": codigo,
+                "tipoSoporteId": tipoSoporte.value === 'undefined' ? 0 : tipoSoporte.value,
+                "frecuenciaUsoId": frecuenciaUso.value === 'undefined' ? 0 : frecuenciaUso.value,
+                "notas": notas,
+                "vigenciaId": vigencia.value,
+                "cedulaCatastral": cedulaCatastral,
+                "duplicidad": duplicidad == "" ? 0 : duplicidad,
+                "autoDeCierre": false//autoDeCierre.value === 1 ? true : false
+            }
+
+            //llamar al end point que crea las carpetas y las asigna a la caja
+            const {data} = await indetechApi.post('/Carpeta/AgregarCarpetaACaja', carpetaCajaCriteria);
+            
+            //Actualizar la tabla de las carpetas by Caja.
+            getCarpetasByCajaId(data.cajaId);
+
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Registro corecto',
+                text: ``,
+                showConfirmButton: true,
                 //timer: 1500
             });
         }
@@ -138,6 +207,7 @@ export const useCarpetaStore = () => {
         //* Métodos
         crearCarpeta, 
         getCarpetasByCajaId,
-        deleteCarpetaById
+        deleteCarpetaById,
+        editarCarpeta
     }
 }
