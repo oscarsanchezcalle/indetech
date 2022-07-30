@@ -98,48 +98,43 @@ export const useCarpetaStore = () => {
         }
     }
 
-    const editarCarpeta = async (criteria = {}, proyectoId, numeroCaja ) => {
+    const editarCarpeta = async (criteria = {}, cajaId) => {
         
         dispatch(setIsLoadingAddCarpeta(true));
 
         try
         {
             const {
-                dependencia, oficina, vigencia, numeroCaja, serie, subserie, tipoDocumento,
+                id, serie, subserie, tipoDocumento,
                 tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
                 folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre 
             } = criteria;
 
-            const carpetaCajaCriteria = {
-                "proyectoId": proyectoId,
-                "dependenciaId": dependencia.value,
-                "oficinaId": oficina.value,
-                "numeroCaja": parseInt(numeroCaja),
-                "serieId": serie.value,
-                "subserieId": subserie.value,
-                "tipoDocumentoId": 1,
-                "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
-                "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
-                "tomoActual": tomoActual == "" ? 0 : tomoActual,
-                "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
+            const updateCriteria = {
+                "id": 0,
+                "codigo": codigo,
                 "folioInicial": folioInicial == "" ? 0 : folioInicial,
                 "folioFinal": folioFinal == "" ? 0 : folioFinal,
-                "codigo": codigo,
-                "tipoSoporteId": tipoSoporte.value === 'undefined' ? 0 : tipoSoporte.value,
-                "frecuenciaUsoId": frecuenciaUso.value === 'undefined' ? 0 : frecuenciaUso.value,
-                "notas": notas,
-                "vigenciaId": vigencia.value,
+                "descripcion": notas,
+                "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
+                "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
+                "serieId": serie.value,
+                "subserieId": subserie.value,
+                "tipoDocumentoId": tipoDocumento.value,
+                "tipoSoporteId":  tipoSoporte.value === 'undefined' ? 0 : tipoSoporte.value,
+                "frecuenciaUsoId":  frecuenciaUso.value === 'undefined' ? 0 : frecuenciaUso.value,
+                "tomoInicial": tomoActual == "" ? 0 : tomoActual,
+                "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
                 "cedulaCatastral": cedulaCatastral,
                 "duplicidad": duplicidad == "" ? 0 : duplicidad,
-                "autoDeCierre": false//autoDeCierre.value === 1 ? true : false
+                "autoDeCierre": autoDeCierre.value === 1 ? true : false
             }
 
-            //llamar al end point que crea las carpetas y las asigna a la caja
-            const {data} = await indetechApi.post('/Carpeta/AgregarCarpetaACaja', carpetaCajaCriteria);
+            const {data} = await indetechApi.put('/Carpeta/'+id, updateCriteria);
             
             //Actualizar la tabla de las carpetas by Caja.
-            getCarpetasByCajaId(data.cajaId);
-
+            getCarpetasByCajaId(cajaId);
+            
             dispatch(setIsLoadingAddCarpeta(false));
 
             Swal.fire({
@@ -148,7 +143,7 @@ export const useCarpetaStore = () => {
                 title: 'Registro corecto',
                 text: ``,
                 showConfirmButton: true,
-                //timer: 1500
+                timer: 1000
             });
         }
         catch(error)

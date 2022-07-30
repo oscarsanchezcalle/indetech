@@ -10,20 +10,20 @@ import { NumeroCaja } from './NumeroCaja';
 import 
 { 
     useAuthStore, useSubserieStore, useTipoDocumentoStore, useSerieStore,
-    useForm, useCarpetaStore, useSoporteStore, useFrecuenciaStore
+    useForm, useCarpetaStore, useSoporteStore, useFrecuenciaStore, useCajaStore
 } from '../../../hooks';
 
 import { convertSeriesToSelect, convertSubseriesToSelect, convertTipoDocumentosToSelect } from '../../../helpers';
 
 export const TablaCarpetas = () => {
 
-    const { proyectoId } = useAuthStore();
     const { series } = useSerieStore();
     const { subseriesEdit, startLoadingSubseriesEdit } = useSubserieStore();
     const { tipoDocumentosEdit, startLoadingTipoDocumentosEdit } = useTipoDocumentoStore();
     const { soportes } = useSoporteStore();
     const { frecuencias,  } = useFrecuenciaStore();
     const { isLoadingAddCarpeta, editarCarpeta } = useCarpetaStore();
+    const { rotuloCaja, buscarRotuloCajaById } = useCajaStore();
 
     //useForm
     const documentoForm = {
@@ -97,6 +97,7 @@ export const TablaCarpetas = () => {
         startLoadingTipoDocumentosEdit(subserieOption[0].value);
 
         const formValues = {
+            id: carpeta.id,
             serie:serieOption[0],
             subserie:subserieOption[0],
             tipoDocumento:tipoDocumentoOption[0],
@@ -159,8 +160,6 @@ export const TablaCarpetas = () => {
 
     const handleBtnModificar = async () => {
 
-        const numeroCaja = carpetasByCajaId[0]?.numeroCaja;
-
         const {isValid, validationConditions} = isValidFormForSave(formValues);
         
         if (!isValid){
@@ -178,8 +177,12 @@ export const TablaCarpetas = () => {
         }
 
         document.body.style.overflow = 'unset';
-        await editarCarpeta(formValues, proyectoId, numeroCaja);
-        //setIsOpen(false);
+
+        await editarCarpeta(formValues, rotuloCaja.cajaId);
+
+        await buscarRotuloCajaById(rotuloCaja.cajaId);
+        
+        setIsOpen(false);
     } 
 
     const isValidFormForSave = (criteria = {}) => {
@@ -345,7 +348,7 @@ export const TablaCarpetas = () => {
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a onClick={() => handleBtnEliminar(carpeta.id)}>
+                                                                    <a href='#' onClick={() => handleBtnEliminar(carpeta.id)}>
                                                                         <em className="icon ni ni-trash" />
                                                                         <span>Eliminar</span>
                                                                     </a>

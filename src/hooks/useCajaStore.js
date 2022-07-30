@@ -46,6 +46,8 @@ export const useCajaStore = () => {
                     //timer: 1500
                 });
             }
+
+
             
         } catch (error) {
           setIsLoadingRotuloCaja(false);
@@ -53,6 +55,37 @@ export const useCajaStore = () => {
           console.log(error)
         }
     }
+
+    const buscarRotuloCajaById = async(cajaId) => {
+       
+        try {
+            setIsLoadingRotuloCaja(true);
+
+            const { data } = await indetechApi.get('/Caja/BuscarRotuloCaja/'+cajaId);
+            
+            dispatch( onLoadRotuloCaja( data ) );
+            
+            setIsLoadingRotuloCaja(false);
+
+            if(data.cajaId === 0 ){
+                Swal.fire({
+                    //position: 'top-end',
+                    icon: 'warning',
+                    title: 'La caja no existe',
+                    text: 'Por favor crear la caja para esta vigencia',
+                    showConfirmButton: true,
+                    //timer: 1500
+                });
+            }
+            
+        } catch (error) {
+          setIsLoadingRotuloCaja(false);
+          console.log('Error cargando rotulo de caja y carpetas');
+          console.log(error)
+        }
+    }
+
+    
 
     
     return {
@@ -65,7 +98,7 @@ export const useCajaStore = () => {
 
         //* Métodos
         startLoadingCajas,
-        buscarRotuloCaja
-        
+        buscarRotuloCaja,
+        buscarRotuloCajaById
     }
 }
