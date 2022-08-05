@@ -1,33 +1,15 @@
-import React, { useEffect } from 'react'
-import { Navigation } from '../layout/Navigation'
+import React from 'react'
+import { AdminNavbar } from '../layout/AdminNavbar'
 import { Footer } from '../layout/Footer'
-import { AppScreenRouter } from '../../routers/AppScreenRouter'
-import { useAuthStore } from '../../hooks'
-import { LoginScreen } from '../auth/LoginScreen'
+import { Outlet } from 'react-router-dom'
 
 export const AppScreen = () => {
-
-  const { startLoadingAuth, authenticated } = useAuthStore();
-
-   //cargo la primera vez
-  useEffect(() => {
-    document.body.style.zoom = "90%";
-    startLoadingAuth();
-  }, []);
-
-  // if(!authenticated){
-  //   return (
-  //     <>
-  //       <LoginScreen />
-  //     </>
-  //   );
-  // }
 
   return (
   
    <div className="nk-app-root">
      <div className="nk-wrap ">
-        <Navigation />
+        <AdminNavbar />
         <div className="nk-content nk-content-fluid">
           <div className="container-xl wide-xl">
             <div className="nk-content-inner">
@@ -35,7 +17,7 @@ export const AppScreen = () => {
 
                 
                 {/* Rutas con el navbar */}
-                <AppScreenRouter />
+                <Outlet />
 
               </div>
             </div>

@@ -5,7 +5,7 @@ import
     useAuthStore, useForm
 } from '../../hooks';
 
-export const Navigation = () => {
+export const AdminNavbar = () => {
 
   const { startLogout } = useAuthStore();
  
