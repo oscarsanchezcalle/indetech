@@ -12,7 +12,7 @@ import { PageNotFound } from '../components/app/notFound/PageNotFound';
   
 export const AppRouter = () => {
   
-  const status = 'authenticated'; // 'authenticated'; // 'not-authenticated';
+  const status = 'non-authenticated'; // 'authenticated'; // 'not-authenticated';
   
   return (
     
