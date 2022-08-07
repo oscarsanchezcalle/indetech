@@ -7,7 +7,9 @@
 //     }
 // }
 
-const baseUrl = 'https://protechdevapi.azurewebsites.net/api';
+const baseUrl = 'https://localhost:7177/api';
+
+//const baseUrl = 'https://protechdevapi.azurewebsites.net/api';
 
 //const baseUrl = 'https://protechapi.azurewebsites.net/api';
 

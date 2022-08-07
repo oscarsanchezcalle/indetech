@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppScreen } from '../components/app/AppScreen';
 import { FuidScreen } from '../components/app/organizar/FuidScreen';
@@ -13,8 +13,12 @@ import { useAuthStore } from '../hooks';
   
 export const AppRouter = () => {
   
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, checkAuthToken } = useAuthStore();
   
+    useEffect(() => {
+        checkAuthToken();
+    }, []);
+
   return (
     
     <Routes>

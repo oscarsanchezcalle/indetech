@@ -5,13 +5,13 @@ export const authSlice = createSlice({
     initialState:{
         persona:'',
         username: '',
-        rol: '',
         proyectoId: 0,
         proyecto:'',
         objetoContrato: '',
         isAuthenticated: false,
         identityId: '',
-        isLoading: false
+        isLoading: false,
+        rol:[]
     },
     reducers: {
         onLoadAuth: (state, { payload }) => {
