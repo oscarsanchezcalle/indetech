@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
-import logo from './logoProtech.png' // with import
+import React from 'react';
+import logo from './logoProtech.png';
+import { LoadingInButton } from './../../components/app/LoadingInButton';
 import 
 { 
     useAuthStore, useForm
@@ -8,7 +9,7 @@ import { SliderLogin } from './SliderLogin';
 
 export const LoginScreen = () => {
 
-  const { startLogIn, authenticated } = useAuthStore();
+  const { startLoadingAuth, isLoading } = useAuthStore();
 
   const [formValues, handleInputChange] = useForm({
     username:'',
@@ -16,9 +17,15 @@ export const LoginScreen = () => {
   });
  
   const {username, password} = formValues;
+  
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      startLoadingAuth(username,password);
+    }
+  }
 
   const handleBtnLogin = () => {
-    startLogIn(username,password);
+    startLoadingAuth(username,password);
   }
 
   return (
@@ -53,7 +60,7 @@ export const LoginScreen = () => {
                         </div>
                       </div>
                       {/* .nk-block-head */}
-                      <form action="#">
+                      
                         <div className="form-group">
                           <div className="form-label-group">
                             <label className="form-label" htmlFor="default-01">
@@ -64,6 +71,7 @@ export const LoginScreen = () => {
                           <input
                                 type='text'
                                 onChange={handleInputChange}
+                                onKeyDown={handleKeyDown}
                                 value={username}
                                 autoComplete="off"
                                 placeholder='Ingresa el nombre de usuario'
@@ -83,6 +91,7 @@ export const LoginScreen = () => {
                             <input
                               type='password'
                               onChange={handleInputChange}
+                              onKeyDown={handleKeyDown}
                               value={password}
                               autoComplete="off"
                               placeholder='Ingresa la clave de acceso'
@@ -90,14 +99,13 @@ export const LoginScreen = () => {
                               className='form-control form-control-lg'
                             />
                           </div>
-                        </div>
+                        </div>             
                         {/* .form-group */}
                         <div className="form-group">
-                          <button onClick={handleBtnLogin} className="btn btn-lg btn-primary btn-block">
-                             Ingresar
+                          <button onClick={handleBtnLogin}  disabled={isLoading} className="btn btn-lg btn-primary btn-block">
+                          <LoadingInButton isLoading={isLoading} btnText="Ingresar" />
                           </button>
                         </div>
-                      </form>
                       {/* form */}
                     </div>
                     {/* .nk-block */}

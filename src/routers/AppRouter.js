@@ -8,17 +8,18 @@ import { IndexarDocumento } from '../components/app/indexar/IndexarDocumento';
 import { CargueMasivo } from '../components/app/digitalizar/CargueMasivo';
 import { Dashboard } from '../components/app/dashboard/Dashboard';
 import { PageNotFound } from '../components/app/notFound/PageNotFound';
+import { useAuthStore } from '../hooks';
 
   
 export const AppRouter = () => {
   
-  const status = 'non-authenticated'; // 'authenticated'; // 'not-authenticated';
+  const { isAuthenticated } = useAuthStore();
   
   return (
     
     <Routes>
         {
-            ( status === 'non-authenticated')  
+            ( !isAuthenticated )  
                 ? (
                     <>
                         <Route path="/auth/*" element={ <LoginScreen /> } />
@@ -33,8 +34,10 @@ export const AppRouter = () => {
                             <Route path="/indexar" element={<IndexarDocumento />} />  
                             <Route path="/cargueMasivo" element={<CargueMasivo />}/>                    
                             <Route path="/administrarFuid" element={<FuidScreen/>}/>
+                            
+                            <Route path="/auth/login"  element={  <Navigate to="/" /> } />
                             <Route path="/*" element={ <PageNotFound/>} />
-                            {/* esta bien que mande pal not found por que auth/login no existe, debo redireccionar en el login a / */}
+                            
                         </Route>
                     </>
                 )

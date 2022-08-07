@@ -2,15 +2,14 @@ import React from 'react'
 import { Link } from "react-router-dom"
 import 
 { 
-    useAuthStore, useForm
+    useAuthStore
 } from '../../hooks';
 
 export const AdminNavbar = () => {
 
-  const { startLogout } = useAuthStore();
+  const { startLogout, rol, username } = useAuthStore();
  
   const handleLogOut = () => {
-    console.log("salir");
     startLogout();
   }
 
@@ -251,8 +250,8 @@ export const AdminNavbar = () => {
                       <em className="icon ni ni-user-alt" />
                     </div>
                     <div className="user-info d-none d-xl-block">
-                      <div className="user-status">Usuario test</div>
-                      <div className="user-name dropdown-indicator">Analista documental</div>
+                      <div className="user-status">{username}</div>
+                      <div className="user-name dropdown-indicator">{rol}</div>
                     </div>
                   </div>
                 </a>
@@ -260,11 +259,11 @@ export const AdminNavbar = () => {
                   <div className="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                     <div className="user-card">
                       <div className="user-avatar">
-                        <span>AD</span>
+                        <span><em className="icon ni ni-user-alt-fill"></em></span>
                       </div>
                       <div className="user-info">
-                        <span className="lead-text">Analista Documental</span>
-                        <span className="sub-text">Rol del usuario</span>
+                        <span className="lead-text">{username}</span>
+                        <span className="sub-text">{rol}</span>
                       </div>
                     </div>
                   </div>
@@ -278,7 +277,7 @@ export const AdminNavbar = () => {
                     <ul className="link-list">
                       {/* <li><a href="html/user-profile-regular.html"><em className="icon ni ni-user-alt" /><span>Administrar Usuario</span></a></li> */}
                       <li>
-                        <a onClick={handleLogOut} className="dark-mode-switch" >
+                        <a href="#" onClick={handleLogOut} className="dark-mode-switch" >
                           <em className="icon ni ni-signout" />
                           <span>Salir</span>
                         </a>

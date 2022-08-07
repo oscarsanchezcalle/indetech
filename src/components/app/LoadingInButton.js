@@ -7,9 +7,7 @@ export const LoadingInButton = ({isLoading, btnText}) => {
       {(() => {
             switch(isLoading) {
                 case true:
-                    return <div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                          </div>
+                    return <i className="fas fa-circle-notch fa-spin"></i>
                 case false:
                     return <label>{btnText}</label>
                 default:
