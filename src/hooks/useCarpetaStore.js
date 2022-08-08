@@ -29,7 +29,7 @@ export const useCarpetaStore = () => {
         }
     }
 
-    const crearCarpeta = async (criteria = {}, proyectoId ) => {
+    const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
         
         dispatch(setIsLoadingAddCarpeta(true));
 
@@ -62,7 +62,8 @@ export const useCarpetaStore = () => {
                 "vigenciaId": vigencia.value,
                 "cedulaCatastral": cedulaCatastral,
                 "duplicidad": duplicidad == "" ? 0 : duplicidad,
-                "autoDeCierre": false//autoDeCierre.value === 1 ? true : false
+                "autoDeCierre": false,//autoDeCierre.value === 1 ? true : false,
+                "Username": username
             }
 
             //llamar al end point que crea las carpetas y las asigna a la caja
@@ -98,7 +99,7 @@ export const useCarpetaStore = () => {
         }
     }
 
-    const editarCarpeta = async (criteria = {}, cajaId) => {
+    const editarCarpeta = async (criteria = {}, cajaId, username) => {
         
         dispatch(setIsLoadingAddCarpeta(true));
 
@@ -127,10 +128,11 @@ export const useCarpetaStore = () => {
                 "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
                 "cedulaCatastral": cedulaCatastral,
                 "duplicidad": duplicidad == "" ? 0 : duplicidad,
-                "autoDeCierre": autoDeCierre.value === 1 ? true : false
+                "autoDeCierre": autoDeCierre.value === 1 ? true : false,
+                "Username": username
             }
 
-            const {data} = await indetechApi.put('/Carpeta/'+id, updateCriteria);
+            await indetechApi.put('/Carpeta/'+id, updateCriteria);
             
             //Actualizar la tabla de las carpetas by Caja.
             getCarpetasByCajaId(cajaId);
@@ -176,13 +178,14 @@ export const useCarpetaStore = () => {
         }
     }
 
-    const deleteCarpetaById = async (carpetaId) => {
+    const deleteCarpetaById = async (carpetaId, username) => {
 
         dispatch( setIsDeletingCarpeta('') );
 
         try {
 
-            await indetechApi.delete('/carpeta/'+carpetaId); 
+            
+            await indetechApi.delete('/Carpeta?id='+carpetaId+'&username='+username); 
             
             Swal.fire({
                 //position: 'top-end',

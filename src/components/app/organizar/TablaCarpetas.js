@@ -17,6 +17,7 @@ import { convertSeriesToSelect, convertSubseriesToSelect, convertTipoDocumentosT
 
 export const TablaCarpetas = () => {
 
+    const { username } = useAuthStore();
     const { series } = useSerieStore();
     const { subseriesEdit, startLoadingSubseriesEdit } = useSubserieStore();
     const { tipoDocumentosEdit, startLoadingTipoDocumentosEdit } = useTipoDocumentoStore();
@@ -49,7 +50,7 @@ export const TablaCarpetas = () => {
         autoDeCierre: ''
     };
 
-    const [formValues, handleInputChange, handleSelectChange, resetFuidForm, setEditFuidForm] = useForm(documentoForm);
+    const [formValues, handleInputChange, handleSelectChange, setEditFuidForm] = useForm(documentoForm);
 
     const {
         serie,
@@ -74,7 +75,6 @@ export const TablaCarpetas = () => {
 
     const [modalIsOpen, setIsOpen] = useState(false);
 
-
     const { carpetasByCajaId, deleteCarpetaById } = useCarpetaStore();
    
     if(carpetasByCajaId === undefined){
@@ -90,7 +90,7 @@ export const TablaCarpetas = () => {
         
         }).then((result) => {  
             if (result.isConfirmed) {    
-                deleteCarpetaById(carpetaId);
+                deleteCarpetaById(carpetaId, username);
             }
         });
     }
@@ -188,7 +188,7 @@ export const TablaCarpetas = () => {
 
         document.body.style.overflow = 'unset';
 
-        await editarCarpeta(formValues, rotuloCaja.cajaId);
+        await editarCarpeta(formValues, rotuloCaja.cajaId, username);
 
         await buscarRotuloCajaById(rotuloCaja.cajaId);
         

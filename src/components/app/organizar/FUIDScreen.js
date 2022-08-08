@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 
 export const FuidScreen = () => {
 
-    const { proyectoId, proyecto } = useAuthStore();
+    const { proyectoId, proyecto, username } = useAuthStore();
     const { startLoadingDependencias, dependencias } = useDependieciaStore();
     const { startLoadingOficinas, oficinas } = useOficinaStore();
     const { series, startLoadingSeries } = useSerieStore();
@@ -213,7 +213,7 @@ export const FuidScreen = () => {
             return;
         }
 
-        await crearCarpeta(formValues, proyectoId);
+        await crearCarpeta(formValues, proyectoId, username);
         
         const frecuenciaDefault = frecuencias.find(f => f.label == 'Sin Frecuencia');
         const tipoSoporteDefault = soportes.find(f => f.label == 'Sin Soporte');
