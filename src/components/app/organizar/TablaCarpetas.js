@@ -82,7 +82,17 @@ export const TablaCarpetas = () => {
     }
 
     const handleBtnEliminar = async (carpetaId) => {
-        await deleteCarpetaById(carpetaId);
+        Swal.fire({  
+        title: '¿Está seguro de eliminar la carpeta?',  
+        showCancelButton: true,  
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: `Si`,  
+        
+        }).then((result) => {  
+            if (result.isConfirmed) {    
+                deleteCarpetaById(carpetaId);
+            }
+        });
     }
 
     function openModal(carpeta) {
@@ -232,9 +242,6 @@ export const TablaCarpetas = () => {
         },
     };
 
-   
-
-
     return (
             <>
                 <div className="nk-block">
@@ -260,13 +267,16 @@ export const TablaCarpetas = () => {
                                     <thead className="tb-odr-head">
                                         <tr>
                                             <th>
-                                                <span>Código</span>
+                                                <span>Nro</span>
                                             </th>
-                                            <th >
+                                            <th>
                                                 <span>Serie, Subserie o tipo documental</span>
                                             </th>
                                             <th >
-                                                <span>Número</span>
+                                                <span>Número del expediente</span>
+                                            </th>
+                                            <th >
+                                                <span>Cédula Catastral</span>
                                             </th>
                                             <th >
                                                 <span>Fechas Extremas</span>
@@ -277,15 +287,7 @@ export const TablaCarpetas = () => {
                                             <th >
                                                 <span>Folios</span>
                                             </th>
-                                            <th >
-                                                <span>Soporte</span>
-                                            </th>
-                                            <th >
-                                                <span>Frecuencia</span>
-                                            </th>
-                                            <th >
-                                                <span>Notas</span>
-                                            </th>
+                                           
                                             <th >
                                                 <span></span>
                                             </th>
@@ -296,7 +298,7 @@ export const TablaCarpetas = () => {
                                             <tr key={carpeta.id }>
                                                 <td>
                                                     <span className="tb-odr-id">
-                                                        {carpeta.dependencia.codigo}.{carpeta.oficina.codigo}.{carpeta.serie.codigo}.{carpeta.subserie.codigo}
+                                                        {carpeta.numero}
                                                     </span>
                                                 </td>
                                                 <td>
@@ -306,23 +308,18 @@ export const TablaCarpetas = () => {
                                                     {carpeta.codigo}
                                                 </td>
                                                 <td>
-                                                       {`${format(parseISO(carpeta.fechaInicial), 'dd/MM/yyyy')} - ${format(parseISO(carpeta.fechaFinal), 'dd/MM/yyyy')}`}
+                                                    {carpeta.cedulaCatastral}
                                                 </td>
                                                 <td>
-                                                    {carpeta.tomoInicial} de {carpeta.tomoFinal}
+                                                {`${format(parseISO(carpeta.fechaInicial), 'dd/MM/yyyy')} - ${format(parseISO(carpeta.fechaFinal), 'dd/MM/yyyy')}`}
                                                 </td>
                                                 <td>
-                                                    {carpeta.folioInicial} hasta {carpeta.folioFinal}
+                                                    {carpeta.tomoInicial} hasta {carpeta.tomoFinal}
                                                 </td>
                                                 <td>
-                                                    {carpeta.tipoSoporte.descripcion}
+                                                     {carpeta.folioInicial} hasta {carpeta.folioFinal}
                                                 </td>
-                                                <td>
-                                                    {carpeta.frecuenciaUso.descripcion}
-                                                </td>
-                                                <td>
-                                                    {carpeta.descripcion}
-                                                </td>
+                                              
                                                 <td>
                                                     <div className="drodown">
                                                         <a

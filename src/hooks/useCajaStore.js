@@ -46,8 +46,6 @@ export const useCajaStore = () => {
                     //timer: 1500
                 });
             }
-
-
             
         } catch (error) {
           setIsLoadingRotuloCaja(false);
@@ -79,6 +77,7 @@ export const useCajaStore = () => {
             }
             
         } catch (error) {
+
           setIsLoadingRotuloCaja(false);
           console.log('Error cargando rotulo de caja y carpetas');
           console.log(error)

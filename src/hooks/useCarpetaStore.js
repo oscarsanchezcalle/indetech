@@ -184,6 +184,15 @@ export const useCarpetaStore = () => {
 
             await indetechApi.delete('/carpeta/'+carpetaId); 
             
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Operación exitosa!',
+                text: `La carpeta fue eliminada`,
+                showConfirmButton: true,
+                timer: 1000
+            });
+
             dispatch( setIsDeletingCarpeta('deleted') );
 
         } catch (error) {

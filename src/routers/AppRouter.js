@@ -32,12 +32,13 @@ export const AppRouter = () => {
                 )
                 : (
                     <>
-                        <Route path="/"  element={<AppScreen />}>
-                            <Route index element={<Dashboard />} />
+                        <Route path="/" element={<AppScreen />}>
+                            <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/tareasAnalista" element={<TareasAsignadas />} />  
                             <Route path="/indexar" element={<IndexarDocumento />} />  
                             <Route path="/cargueMasivo" element={<CargueMasivo />}/>                    
                             <Route path="/administrarFuid" element={<FuidScreen/>}/>
+                            <Route index element={<FuidScreen/>}/>
                             
                             <Route path="/auth/login"  element={  <Navigate to="/" /> } />
                             <Route path="/*" element={ <PageNotFound/>} />
