@@ -14,6 +14,7 @@ import
 } from '../../../hooks';
 
 import { convertSeriesToSelect, convertSubseriesToSelect, convertTipoDocumentosToSelect } from '../../../helpers';
+import { MoverCarpetaModal } from './MoverCarpetaModal';
 
 export const TablaCarpetas = () => {
 
@@ -23,7 +24,7 @@ export const TablaCarpetas = () => {
     const { tipoDocumentosEdit, startLoadingTipoDocumentosEdit } = useTipoDocumentoStore();
     const { soportes } = useSoporteStore();
     const { frecuencias,  } = useFrecuenciaStore();
-    const { isLoadingAddCarpeta, editarCarpeta } = useCarpetaStore();
+    const { isLoadingAddCarpeta, editarCarpeta, openModalMoverCarpeta } = useCarpetaStore();
     const { rotuloCaja, buscarRotuloCajaById } = useCajaStore();
 
     //useForm
@@ -74,7 +75,7 @@ export const TablaCarpetas = () => {
     Modal.setAppElement('#root');
 
     const [modalIsOpen, setIsOpen] = useState(false);
-
+    
     const { carpetasByCajaId, deleteCarpetaById } = useCarpetaStore();
    
     if(carpetasByCajaId === undefined){
@@ -93,6 +94,10 @@ export const TablaCarpetas = () => {
                 deleteCarpetaById(carpetaId, username);
             }
         });
+    }
+
+    const handleMoverCarpeta = (carpeta) => {
+        openModalMoverCarpeta(carpeta);
     }
 
     function openModal(carpeta) {
@@ -132,16 +137,16 @@ export const TablaCarpetas = () => {
 
         document.body.style.overflow = 'hidden';
         setIsOpen(true);
-     }
+    }
     
-     function afterOpenModal() {
+    function afterOpenModal() {
         // references are now sync'd and can be accessed.
-     }
+    }
     
-     function closeModal() {
+    function closeModal() {
         setIsOpen(false);
         document.body.style.overflow = 'unset';
-     }
+    }
 
     const handleSelectSerieChange = ( selectedOption) => {   
         startLoadingSubseriesEdit(selectedOption.value);
@@ -268,7 +273,7 @@ export const TablaCarpetas = () => {
                                     <thead className="tb-odr-head">
                                         <tr>
                                             <th>
-                                                <span>Nro</span>
+                                                <span># Carpeta</span>
                                             </th>
                                             <th>
                                                 <span>Serie, Subserie o tipo documental</span>
@@ -334,7 +339,7 @@ export const TablaCarpetas = () => {
                                                         <div className="dropdown-menu dropdown-menu-end" style={{}}>
                                                             <ul className="link-list-opt no-bdr">
                                                                 <li>
-                                                                    <a href="#">
+                                                                    <a href="#" onClick={() => handleMoverCarpeta(carpeta)}>
                                                                         <em className="icon ni ni-external" />
                                                                         <span>Mover Carpeta</span>
                                                                     </a>
@@ -374,19 +379,15 @@ export const TablaCarpetas = () => {
                 >   
                         <div className="modal-header">
                             <h5 className="modal-title">Editar Carpeta</h5>
-                            
                             <ul className="btn-toolbar">  
-                                
                                 <NumeroCaja numeroCaja={carpetasByCajaId[0]?.numeroCaja}/>
-
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <a href="#" onClick={closeModal} className="close">
                                     <em className="icon ni ni-cross" />
                                 </a>
                             </ul>
-
                         </div>
-                            <div className="modal-body modal-body-lg">
+                        <div className="modal-body modal-body-lg">
                                 <div className='col-md-12'>
                                     <div className='row'>
                                         <div className='col-md-4'>
@@ -583,8 +584,11 @@ export const TablaCarpetas = () => {
                                     </div>
                                 </div>  
                                 
-                            </div>   
+                        </div>   
                 </Modal>
+
+                <MoverCarpetaModal />
+                
             </>
         )
 }

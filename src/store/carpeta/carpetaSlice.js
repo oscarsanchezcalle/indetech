@@ -11,7 +11,9 @@ export const carpetaSlice = createSlice({
         carpetasByCajaId : [
             
         ],
-        isDeletingCarpeta: ''
+        isDeletingCarpeta: '',
+        carpetaActiva: {},
+        isOpenModalMoverCarpeta: false
     },
     reducers: {
         onLoadCarpetas: (state, { payload = [] }) => {
@@ -29,6 +31,12 @@ export const carpetaSlice = createSlice({
         },
         setIsDeletingCarpeta: ( state, {payload} ) => {
             state.isDeletingCarpeta = payload ;
+        },
+        setCarpetaActiva: ( state, {payload} ) => {
+            state.carpetaActiva = payload ;
+        },
+        setOpenModalMoverCarpeta: ( state, {payload} ) => {
+            state.isOpenModalMoverCarpeta = payload ;
         }
     }
 });
@@ -39,5 +47,7 @@ export const {
     onAddNewCarpeta,
     onLoadCarpetasByCaja,
     setIsLoadingAddCarpeta,
-    setIsDeletingCarpeta
+    setIsDeletingCarpeta,
+    setCarpetaActiva,
+    setOpenModalMoverCarpeta
 } = carpetaSlice.actions;

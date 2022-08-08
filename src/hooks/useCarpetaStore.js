@@ -3,31 +3,16 @@ import Swal from 'sweetalert2';
 
 import { indetechApi } from '../api';
 import { 
-     onLoadCarpetas, onLoadCarpetasByCaja, setIsLoadingAddCarpeta,
-     setIsDeletingCarpeta } from '../store';
+     onLoadCarpetasByCaja, setIsLoadingAddCarpeta,
+     setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta } from '../store';
 
 export const useCarpetaStore = () => {
   
     const dispatch = useDispatch();
 
-    const { carpetas, carpetasByCajaId, isLoadingAddCarpeta, isDeletingCarpeta } = useSelector( state => state.carpeta );
-
-    const startLoadingCarpetas = async() => {
-
-        try {
-
-            const { data } = await indetechApi.get('/carpeta');
-            
-            // es un mapeo para formatear las fechas carpetas = convertEventsToDateEvents( data.eventos ); 
-            console.log(data);
-            //escribo en el store
-            dispatch( onLoadCarpetas( data.carpetas ) );
-
-        } catch (error) {
-          console.log('Error cargando carpetas');
-          console.log(error)
-        }
-    }
+    const {
+         carpetas, carpetasByCajaId, isLoadingAddCarpeta, 
+         isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta } = useSelector( state => state.carpeta );
 
     const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
         
@@ -173,7 +158,7 @@ export const useCarpetaStore = () => {
 
 
         } catch (error) {
-          console.log('Error cargando carpetas de la caja'+ cajaId);
+          console.log('Error cargando carpetas de la caja id'+ cajaId);
           console.log(error)
         }
     }
@@ -204,17 +189,34 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const openModalMoverCarpeta = (carpeta) => {
+
+        dispatch( setCarpetaActiva(carpeta) );
+        dispatch( setOpenModalMoverCarpeta(true) );
+    }
+
+    const closeModalMoverCarpeta = () => {
+
+        dispatch( setCarpetaActiva({}) );
+        dispatch( setOpenModalMoverCarpeta(false) );
+    }
+
+
     return {
         //* Propiedades
         carpetas,
         carpetasByCajaId,
         isLoadingAddCarpeta,
         isDeletingCarpeta,
+        carpetaActiva,
+        isOpenModalMoverCarpeta,
         
         //* Métodos
         crearCarpeta, 
         getCarpetasByCajaId,
         deleteCarpetaById,
-        editarCarpeta
+        editarCarpeta,
+        openModalMoverCarpeta,
+        closeModalMoverCarpeta
     }
 }

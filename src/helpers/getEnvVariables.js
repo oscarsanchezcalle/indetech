@@ -7,10 +7,13 @@
 //     }
 // }
 
-//const baseUrl = 'https://localhost:7177/api';
+//API Local
+const baseUrl = 'https://localhost:7177/api';
 
+//API Develop
 //const baseUrl = 'https://protechdevapi.azurewebsites.net/api';
 
-const baseUrl = 'https://protechapi.azurewebsites.net/api';
+//API Produccion
+//const baseUrl = 'https://protechapi.azurewebsites.net/api';
 
 export { baseUrl };
