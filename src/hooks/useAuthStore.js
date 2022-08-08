@@ -111,7 +111,7 @@ export const useAuthStore = () => {
         const ahora = Math.floor(date.getTime() / 1000);
         const dif = (tokenPayload.exp - ahora);
         
-        //console.log(dif);
+        // console.log(dif);
         // console.log(tokenPayload.exp);
         // console.log(ahora);
 

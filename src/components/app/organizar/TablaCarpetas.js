@@ -49,8 +49,8 @@ export const TablaCarpetas = () => {
         duplicidad:'',
         autoDeCierre: ''
     };
-
-    const [formValues, handleInputChange, handleSelectChange, setEditFuidForm] = useForm(documentoForm);
+    
+    const [formValues, handleInputChange, handleSelectChange, resetFuidForm, setEditFuidForm] = useForm(documentoForm);
 
     const {
         serie,
@@ -96,6 +96,7 @@ export const TablaCarpetas = () => {
     }
 
     function openModal(carpeta) {
+        resetFuidForm();
         
         const serieOption = convertSeriesToSelect([carpeta.serie]);
         const subserieOption = convertSubseriesToSelect([carpeta.subserie]);
@@ -126,7 +127,7 @@ export const TablaCarpetas = () => {
             tipoSoporte: tipoSoporteOption[0],
             frecuenciaUso: frecuenciaUsoOption[0]
         }
-
+        
         setEditFuidForm(formValues);
 
         document.body.style.overflow = 'hidden';
