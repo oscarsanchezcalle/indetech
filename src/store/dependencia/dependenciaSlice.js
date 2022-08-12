@@ -8,6 +8,9 @@ export const dependenciaSlice = createSlice({
         dependencias: [
             // temp
         ],
+        dependenciaActiva:{
+
+        }
     },
     reducers: {
         onLoadDependiencias: (state, { payload = [] }) => {
@@ -23,6 +26,9 @@ export const dependenciaSlice = createSlice({
         isLoadingDependencias: (state, { payload }) => {
             state.isLoadingDependencia = payload;
         },
+        setDependenciaActiva: (state, { payload }) => {
+            state.dependenciaActiva = payload;
+        },
     }
 });
 
@@ -31,5 +37,6 @@ export const {
     onLoadDependiencias,
     onAddNewDependiencia,
     isSuccessDependencias,
-    isLoadingDependencias
+    isLoadingDependencias,
+    setDependenciaActiva
 } = dependenciaSlice.actions;

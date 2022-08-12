@@ -1,12 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { indetechApi } from '../api';
 import { convertDependenciasToSelect } from '../helpers';
-import { onLoadDependiencias, isLoadingDependencias, isSuccessDependencias } from '../store';
+import { 
+            onLoadDependiencias, isLoadingDependencias, isSuccessDependencias,
+            setDependenciaActiva
+       } from '../store';
 
 export const useDependieciaStore = () => {
   
     const dispatch = useDispatch();
-    const { dependencias, isLoadingDependencia, isSuccessDependencia } = useSelector( state => state.dependencia );
+    const { dependencias, isLoadingDependencia, isSuccessDependencia, dependenciaActiva } = useSelector( state => state.dependencia );
     
 
     const startLoadingDependencias = async(id) => {
@@ -29,14 +32,20 @@ export const useDependieciaStore = () => {
             console.log(error);
         }
     }
+
+    const setDependenciaSelected = (dependencia) => {
+        dispatch( setDependenciaActiva( dependencia ) );
+    }
     
     return {
         //* Propiedades
         dependencias,
         isLoadingDependencia,
         isSuccessDependencia,
+        dependenciaActiva,
 
         //* Métodos
-        startLoadingDependencias
+        startLoadingDependencias,
+        setDependenciaSelected
     }
 }

@@ -8,6 +8,9 @@ export const oficinaSlice = createSlice({
         oficinas: [
             // temp
         ],
+        oficinaActiva:{
+            
+        }
     },
     reducers: {
         onLoadOficinas: (state, { payload = [] }) => {
@@ -27,6 +30,9 @@ export const oficinaSlice = createSlice({
         resetOficinas: (state) => {
             state.oficinas = [];
         },
+        setOficinaActiva: (state, { payload }) => {
+            state.oficinaActiva = payload;
+        },
     }
 });
 
@@ -36,6 +42,7 @@ export const {
     onAddNewOficina,
     isSuccessOficinas,
     isLoadingOficinas,
-    resetOficinas
+    resetOficinas,
+    setOficinaActiva
 } = oficinaSlice.actions;
 

@@ -30,7 +30,7 @@ export const useForm = ( initialState = {} ) => {
     }
 
     const setEditFuidForm = () => {
-     
+     //no eliminar este metodo, es utilizado en el editar.
     }
 
     const handleInputChange = ({ target }) => {

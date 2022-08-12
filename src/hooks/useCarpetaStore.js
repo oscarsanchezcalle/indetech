@@ -93,7 +93,7 @@ export const useCarpetaStore = () => {
             const {
                 id, serie, subserie, tipoDocumento,
                 tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
-                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre 
+                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre, numeroCaja
             } = criteria;
 
             const updateCriteria = {

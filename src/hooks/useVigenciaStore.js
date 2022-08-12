@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { indetechApi } from '../api';
 import { convertVigenciasToSelect } from '../helpers';
-import { onLoadVigencias, isLoadingVigencias, isSuccessVigencias } from '../store';
+import { onLoadVigencias, isLoadingVigencias, isSuccessVigencias, setVigenciaActiva } from '../store';
 
 export const useVigenciaStore = () => {
   
     const dispatch = useDispatch();
-    const { vigencias, isLoadingVigencia, isSuccessVigencia } = useSelector( state => state.vigencia );
+    const { vigencias, isLoadingVigencia, isSuccessVigencia, vigenciaActiva } = useSelector( state => state.vigencia );
     
 
     const startLoadingVigencias = async() => {
@@ -29,13 +29,19 @@ export const useVigenciaStore = () => {
         }
     }
     
+    const setVigenciaSelected = (vigencia) => {
+        dispatch( setVigenciaActiva( vigencia ) );
+    }
+
     return {
         //* Propiedades
         vigencias,
         isLoadingVigencia,
         isSuccessVigencia,
+        vigenciaActiva,
 
         //* Métodos
-        startLoadingVigencias
+        startLoadingVigencias,
+        setVigenciaSelected
     }
 }

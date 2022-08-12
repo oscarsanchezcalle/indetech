@@ -15,12 +15,12 @@ import Swal from 'sweetalert2';
 export const FuidScreen = () => {
 
     const { proyectoId, proyecto, username } = useAuthStore();
-    const { startLoadingDependencias, dependencias } = useDependieciaStore();
-    const { startLoadingOficinas, oficinas } = useOficinaStore();
+    const { startLoadingDependencias, dependencias, setDependenciaSelected } = useDependieciaStore();
+    const { startLoadingOficinas, oficinas, setOficinaSelected } = useOficinaStore();
     const { series, startLoadingSeries } = useSerieStore();
     const { subseries, startLoadingSubseries } = useSubserieStore();
     const { tipoDocumentos, startLoadingTipoDocumentos } = useTipoDocumentoStore();
-    const { vigencias, startLoadingVigencias } = useVigenciaStore();
+    const { vigencias, startLoadingVigencias, setVigenciaSelected } = useVigenciaStore();
     const { soportes, startLoadingSoportes } = useSoporteStore();
     const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
     const { isLoadingRotuloCaja, buscarRotuloCaja, rotuloCaja } = useCajaStore();
@@ -158,11 +158,18 @@ export const FuidScreen = () => {
     const handleSelectDependenciaChange = ( selectedOption ) => {           
         startLoadingOficinas(selectedOption.value);
         handleSelectChange(selectedOption, "dependencia");
+        setDependenciaSelected(selectedOption);
     }
 
     const handleSelectSubDependenciaChange = ( selectedOption ) => {           
         startLoadingSeries(selectedOption.value);
-        handleSelectChange(selectedOption, "oficina");  
+        handleSelectChange(selectedOption, "oficina"); 
+        setOficinaSelected(selectedOption);
+    }
+    
+    const handleSelectVigenciaChange = ( selectedOption ) => {   
+        handleSelectChange(selectedOption, "vigencia");
+        setVigenciaSelected(selectedOption);
     }
 
     const handleSelectSerieChange = ( selectedOption) => {   
@@ -185,10 +192,6 @@ export const FuidScreen = () => {
 
     const handleSelectFrecuenciaChange = ( selectedOption ) => {   
         handleSelectChange(selectedOption, "frecuenciaUso");
-    }
-
-    const handleSelectVigenciaChange = ( selectedOption ) => {   
-        handleSelectChange(selectedOption, "vigencia");
     }
 
     const handleSelectAutoDeCierreChange = ( selectedOption ) => {   

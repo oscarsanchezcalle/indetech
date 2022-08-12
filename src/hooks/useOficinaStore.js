@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { indetechApi } from '../api';
 import { convertOficinasToSelect } from '../helpers';
-import { onLoadOficinas, isLoadingOficinas, isSuccessOficinas, resetOficinas } from '../store';
+import { onLoadOficinas, isLoadingOficinas, isSuccessOficinas, resetOficinas, setOficinaActiva } from '../store';
 
 export const useOficinaStore = () => {
   
     const dispatch = useDispatch();
-    const { oficinas, isLoadingOficina, isSuccessOficina } = useSelector( state => state.oficina );
+    const { oficinas, isLoadingOficina, isSuccessOficina, oficinaActiva } = useSelector( state => state.oficina );
     
 
     const startLoadingOficinas = async(id) => {
@@ -32,15 +32,21 @@ export const useOficinaStore = () => {
     const resetOficina = async() => {
         dispatch( resetOficinas() );
     }
+
+    const setOficinaSelected = (oficina) => {
+        dispatch( setOficinaActiva( oficina ) );
+    }
     
     return {
         //* Propiedades
         oficinas,
         isLoadingOficina,
         isSuccessOficina,
+        oficinaActiva,
 
         //* Métodos
         startLoadingOficinas,
-        resetOficina
+        resetOficina,
+        setOficinaSelected
     }
 }

@@ -41,42 +41,34 @@ export const AdminNavbar = () => {
               </div>
             </div>
             <ul className="nk-menu nk-menu-main ui-s2">
-              {/* <li className="nk-menu-item has-sub">
+              <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">Dashboards</span>
                 </a>
                 <ul className="nk-menu-sub">
                   <li className="nk-menu-item">
                     <a href="#"  className="nk-menu-link">
-                      <span className="nk-menu-text">Default Dashboard</span>
+                      <span className="nk-menu-text">Análisis General</span>
                     </a>
                   </li>
                   <li className="nk-menu-item">
                     <a href="#" className="nk-menu-link">
-                      <span className="nk-menu-text">Sales Dashboard</span>
+                      <span className="nk-menu-text">FUID</span>
+                    </a>
+                  </li>
+                  <li className="nk-menu-item">
+                    <a href="#" className="nk-menu-link">
+                      <span className="nk-menu-text">Indexación de documentos</span>
                     </a>
                   </li>
                   <li className="nk-menu-item">
                     <a href="#"  className="nk-menu-link">
-                      <span className="nk-menu-text">Crypto Dashboard</span>
-                    </a>
-                  </li>
-                  <li className="nk-menu-item">
-                    <a href="#"  className="nk-menu-link">
-                      <span className="nk-menu-text">Analytics Dashboard</span>
-                    </a>
-                  </li>
-                  <li className="nk-menu-heading">
-                    <h6 className="overline-title text-primary">Use-Case Concept</h6>
-                  </li>
-                  <li className="nk-menu-item">
-                    <a href="#"  className="nk-menu-link" target="_blank">
-                      <span className="nk-menu-text">Investment Panel</span>
-                      <span className="nk-menu-badge">HOT</span>
+                      <span className="nk-menu-text">Seguimiento</span>
+                      <span className="nk-menu-badge">Celular</span>
                     </a>
                   </li>
                 </ul>
-              </li> */}
+              </li>
               <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">FUID</span>
@@ -91,7 +83,7 @@ export const AdminNavbar = () => {
                   </li>
                 </ul>
               </li>
-              {/* <li className="nk-menu-item has-sub">
+              <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">Digitalización</span>
                 </a>
@@ -166,12 +158,12 @@ export const AdminNavbar = () => {
                     <a href="#" className="nk-menu-link"><span className="nk-menu-text">Usuarios</span></a>
                   </li>
                 </ul>
-              </li> */}
+              </li>
             </ul>
           </div>
           <div className="nk-header-tools">
             <ul className="nk-quick-nav">
-              {/* <li className="dropdown notification-dropdown">
+              <li className="dropdown notification-dropdown">
                 <a href="#" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
                   <div className="icon-status icon-status-info"><em className="icon ni ni-bell" /></div>
                 </a>
@@ -242,7 +234,7 @@ export const AdminNavbar = () => {
                     <a href="#">View All</a>
                   </div>
                 </div>
-              </li> */}
+              </li>
               <li className="dropdown user-dropdown order-sm-first">
                 <a href="#" className="dropdown-toggle" data-bs-toggle="dropdown">
                   <div className="user-toggle">

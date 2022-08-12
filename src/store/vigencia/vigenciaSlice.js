@@ -8,6 +8,9 @@ export const vigenciaSlice = createSlice({
         vigencias: [
             // temp
         ],
+        vigenciaActiva:{
+
+        }
     },
     reducers: {
         onLoadVigencias: (state, { payload = [] }) => {
@@ -22,7 +25,10 @@ export const vigenciaSlice = createSlice({
         },
         isLoadingVigencias: (state, { payload }) => {
             state.isLoadingVigencias = payload;
-        }
+        },
+        setVigenciaActiva: (state, { payload }) => {
+            state.vigenciaActiva = payload;
+        },
     }
 });
 
@@ -31,5 +37,6 @@ export const {
     onLoadVigencias,
     onAddNewVigencia,
     isSuccessVigencias,
-    isLoadingVigencias
+    isLoadingVigencias,
+    setVigenciaActiva
 } = vigenciaSlice.actions;
