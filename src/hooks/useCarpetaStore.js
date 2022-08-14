@@ -168,7 +168,6 @@ export const useCarpetaStore = () => {
         dispatch( setIsDeletingCarpeta('') );
 
         try {
-
             
             await indetechApi.delete('/Carpeta?id='+carpetaId+'&username='+username); 
             
@@ -189,13 +188,13 @@ export const useCarpetaStore = () => {
         }
     }
 
-    const moverCarpeta = async(searchCriteria) => {
+    const moverCarpeta = async(moverCriteria) => {
        
         try {
+            dispatch( setIsLoadingAddCarpeta(true) );
+            await indetechApi.put('/Carpeta/MoverCarpeta', moverCriteria);
             
-            await indetechApi.put('/Carpeta/MoverCarpeta', searchCriteria);
-            
-            getCarpetasByCajaId(searchCriteria.cajaIdActual);
+            getCarpetasByCajaId(moverCriteria.cajaIdActual);
 
             Swal.fire({
                 //position: 'top-end',
@@ -206,13 +205,26 @@ export const useCarpetaStore = () => {
                 //timer: 1500
             });
             
+            dispatch( setIsLoadingAddCarpeta(false));
+
+            return true;
             
         } catch (error) {
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'No se pudo mover la carpeta',
+                text: 'Por favor intenta nuevamente',
+                showConfirmButton: true,
+                timer: 1500
+            });
 
-        //   setIsLoadingRotuloCaja(false);
-        //   console.log('Error cargando rotulo de caja y carpetas');
-          console.log(error)
+            dispatch( setIsLoadingAddCarpeta(false));
+            console.log(error)
+            return false;
         }
+
+        
     }
 
     const openModalMoverCarpeta = (carpeta) => {

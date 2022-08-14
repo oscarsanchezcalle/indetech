@@ -28,7 +28,7 @@ export const MoverCarpetaModal = () => {
     const { startLoadingOficinas, oficinas, oficinaActiva } = useOficinaStore();
     const { vigencias, vigenciaActiva } = useVigenciaStore();
     const { cajas, startLoadingCajas, buscarRotuloCajaById } = useCajaStore();
-    const { proyectoId } = useAuthStore();
+    const { proyectoId, username } = useAuthStore();
     const { carpetaActiva, isOpenModalMoverCarpeta, isLoadingAddCarpeta, 
             closeModalMoverCarpeta, moverCarpeta } = useCarpetaStore();
 
@@ -140,20 +140,28 @@ export const MoverCarpetaModal = () => {
         return;
       }
 
-      const searchCriteria = {
+      const moverCriteria = {
         "carpetaId": carpetaActiva.id,
         "numeroCarpeta": parseInt(formValues.numeroCarpeta),
         "cajaIdActual": carpetaActiva.cajaId,
-        "cajaIdNueva": formValues.caja.cajaId ? formValues.caja.cajaId : 0
+        "cajaIdNueva": formValues.caja.cajaId ? formValues.caja.cajaId : 0,
+        "proyectoId": parseInt(proyectoId),
+        "dependenciaId": formValues.dependencia.value,
+        "oficinaProductoraId": formValues.oficina.value,
+        "vigenciaId": formValues.vigencia.value,
+        "numeroCaja": formValues.caja.cajaId ? 0 : parseInt(formValues.caja.value),
+        "username": username
       }
 
-      await moverCarpeta(searchCriteria);
+      const fueMovida =  await moverCarpeta(moverCriteria);
 
-      await buscarRotuloCajaById(carpetaActiva.cajaId);
+      if(fueMovida){
+         await buscarRotuloCajaById(carpetaActiva.cajaId);
+         closeModal();
+      }
     };
     
     const onlyNumbers = (e) => {
-      
         const keyCode = e.which ? e.which : e.keyCode
         //console.log(String.fromCharCode(e.keyCode));
         if(!(keyCode >= 48 && keyCode <= 57  || keyCode >= 37 && keyCode <= 40 
@@ -161,9 +169,7 @@ export const MoverCarpetaModal = () => {
           )){
           // si es numero mato el evento y no deja meter letras
           e.preventDefault();
-          
         }
-        
     }
 
   return (
