@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { 
         useAuthStore, useCarpetaStore, useDependieciaStore, 
         useForm, useOficinaStore, useVigenciaStore, useCajaStore } from '../../../hooks';
-import { RotuloCaja } from './RotuloCaja';
+import { RotuloCajaHorizontal } from './RotuloCajaHorizontal';
 import Modal from 'react-modal';
 import { RotuloCarpeta } from './RotuloCarpeta';
 import { LoadingInButton } from '../LoadingInButton';
@@ -15,11 +15,11 @@ export const MoverCarpetaModal = () => {
 
     const customStyles = {
       content: {
-          top: '55%',
+          top: '70%',
           left: '50%',
-          right: '0%',
+          right: 'auto',
           bottom: 'auto',
-          marginRight: '-30%',
+          marginRight: '-40%',
           transform: 'translate(-50%, -50%)',
       }
     };
@@ -140,6 +140,23 @@ export const MoverCarpetaModal = () => {
         return;
       }
 
+      if( 
+          formValues.caja?.value === ''
+          || formValues.numeroCarpeta === ''
+          || formValues.numeroCarpeta === '0'
+        )
+      {
+        Swal.fire({
+          //position: 'top-end',
+          icon: 'warning',
+          title: 'Campos incompletos',
+          text: 'Por favor diligencia todos los campos.',
+          showConfirmButton: true,
+          //timer: 1500
+        });
+        return;
+      }
+
       const moverCriteria = {
         "carpetaId": carpetaActiva.id,
         "numeroCarpeta": parseInt(formValues.numeroCarpeta),
@@ -178,7 +195,30 @@ export const MoverCarpetaModal = () => {
         isOpen={isOpenModalMoverCarpeta}
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={{
+          overlay: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.75)'
+          },
+          content: {
+            position: 'absolute',
+            top: '70px',
+            left: '40px',
+            right: '40px',
+            bottom: '40px',
+            border: '1px solid #ccc',
+            background: '#fff',
+            overflow: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            borderRadius: '4px',
+            outline: 'none',
+            padding: '20px'
+          }
+        }}
         contentLabel="Mover Carpeta"> 
 
           <div className="modal-header pb-2">
@@ -189,21 +229,13 @@ export const MoverCarpetaModal = () => {
                 </a>
             </ul>
           </div>
-          <div className="modal-body modal-body-lg pt-5">
-              <div className="row">
-              <div className="col-md-12">
-                <RotuloCarpeta />
-                </div>
-              </div>
-            <div className='row mt-2'>
-              <div className='col-md-6'>
-                  <RotuloCaja/>
-              </div>
-              <div className='col-md-6'>
+          <div className="modal-body modal-body-lg pt-5">            
+            <div className='row'>
+              <div className='col-md-12'>
                    <div className="code-block">
                     <h6 className="overline-title title">Mover carpeta</h6>
                     <div className='row'>
-                      <div className='col-md-6'>
+                      <div className='col-md-4'>
                           <div className="form-group">
                             <label className="form-label" htmlFor="cf-full-name">
                               Dependencia
@@ -217,7 +249,7 @@ export const MoverCarpetaModal = () => {
                               />
                           </div>
                       </div>
-                      <div className='col-md-6'>
+                      <div className='col-md-4'>
                           <div className="form-group">
                             <label className="form-label" htmlFor="cf-full-name">
                               Sub Dependencia
@@ -231,9 +263,7 @@ export const MoverCarpetaModal = () => {
                               />
                           </div>
                       </div>
-                    </div>
-                    <div className='row mt-2'>
-                      <div className='col-md-6'>
+                      <div className='col-md-4'>
                           <div className="form-group">
                             <label className="form-label" htmlFor="cf-full-name">
                               Vigencia
@@ -246,7 +276,10 @@ export const MoverCarpetaModal = () => {
                                 />
                           </div>
                       </div>
-                      <div className='col-md-6'>
+                    </div>
+                    <div className='row mt-2'>
+                     
+                      <div className='col-md-4'>
                           <div className="form-group">
                             <label className="form-label" htmlFor="cf-full-name">
                               Caja
@@ -261,9 +294,7 @@ export const MoverCarpetaModal = () => {
                                 />
                           </div>
                       </div>
-                    </div>
-                    <div className='row mt-2'>
-                        <div className='col-md-6'>
+                      <div className='col-md-4'>
                           <div className="form-group">
                             <label className="form-label" htmlFor="cf-full-name">
                               Nuevo número de Carpeta
@@ -278,13 +309,13 @@ export const MoverCarpetaModal = () => {
                                onChange={handleInputChange}/>
                           </div>
                         </div>
-                        <div className='col-md-6'>
+                        <div className='col-md-4'>
                           <div className="form-group">
                               <button 
                                   onClick={handleBtnMover}
                                   type="button"
                                   disabled={isLoadingAddCarpeta}
-                                  className="btn btn-lg  btn-outline-primary btn-dim  mt-4 btn-block">
+                                  className="btn btn-lg bg-primary-dim text-primary btn-outline-light btn-dim  mt-4 btn-block">
                                       <LoadingInButton isLoading={isLoadingAddCarpeta} btnText="Mover carpeta" />
                               </button>
                           </div>
@@ -293,7 +324,17 @@ export const MoverCarpetaModal = () => {
                 </div>
               </div>
             </div>
-
+            <div className="row">
+              <div className="col-md-12">
+                <RotuloCarpeta />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-12">
+                <RotuloCajaHorizontal/>
+              </div>
+            </div>
+ 
           </div>
 
         </Modal>

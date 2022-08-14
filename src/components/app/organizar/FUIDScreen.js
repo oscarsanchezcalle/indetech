@@ -340,7 +340,7 @@ export const FuidScreen = () => {
     <>
     <div className='row'>
         <div className='col-md-7'>
-            <h6 className="title pb-2">Formato Único de Inventario Documental</h6>
+            <h6 className="title pb-2">Registro de Caja</h6>
             <div className="row">
                 <label className="col-sm-3 col-form-label form-label">Entidad</label>
                 <div className="col-sm-9">
@@ -414,7 +414,7 @@ export const FuidScreen = () => {
             <div id="accordion" className="accordion">
                 <div className="accordion-item">
                     <a href="#" className="accordion-head" data-bs-toggle="collapse" data-bs-target="#accordion-item-1" aria-expanded="false">
-                        <h6 className="title">Nuevo registro de carpeta</h6>
+                        <h6 className="title">Registro de carpeta</h6>
                         <span className="accordion-icon" />
                     </a>
                     <div className="accordion-body collapse show" id="accordion-item-1" data-bs-parent="#accordion" style={{}}>

@@ -257,7 +257,7 @@ export const TablaCarpetas = () => {
                                 <div className="card-title-group">
                                     <div className="card-title">
                                     <h6 className="title">
-                                        Inventario Carpetas
+                                        Listado de carpetas
                                     </h6>
                                     </div>
                                     <div className="card-tools me-n1">

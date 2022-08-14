@@ -78,7 +78,7 @@ export const AdminNavbar = () => {
                   <Link 
                     className="nk-menu-link"
                     to="/administrarFuid">
-                      <span className="nk-menu-text">Gestionar FUID</span> 
+                      <span className="nk-menu-text">Gestionar Carpetas</span> 
                   </Link>  
                   </li>
                 </ul>
