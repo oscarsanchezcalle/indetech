@@ -341,7 +341,7 @@ export const TablaCarpetas = () => {
                                                                 <li>
                                                                     <a href="#" onClick={() => handleMoverCarpeta(carpeta)}>
                                                                         <em className="icon ni ni-external" />
-                                                                        <span>Mover Carpeta</span>
+                                                                        <span>Mover carpeta a otra caja</span>
                                                                     </a>
                                                                 </li>
                                                                 <li>

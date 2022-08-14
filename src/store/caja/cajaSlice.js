@@ -15,7 +15,7 @@ export const cajaSlice = createSlice({
             numeroExpedientes:'',
             fechasExtremas:'',
             cajaId:0
-        }
+        },
     },
     reducers: {
         onLoadCajas: (state, { payload = [] }) => {

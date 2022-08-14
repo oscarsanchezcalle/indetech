@@ -189,6 +189,32 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const moverCarpeta = async(searchCriteria) => {
+       
+        try {
+            
+            await indetechApi.put('/Carpeta/MoverCarpeta', searchCriteria);
+            
+            getCarpetasByCajaId(searchCriteria.cajaIdActual);
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Carpeta movida con éxito',
+                text: 'La carpeta reposa en la caja indicada',
+                showConfirmButton: true,
+                //timer: 1500
+            });
+            
+            
+        } catch (error) {
+
+        //   setIsLoadingRotuloCaja(false);
+        //   console.log('Error cargando rotulo de caja y carpetas');
+          console.log(error)
+        }
+    }
+
     const openModalMoverCarpeta = (carpeta) => {
 
         dispatch( setCarpetaActiva(carpeta) );
@@ -217,6 +243,7 @@ export const useCarpetaStore = () => {
         deleteCarpetaById,
         editarCarpeta,
         openModalMoverCarpeta,
-        closeModalMoverCarpeta
+        closeModalMoverCarpeta,
+        moverCarpeta
     }
 }

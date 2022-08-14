@@ -1,10 +1,15 @@
 import React, { useEffect } from 'react'
-import { useAuthStore, useCarpetaStore, useDependieciaStore, useForm, useOficinaStore, useVigenciaStore } from '../../../hooks';
+import { 
+        useAuthStore, useCarpetaStore, useDependieciaStore, 
+        useForm, useOficinaStore, useVigenciaStore, useCajaStore } from '../../../hooks';
 import { RotuloCaja } from './RotuloCaja';
 import Modal from 'react-modal';
 import { RotuloCarpeta } from './RotuloCarpeta';
 import { LoadingInButton } from '../LoadingInButton';
 import Select from 'react-select';
+import Creatable  from 'react-select/creatable';
+import Swal from 'sweetalert2';
+
 
 export const MoverCarpetaModal = () => {
 
@@ -19,17 +24,20 @@ export const MoverCarpetaModal = () => {
       }
     };
 
-    const { startLoadingDependencias, dependencias, dependenciaActiva } = useDependieciaStore();
+    const { dependencias, dependenciaActiva } = useDependieciaStore();
     const { startLoadingOficinas, oficinas, oficinaActiva } = useOficinaStore();
-    const { vigencias, startLoadingVigencias, vigenciaActiva } = useVigenciaStore();
+    const { vigencias, vigenciaActiva } = useVigenciaStore();
+    const { cajas, startLoadingCajas, buscarRotuloCajaById } = useCajaStore();
     const { proyectoId } = useAuthStore();
-    const { carpetaActiva, isOpenModalMoverCarpeta, isLoadingAddCarpeta, closeModalMoverCarpeta } = useCarpetaStore();
+    const { carpetaActiva, isOpenModalMoverCarpeta, isLoadingAddCarpeta, 
+            closeModalMoverCarpeta, moverCarpeta } = useCarpetaStore();
 
     const documentoForm = {
       dependencia: {},
       oficina: {},
       vigencia: {},
-      caja: {}
+      caja: {},
+      numeroCarpeta: ''
     };
 
     const [formValues, handleInputChange, handleSelectChange] = useForm(documentoForm);
@@ -39,6 +47,7 @@ export const MoverCarpetaModal = () => {
         oficina,
         vigencia,
         caja,
+        numeroCarpeta
     } = formValues;
 
     const handleSelectDependenciaChange = ( selectedOption ) => {           
@@ -52,12 +61,32 @@ export const MoverCarpetaModal = () => {
 
     const handleSelectVigenciaChange = ( selectedOption ) => {   
       handleSelectChange(selectedOption, "vigencia");
+      
+      if(dependenciaActiva && oficinaActiva && vigenciaActiva && proyectoId){
+        const criteria = 
+        {
+            "proyectoId": parseInt(proyectoId),
+            "dependenciaId": dependenciaActiva.value,
+            "oficinaId": oficinaActiva.value,
+            "vigenciaId": selectedOption.value
+        };
+        buscarCajas(criteria);
+      }
+
+    }
+
+    const handleSelectCajaChange = ( selectedOption ) => {  
+      handleSelectChange(selectedOption, "caja");
+    }
+
+    const buscarCajas = async (criteria) => { 
+          await startLoadingCajas(criteria);
     }
 
     // el useEffect setea el estado del formulario.
     useEffect(() => {
       if(dependencias?.length > 0 && proyectoId == 1){
-          handleSelectDependenciaChange(dependencias[0]);
+        return  handleSelectDependenciaChange(dependencias[0]);
       }
     }, [dependencias]);
 
@@ -81,9 +110,7 @@ export const MoverCarpetaModal = () => {
         handleSelectDependenciaChange(dependenciaActiva);
         handleSelectSubDependenciaChange(oficinaActiva);
         handleSelectVigenciaChange(vigenciaActiva);
-
         //console.log(formValues);
-        
         // console.log('aqui');
         //console.log(carpetaActiva);
     }
@@ -93,9 +120,51 @@ export const MoverCarpetaModal = () => {
       closeModalMoverCarpeta({}, false);
     }
 
-    const handleBtnMover = () => {
-      console.log("mover");
+    const handleBtnMover = async () => {
+      
+      if( 
+            vigenciaActiva.value === formValues.vigencia.value 
+          && dependenciaActiva.value === formValues.dependencia.value
+          && oficinaActiva.value === formValues.oficina.value
+          && carpetaActiva.cajaId === formValues.caja?.cajaId
+         )
+      {
+        Swal.fire({
+          //position: 'top-end',
+          icon: 'error',
+          title: 'Acción no permitida',
+          text: 'No se puede mover la carpeta dentro de la misma caja',
+          showConfirmButton: true,
+          //timer: 1500
+        });
+        return;
+      }
+
+      const searchCriteria = {
+        "carpetaId": carpetaActiva.id,
+        "numeroCarpeta": parseInt(formValues.numeroCarpeta),
+        "cajaIdActual": carpetaActiva.cajaId,
+        "cajaIdNueva": formValues.caja.cajaId ? formValues.caja.cajaId : 0
+      }
+
+      await moverCarpeta(searchCriteria);
+
+      await buscarRotuloCajaById(carpetaActiva.cajaId);
     };
+    
+    const onlyNumbers = (e) => {
+      
+        const keyCode = e.which ? e.which : e.keyCode
+        //console.log(String.fromCharCode(e.keyCode));
+        if(!(keyCode >= 48 && keyCode <= 57  || keyCode >= 37 && keyCode <= 40 
+          || keyCode >= 8 && keyCode <= 10 || keyCode === 13
+          )){
+          // si es numero mato el evento y no deja meter letras
+          e.preventDefault();
+          
+        }
+        
+    }
 
   return (
     <>
@@ -107,7 +176,7 @@ export const MoverCarpetaModal = () => {
         contentLabel="Mover Carpeta"> 
 
           <div className="modal-header pb-2">
-            <h5 className="modal-title">Mover Carpeta</h5>
+            <h5 className="modal-title">Mover carpeta a otra caja</h5>
             <ul className="btn-toolbar">   
                 <a href="#" onClick={closeModal} className="close">
                     <em className="icon ni ni-cross" />
@@ -176,7 +245,14 @@ export const MoverCarpetaModal = () => {
                             <label className="form-label" htmlFor="cf-full-name">
                               Caja
                             </label>
-                            <input type="text" className="form-control" id="cf-full-name" />
+                            <Creatable
+                                options={cajas}   
+                                formatCreateLabel= {(inputValue) => `Crear Caja ${inputValue}`}
+                                placeholder=''
+                                value={caja}
+                                onKeyDown={(e) => onlyNumbers(e)}
+                                onChange={(selectedOption) => handleSelectCajaChange(selectedOption)}
+                                />
                           </div>
                       </div>
                     </div>
@@ -186,7 +262,14 @@ export const MoverCarpetaModal = () => {
                             <label className="form-label" htmlFor="cf-full-name">
                               Nuevo número de Carpeta
                             </label>
-                            <input type="text" className="form-control" id="cf-full-name" />
+                            
+                            <input 
+                               type="number" 
+                               className="form-control" 
+                               name="numeroCarpeta"   
+                               value={numeroCarpeta}  
+                               autoComplete="off"                       
+                               onChange={handleInputChange}/>
                           </div>
                         </div>
                         <div className='col-md-6'>

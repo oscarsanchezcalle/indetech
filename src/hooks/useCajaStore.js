@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { indetechApi } from '../api';
+import { convertCajasToSelect } from '../helpers';
+
 import { onLoadCajas, onLoadRotuloCaja, setIsLoadingRotuloCaja, onLoadCarpetasByCaja } from '../store';
 
 export const useCajaStore = () => {
@@ -8,16 +10,15 @@ export const useCajaStore = () => {
     const dispatch = useDispatch();
     const { cajas, rotuloCaja, isLoadingRotuloCaja } = useSelector( state => state.caja );
 
-    const startLoadingCajas = async() => {
+    const startLoadingCajas = async(criteria) => {
        
         try {
-
-            const { data } = await indetechApi.get('/caja');
-            //const { data } = await carpetaApi.post('/caja',{criteria1, criteria2});
+           
+            const { data } = await indetechApi.post('/caja/BuscarCajas', criteria);
             
-            //console.log(data);
-            //escribo en el store
-            dispatch( onLoadCajas( data.cajas ) );
+            const cajasForSelect = convertCajasToSelect(data); 
+            
+            dispatch( onLoadCajas( cajasForSelect ) );
 
         } catch (error) {
           console.log('Error cargando cajas');
@@ -84,9 +85,6 @@ export const useCajaStore = () => {
         }
     }
 
-    
-
-    
     return {
         //* Propiedades
         cajas,
