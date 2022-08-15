@@ -24,7 +24,7 @@ export const TablaCarpetas = () => {
     const { tipoDocumentosEdit, startLoadingTipoDocumentosEdit } = useTipoDocumentoStore();
     const { soportes } = useSoporteStore();
     const { frecuencias,  } = useFrecuenciaStore();
-    const { isLoadingAddCarpeta, editarCarpeta, openModalMoverCarpeta } = useCarpetaStore();
+    const { isLoadingAddCarpeta, editarCarpeta, openModalMoverCarpeta, carpetasByCajaId, deleteCarpetaById } = useCarpetaStore();
     const { rotuloCaja, buscarRotuloCajaById } = useCajaStore();
 
     //useForm
@@ -76,8 +76,6 @@ export const TablaCarpetas = () => {
 
     const [modalIsOpen, setIsOpen] = useState(false);
     
-    const { carpetasByCajaId, deleteCarpetaById } = useCarpetaStore();
-   
     if(carpetasByCajaId === undefined){
         return null;
     }

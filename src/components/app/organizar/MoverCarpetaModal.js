@@ -72,7 +72,6 @@ export const MoverCarpetaModal = () => {
         };
         buscarCajas(criteria);
       }
-
     }
 
     const handleSelectCajaChange = ( selectedOption ) => {  

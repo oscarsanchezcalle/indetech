@@ -7,14 +7,6 @@ const {
     newPipeline,
   } = require("@azure/storage-file-share");
   
-/*
-  [
-    {
-        nombre: dsfjksdhfkjsdf.pdf
-        porcentaje: 40
-    }
-  ]
-*/
 export const CajaCard = (cardNumber) => {
 
     const indexCaja = cardNumber;

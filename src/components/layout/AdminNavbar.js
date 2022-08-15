@@ -88,15 +88,19 @@ export const AdminNavbar = () => {
                   <span className="nk-menu-text">Digitalización</span>
                 </a>
                 <ul className="nk-menu-sub">
-                  <li className="nk-menu-item">
+                  {/* <li className="nk-menu-item">
                   <Link 
                     className="nk-menu-link"
                     to="/CargueMasivo">
                       <span className="nk-menu-text">Cargue Masivo</span> 
                   </Link>  
-                  </li>
+                  </li> */}
                   <li className="nk-menu-item">
-                    <a href="html/apps-messages.html" className="nk-menu-link"><span className="nk-menu-text">Administrar Cargas</span></a>
+                  <Link 
+                    className="nk-menu-link"
+                    to="/asociarImagen">
+                      <span className="nk-menu-text">Asociar Imagen de Carpeta </span> 
+                  </Link>  
                   </li>
                 </ul>
               </li>

@@ -150,6 +150,7 @@ export const useCarpetaStore = () => {
     }
     
     const getCarpetasByCajaId = async (cajaId) => {
+        
         try {
 
             const { data } = await indetechApi.get('/carpeta/GetCarpetasByCajaID?id='+cajaId);            
@@ -161,6 +162,10 @@ export const useCarpetaStore = () => {
           console.log('Error cargando carpetas de la caja id'+ cajaId);
           console.log(error)
         }
+    }
+
+    const setCarpetasByCajaId = () => {
+        dispatch( onLoadCarpetasByCaja( [] ) );
     }
 
     const deleteCarpetaById = async (carpetaId, username) => {
@@ -256,6 +261,7 @@ export const useCarpetaStore = () => {
         editarCarpeta,
         openModalMoverCarpeta,
         closeModalMoverCarpeta,
-        moverCarpeta
+        moverCarpeta,
+        setCarpetasByCajaId
     }
 }

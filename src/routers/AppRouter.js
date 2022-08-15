@@ -9,6 +9,7 @@ import { CargueMasivo } from '../components/app/digitalizar/CargueMasivo';
 import { Dashboard } from '../components/app/dashboard/Dashboard';
 import { PageNotFound } from '../components/app/notFound/PageNotFound';
 import { useAuthStore } from '../hooks';
+import { AsociarImagenCarpeta } from '../components/app/digitalizar/AsociarImagenCarpeta';
 
   
 export const AppRouter = () => {
@@ -34,11 +35,12 @@ export const AppRouter = () => {
                     <>
                         <Route path="/" element={<AppScreen />}>
                             <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/administrarFuid" element={<FuidScreen/>}/>
+                            <Route path="/asociarImagen" element={<AsociarImagenCarpeta />}/>                    
                             <Route path="/tareasAnalista" element={<TareasAsignadas />} />  
                             <Route path="/indexar" element={<IndexarDocumento />} />  
                             <Route path="/cargueMasivo" element={<CargueMasivo />}/>                    
-                            <Route path="/administrarFuid" element={<FuidScreen/>}/>
-                            <Route index element={<FuidScreen/>}/>
+                            <Route index element={<Dashboard/>}/>
                             
                             <Route path="/auth/login"  element={  <Navigate to="/" /> } />
                             <Route path="/*" element={ <PageNotFound/>} />
