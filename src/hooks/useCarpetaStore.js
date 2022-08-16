@@ -5,7 +5,7 @@ import { indetechApi } from '../api';
 import { 
      onLoadCarpetasByCaja, setIsLoadingAddCarpeta,
      setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
-     setOpenModalAsignar } from '../store';
+     setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox } from '../store';
 
 export const useCarpetaStore = () => {
   
@@ -13,7 +13,8 @@ export const useCarpetaStore = () => {
 
     const {
          carpetas, carpetasByCajaId, isLoadingAddCarpeta, 
-         isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, isOpenModalAsignar } = useSelector( state => state.carpeta );
+         isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, 
+         isOpenModalAsignar, archivosDropbox, isLoadingDropbox } = useSelector( state => state.carpeta );
 
     const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
         
@@ -244,7 +245,7 @@ export const useCarpetaStore = () => {
     }
 
     const openModalAsignar = (carpeta) => {
-        
+
         dispatch( setCarpetaActiva(carpeta) );
         dispatch( setOpenModalAsignar(true) );
     }
@@ -255,6 +256,30 @@ export const useCarpetaStore = () => {
         dispatch( setOpenModalAsignar(false) );
     }
 
+    const buscarArchivosDropbox = async (proyectoId) => {
+
+        try 
+        {
+            //Si tengo datos de archivos en el store, no voy a dropbox.
+            if('id' in archivosDropbox){
+                return;
+            }
+
+            dispatch( setIsLoadingDropbox(true) );
+            
+            const { data } = await indetechApi.get('/dropbox/'+proyectoId);            
+            
+            dispatch( setArchivosDropbox(data) );
+
+            dispatch( setIsLoadingDropbox(false) );
+            
+        }
+        catch(error)
+        {
+            dispatch( setIsLoadingDropbox(false) );
+            console.log(error);
+        }
+    }
 
     return {
         //* Propiedades
@@ -265,7 +290,9 @@ export const useCarpetaStore = () => {
         carpetaActiva,
         isOpenModalMoverCarpeta,
         isOpenModalAsignar,
-        
+        isLoadingDropbox,
+        archivosDropbox,
+
         //* Métodos
         crearCarpeta, 
         getCarpetasByCajaId,
@@ -276,6 +303,7 @@ export const useCarpetaStore = () => {
         moverCarpeta,
         setCarpetasByCajaId,
         openModalAsignar,
-        closeModalAsignar
+        closeModalAsignar,
+        buscarArchivosDropbox
     }
 }

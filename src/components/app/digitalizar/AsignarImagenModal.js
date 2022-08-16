@@ -7,17 +7,22 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
 
 import { useCarpetaStore } from '../../../hooks';
+import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
 
 export const AsignarImagenModal = () => {
   
   Modal.setAppElement('#root');
   
-  const { carpetaActiva, isOpenModalAsignar, closeModalAsignar } = useCarpetaStore();
+  const { 
+    carpetaActiva, isOpenModalAsignar, isLoadingDropbox,
+    closeModalAsignar, buscarArchivosDropbox } = useCarpetaStore();
+
   //const { proyectoId, username } = useAuthStore();
   
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
-    console.log(carpetaActiva);
+    //console.log(carpetaActiva);
+    buscarArchivosDropbox(carpetaActiva.proyectoId);
   }
 
   function closeModal() {
@@ -45,10 +50,10 @@ export const AsignarImagenModal = () => {
                 },
                 content: {
                     position: 'absolute',
-                    top: '90px',
-                    left: '20%',
-                    right: '20%',
-                    bottom: 'auto',
+                    top: '80px',
+                    left: '10%',
+                    right: '10%',
+                    bottom: '2%',
                     border: '1px solid #ccc',
                     background: '#fff',
                     overflow: 'auto',
@@ -71,35 +76,84 @@ export const AsignarImagenModal = () => {
             <div className="modal-body modal-body-lg pt-5">  
               <div className='row'>
                 <div className='col-md-12'>
-                <p className="lead text-primary">Selecciona el archivo PDF asociado a la carpeta</p>
-                <TreeView
-                  aria-label="multi-select"
-                  defaultCollapseIcon={<ExpandMoreIcon />}
-                  defaultExpandIcon={ <ChevronRightIcon />}
-                  multiSelect
-                  sx={{ height: 216, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-                >
-                  <TreeItem nodeId="1" label="Applications">
-                    <TreeItem nodeId="2" label="Calendar" />
-                    <TreeItem nodeId="3" label="Chrome" />
-                    <TreeItem nodeId="4" label="Webstorm" />
-                  </TreeItem>
-                  <TreeItem nodeId="5" label="Documents">
-                    <TreeItem nodeId="6" label="MUI">
-                      <TreeItem nodeId="7" label="src">
-                        <TreeItem nodeId="8" label="index.js" />
-                        <TreeItem nodeId="9" label="tree-view.js" />
-                      </TreeItem>
-                    </TreeItem>
-                  </TreeItem>
-                </TreeView>
+                   <RotuloCarpeta />
+                </div>
+              </div>
+              <div className='row pt-3'>
+                <div className='col-md-12'>
+                  {
+                      ( isLoadingDropbox )  
+                      ? (
+                          <>
+                              <i className="fas fa-circle-notch fa-spin"></i>&nbsp;
+                              <label>Buscando archivos en Dropbox...</label>
+                              <br/>
+                              <br/>
+                          </>
+                      )
+                      : (
+                          <>
+                            <div className="nk-block-between">
+                              <div className="nk-block-head-content">
+                                <h5 className="nk-block-title">Selecciona el archivo PDF asociado a la carpeta</h5>
+                              </div>
+                              <div className="nk-block-head-content">
+                                <div className="toggle-wrap nk-block-tools-toggle">
+                                  <a
+                                    href="#"
+                                    className="btn btn-icon btn-trigger toggle-expand me-n1"
+                                    data-target="pageMenu"
+                                  >
+                                    <em className="icon ni ni-more-v" />
+                                  </a>
+                                  <div className="toggle-expand-content">
+                                    <ul className="nk-block-tools g-3">
+                                      <li>
+                                        <a href="#" className="btn btn-white btn-dim btn-outline-primary">
+                                          <em class="icon ni ni-reload"></em>
+                                          <span>Refrescar</span>
+                                        </a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                               </div>
+                              </div>
+                              <br />
+                            
+                            <TreeView
+                              aria-label="multi-select"
+                              defaultCollapseIcon={<ExpandMoreIcon />}
+                              defaultExpandIcon={ <ChevronRightIcon />}
+                              multiSelect
+                              sx={{ height: 216, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+                            >
+                              <TreeItem nodeId="1" label="Applications">
+                                <TreeItem nodeId="2" label="Calendar" />
+                                <TreeItem nodeId="3" label="Chrome" />
+                                <TreeItem nodeId="4" label="Webstorm" />
+                              </TreeItem>
+                              <TreeItem nodeId="5" label="Documents">
+                                <TreeItem nodeId="6" label="MUI">
+                                  <TreeItem nodeId="7" label="src">
+                                    <TreeItem nodeId="8" label="index.js" />
+                                    <TreeItem nodeId="9" label="tree-view.js" />
+                                  </TreeItem>
+                                </TreeItem>
+                              </TreeItem>
+                            </TreeView>
+                          </>
+                      )
+                  }
                 </div>
               </div>  
-            </div>
-            <div className="modal-footer">
+              <div className="modal-footer">
+                
                 <button type="button" onClick={handleAsignar} className="btn btn-outline-primary btn-dim">Asignar</button>
                 <button type="button" onClick={closeModal} className="btn btn-outline-secondary btn-dim">Cancelar</button>
               </div>  
+            </div>
+            
         </Modal>
     </>
   )

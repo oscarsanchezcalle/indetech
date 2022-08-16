@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useCarpetaStore } from '../../../hooks';
 import { FiltrosCaja } from './FiltrosCaja'
 import { TablaCarpetasImagenes } from './TablaCarpetasImagenes'
 
 export const AsociarImagenCarpeta = () => {
   
-  
+    const { setCarpetasByCajaId } = useCarpetaStore();
+
+    useEffect(() => {
+        setCarpetasByCajaId();
+    }, []);
+
     return (
     <>
     <div className='row'>

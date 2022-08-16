@@ -14,7 +14,9 @@ export const carpetaSlice = createSlice({
         isDeletingCarpeta: '',
         carpetaActiva: {},
         isOpenModalMoverCarpeta: false,
-        isOpenModalAsignar: false
+        isOpenModalAsignar: false,
+        archivosDropbox : {},
+        isLoadingDropbox:false
     },
     reducers: {
         onLoadCarpetas: (state, { payload = [] }) => {
@@ -41,6 +43,12 @@ export const carpetaSlice = createSlice({
         },
         setOpenModalAsignar: ( state, {payload} ) => {
             state.isOpenModalAsignar = payload ;
+        },
+        setArchivosDropbox: ( state, {payload} ) => {
+            state.archivosDropbox = payload;
+        },
+        setIsLoadingDropbox: ( state, {payload} ) => {
+            state.isLoadingDropbox = payload ;
         }
     }
 });
@@ -54,5 +62,7 @@ export const {
     setIsDeletingCarpeta,
     setCarpetaActiva,
     setOpenModalMoverCarpeta,
-    setOpenModalAsignar
+    setOpenModalAsignar,
+    setArchivosDropbox,
+    setIsLoadingDropbox
 } = carpetaSlice.actions;

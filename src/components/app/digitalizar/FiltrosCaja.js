@@ -12,11 +12,10 @@ export const FiltrosCaja = () => {
     const { vigencias, vigenciaActiva, setVigenciaSelected, startLoadingVigencias } = useVigenciaStore();
     const { cajas, startLoadingCajas } = useCajaStore();
     const { proyectoId, username, proyecto } = useAuthStore();
-    const { isLoading, setCarpetasByCajaId, getCarpetasByCajaId } = useCarpetaStore();
+    const { isLoading, getCarpetasByCajaId } = useCarpetaStore();
 
     useEffect(() => {
         if(proyectoId > 0){
-            setCarpetasByCajaId();
             startLoadingDependencias(proyectoId);
             startLoadingVigencias();
         }

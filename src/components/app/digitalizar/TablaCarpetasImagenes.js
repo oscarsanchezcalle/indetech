@@ -7,7 +7,7 @@ import { AsignarImagenModal } from './AsignarImagenModal';
 
 export const TablaCarpetasImagenes = () => {
 
-  const { carpetasByCajaId, openModalAsignar  } = useCarpetaStore();
+  const { carpetasByCajaId, openModalAsignar } = useCarpetaStore();
 
   const  handleOpenModalAsignar = (carpeta) => {
     openModalAsignar(carpeta);
