@@ -13,17 +13,6 @@ import Swal from 'sweetalert2';
 
 export const MoverCarpetaModal = () => {
 
-    const customStyles = {
-      content: {
-          top: '70%',
-          left: '50%',
-          right: 'auto',
-          bottom: 'auto',
-          marginRight: '-40%',
-          transform: 'translate(-50%, -50%)',
-      }
-    };
-
     const { dependencias, dependenciaActiva } = useDependieciaStore();
     const { startLoadingOficinas, oficinas, oficinaActiva } = useOficinaStore();
     const { vigencias, vigenciaActiva } = useVigenciaStore();

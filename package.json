@@ -4,6 +4,11 @@
   "private": true,
   "dependencies": {
     "@azure/storage-file-share": "^12.11.0",
+    "@emotion/react": "11.10.0",
+    "@emotion/styled": "11.10.0",
+    "@mui/icons-material": "5.8.4",
+    "@mui/lab": "^5.0.0-alpha.94",
+    "@mui/material": "5.10.0",
     "@reduxjs/toolkit": "1.8.2",
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/react": "12.1.4",
@@ -22,7 +27,7 @@
     "react-router-dom": "6",
     "react-scripts": "5.0.0",
     "react-select": "5.4.0",
-    "sweetalert2": "^11.4.23"
+    "sweetalert2": "11.4.23"
   },
   "scripts": {
     "start": "react-scripts start",

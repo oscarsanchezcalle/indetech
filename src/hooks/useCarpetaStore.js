@@ -4,7 +4,8 @@ import Swal from 'sweetalert2';
 import { indetechApi } from '../api';
 import { 
      onLoadCarpetasByCaja, setIsLoadingAddCarpeta,
-     setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta } from '../store';
+     setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
+     setOpenModalAsignar } from '../store';
 
 export const useCarpetaStore = () => {
   
@@ -12,7 +13,7 @@ export const useCarpetaStore = () => {
 
     const {
          carpetas, carpetasByCajaId, isLoadingAddCarpeta, 
-         isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta } = useSelector( state => state.carpeta );
+         isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, isOpenModalAsignar } = useSelector( state => state.carpeta );
 
     const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
         
@@ -228,8 +229,6 @@ export const useCarpetaStore = () => {
             console.log(error)
             return false;
         }
-
-        
     }
 
     const openModalMoverCarpeta = (carpeta) => {
@@ -244,6 +243,18 @@ export const useCarpetaStore = () => {
         dispatch( setOpenModalMoverCarpeta(false) );
     }
 
+    const openModalAsignar = (carpeta) => {
+        
+        dispatch( setCarpetaActiva(carpeta) );
+        dispatch( setOpenModalAsignar(true) );
+    }
+
+    const closeModalAsignar = () => {
+
+        dispatch( setCarpetaActiva({}) );
+        dispatch( setOpenModalAsignar(false) );
+    }
+
 
     return {
         //* Propiedades
@@ -253,6 +264,7 @@ export const useCarpetaStore = () => {
         isDeletingCarpeta,
         carpetaActiva,
         isOpenModalMoverCarpeta,
+        isOpenModalAsignar,
         
         //* Métodos
         crearCarpeta, 
@@ -262,6 +274,8 @@ export const useCarpetaStore = () => {
         openModalMoverCarpeta,
         closeModalMoverCarpeta,
         moverCarpeta,
-        setCarpetasByCajaId
+        setCarpetasByCajaId,
+        openModalAsignar,
+        closeModalAsignar
     }
 }

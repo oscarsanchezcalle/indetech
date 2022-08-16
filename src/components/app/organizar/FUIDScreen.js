@@ -24,7 +24,7 @@ export const FuidScreen = () => {
     const { soportes, startLoadingSoportes } = useSoporteStore();
     const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
     const { isLoadingRotuloCaja, buscarRotuloCaja, rotuloCaja } = useCajaStore();
-    const { crearCarpeta, isLoadingAddCarpeta, getCarpetasByCajaId, isDeletingCarpeta } = useCarpetaStore();
+    const { crearCarpeta, isLoadingAddCarpeta, getCarpetasByCajaId, isDeletingCarpeta, setCarpetasByCajaId } = useCarpetaStore();
     
 
     //useForm
@@ -82,6 +82,7 @@ export const FuidScreen = () => {
             startLoadingFrecuencias();
             startLoadingSoportes();
             startLoadingVigencias();
+            setCarpetasByCajaId();
         }
     }, [proyectoId]);
 

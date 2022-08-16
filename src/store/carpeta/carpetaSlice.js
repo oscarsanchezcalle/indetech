@@ -13,7 +13,8 @@ export const carpetaSlice = createSlice({
         ],
         isDeletingCarpeta: '',
         carpetaActiva: {},
-        isOpenModalMoverCarpeta: false
+        isOpenModalMoverCarpeta: false,
+        isOpenModalAsignar: false
     },
     reducers: {
         onLoadCarpetas: (state, { payload = [] }) => {
@@ -37,6 +38,9 @@ export const carpetaSlice = createSlice({
         },
         setOpenModalMoverCarpeta: ( state, {payload} ) => {
             state.isOpenModalMoverCarpeta = payload ;
+        },
+        setOpenModalAsignar: ( state, {payload} ) => {
+            state.isOpenModalAsignar = payload ;
         }
     }
 });
@@ -49,5 +53,6 @@ export const {
     setIsLoadingAddCarpeta,
     setIsDeletingCarpeta,
     setCarpetaActiva,
-    setOpenModalMoverCarpeta
+    setOpenModalMoverCarpeta,
+    setOpenModalAsignar
 } = carpetaSlice.actions;
