@@ -256,12 +256,12 @@ export const useCarpetaStore = () => {
         dispatch( setOpenModalAsignar(false) );
     }
 
-    const buscarArchivosDropbox = async (proyectoId) => {
+    const buscarArchivosDropbox = async (proyectoId, byPassSearchValidation) => {
 
         try 
         {
             //Si tengo datos de archivos en el store, no voy a dropbox.
-            if('id' in archivosDropbox){
+            if('id' in archivosDropbox && !byPassSearchValidation){
                 return;
             }
 
@@ -270,7 +270,7 @@ export const useCarpetaStore = () => {
             const { data } = await indetechApi.get('/dropbox/'+proyectoId);            
             
             dispatch( setArchivosDropbox(data) );
-
+            
             dispatch( setIsLoadingDropbox(false) );
             
         }
@@ -280,6 +280,39 @@ export const useCarpetaStore = () => {
             console.log(error);
         }
     }
+
+    // function recursiveRemove ( list ) {
+    // para llemarla
+            //const elements = recursiveRemove([data]);
+            //dispatch( setArchivosDropbox(elements[0]) );
+
+    //     return list.map ( item => { 
+            
+    //         if(item?.details?.tipo === "Archivo"){
+               
+    //             return {
+    //                 id: `${item?.details?.tipo}-${item.id}`,
+    //                 name: item.name,
+    //                 details: {
+    //                     id: item?.details?.id,
+    //                     observacion: item?.details?.observacion,
+    //                     tipo: item?.details?.tipo,
+    //                     url: item?.details?.url,
+    //                 }
+    //             }
+    //         }
+
+    //         return {...item} 
+
+    //     }).filter ( item => {
+
+    //         if ( 'nodes' in item ) {
+    //             item.nodes = recursiveRemove ( item.nodes );
+    //         }
+
+    //         return item;
+    //     });
+    // } 
 
     return {
         //* Propiedades

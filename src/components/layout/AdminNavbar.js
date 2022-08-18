@@ -167,7 +167,7 @@ export const AdminNavbar = () => {
           </div>
           <div className="nk-header-tools">
             <ul className="nk-quick-nav">
-              <li className="dropdown notification-dropdown">
+              {/* <li className="dropdown notification-dropdown">
                 <a href="#" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
                   <div className="icon-status icon-status-info"><em className="icon ni ni-bell" /></div>
                 </a>
@@ -238,7 +238,7 @@ export const AdminNavbar = () => {
                     <a href="#">View All</a>
                   </div>
                 </div>
-              </li>
+              </li> */}
               <li className="dropdown user-dropdown order-sm-first">
                 <a href="#" className="dropdown-toggle" data-bs-toggle="dropdown">
                   <div className="user-toggle">

@@ -1,28 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Modal from 'react-modal';
+import Swal from 'sweetalert2';
+
 import TreeView from '@mui/lab/TreeView';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TreeItem from '@mui/lab/TreeItem';
 
 import { useCarpetaStore } from '../../../hooks';
 import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
+import { RenderTree } from '../RenderTree';
 
 export const AsignarImagenModal = () => {
   
+  const [archivo, setArchivo] = useState("");
+
   Modal.setAppElement('#root');
   
   const { 
     carpetaActiva, isOpenModalAsignar, isLoadingDropbox,
-    closeModalAsignar, buscarArchivosDropbox } = useCarpetaStore();
+    closeModalAsignar, buscarArchivosDropbox, archivosDropbox } = useCarpetaStore();
 
   //const { proyectoId, username } = useAuthStore();
   
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
     //console.log(carpetaActiva);
-    buscarArchivosDropbox(carpetaActiva.proyectoId);
+    buscarArchivosDropbox(carpetaActiva.proyectoId, false);
   }
 
   function closeModal() {
@@ -30,8 +34,43 @@ export const AsignarImagenModal = () => {
   }
 
   const handleAsignar = () => {
-    console.log("asignar");
+    
+    if (! archivo.includes("Archivo-")){
+      Swal.fire({
+          icon: 'error',
+          title: 'Debes seleccionar un archivo',
+          text: `Por favor selecciona un archivo en vez de una carpeta`,
+          showConfirmButton: true,
+          //timer: 1500
+      });
+      return;
+    }
+
+    const archivoId = archivo.replace('Archivo-','');
+
+    //console.log(archivoId);
   }
+
+  const handleRefrescar = () => {
+    buscarArchivosDropbox(carpetaActiva.proyectoId, true);
+  }
+ 
+  const handleFileSelect = (event, nodeId) => {
+    setArchivo(nodeId);
+  };
+  
+  // var getSubMenuItem = function (subMenuItems, id) {
+  //   console.log(subMenuItems);
+  //   if (subMenuItems) {
+  //       for (var i = 0; i < subMenuItems.length; i++) {
+  //           if (subMenuItems[i].id == id) {
+  //               return subMenuItems[i];
+  //           }
+  //           var found = getSubMenuItem(subMenuItems[i].items, id);
+  //           if (found) return found;
+  //       }
+  //   }
+  // };
 
   return (
     <>
@@ -109,8 +148,8 @@ export const AsignarImagenModal = () => {
                                   <div className="toggle-expand-content">
                                     <ul className="nk-block-tools g-3">
                                       <li>
-                                        <a href="#" className="btn btn-white btn-dim btn-outline-primary">
-                                          <em class="icon ni ni-reload"></em>
+                                        <a onClick = {handleRefrescar} className="btn btn-white btn-dim btn-outline-primary">
+                                          <em className="icon ni ni-reload"></em>
                                           <span>Refrescar</span>
                                         </a>
                                       </li>
@@ -120,28 +159,19 @@ export const AsignarImagenModal = () => {
                                </div>
                               </div>
                               <br />
-                            
-                            <TreeView
-                              aria-label="multi-select"
-                              defaultCollapseIcon={<ExpandMoreIcon />}
-                              defaultExpandIcon={ <ChevronRightIcon />}
-                              multiSelect
-                              sx={{ height: 216, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-                            >
-                              <TreeItem nodeId="1" label="Applications">
-                                <TreeItem nodeId="2" label="Calendar" />
-                                <TreeItem nodeId="3" label="Chrome" />
-                                <TreeItem nodeId="4" label="Webstorm" />
-                              </TreeItem>
-                              <TreeItem nodeId="5" label="Documents">
-                                <TreeItem nodeId="6" label="MUI">
-                                  <TreeItem nodeId="7" label="src">
-                                    <TreeItem nodeId="8" label="index.js" />
-                                    <TreeItem nodeId="9" label="tree-view.js" />
-                                  </TreeItem>
-                                </TreeItem>
-                              </TreeItem>
-                            </TreeView>
+
+                              {
+                                  'id' in archivosDropbox && 
+                                  <TreeView
+                                    aria-label="rich object"
+                                    defaultCollapseIcon={<ExpandMoreIcon />}
+                                    defaultExpandIcon={<ChevronRightIcon />}
+                                    onNodeSelect={handleFileSelect}
+                                    sx={{ height: '100%', flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }}
+                                  >
+                                    {RenderTree(archivosDropbox)}
+                                  </TreeView>
+                              }
                           </>
                       )
                   }
