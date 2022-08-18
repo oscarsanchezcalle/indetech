@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 
 import { indetechApi } from '../api';
 import { 
-     onLoadCarpetasByCaja, setIsLoadingAddCarpeta,
+     onLoadCarpetasByCaja, setIsLoadingAddCarpeta, setIsLoadingAsignarPdf, setIsLoadingQuitarPdf,
      setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
      setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox } from '../store';
 
@@ -14,7 +14,8 @@ export const useCarpetaStore = () => {
     const {
          carpetas, carpetasByCajaId, isLoadingAddCarpeta, 
          isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, 
-         isOpenModalAsignar, archivosDropbox, isLoadingDropbox } = useSelector( state => state.carpeta );
+         isOpenModalAsignar, archivosDropbox, isLoadingDropbox, 
+         isLoadingAsignarPdf, isLoadingQuitarPdf } = useSelector( state => state.carpeta );
 
     const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
         
@@ -64,7 +65,7 @@ export const useCarpetaStore = () => {
             Swal.fire({
                 //position: 'top-end',
                 icon: 'success',
-                title: 'Registro corecto',
+                title: 'Registro correcto',
                 text: ``,
                 showConfirmButton: true,
                 timer: 1500
@@ -129,7 +130,7 @@ export const useCarpetaStore = () => {
             Swal.fire({
                 //position: 'top-end',
                 icon: 'success',
-                title: 'Registro corecto',
+                title: 'Registro correcto',
                 text: ``,
                 showConfirmButton: true,
                 timer: 1000
@@ -281,38 +282,87 @@ export const useCarpetaStore = () => {
         }
     }
 
-    // function recursiveRemove ( list ) {
-    // para llemarla
-            //const elements = recursiveRemove([data]);
-            //dispatch( setArchivosDropbox(elements[0]) );
+    const asignarArchivoACarpeta = async (criteria = {}, cajaId) => {
 
-    //     return list.map ( item => { 
+        try 
+        {
+            dispatch( setIsLoadingAsignarPdf(true) );
+
+            const { data } = await indetechApi.put('/Carpeta/PutAsignarArchivo', criteria); 
+
+            await getCarpetasByCajaId(cajaId);
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Operacón exitosa!',
+                text: `El archivo fue asignado a la carpeta`,
+                showConfirmButton: true,
+                timer: 1500
+            });
             
-    //         if(item?.details?.tipo === "Archivo"){
-               
-    //             return {
-    //                 id: `${item?.details?.tipo}-${item.id}`,
-    //                 name: item.name,
-    //                 details: {
-    //                     id: item?.details?.id,
-    //                     observacion: item?.details?.observacion,
-    //                     tipo: item?.details?.tipo,
-    //                     url: item?.details?.url,
-    //                 }
-    //             }
-    //         }
+            dispatch( setIsLoadingAsignarPdf(false) );
+            
+            return true;
 
-    //         return {...item} 
+        }
+        catch(error)
+        {
+            dispatch( setIsLoadingAsignarPdf(false) );
 
-    //     }).filter ( item => {
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'Error de conexión con Dropbox!',
+                text: `Por favor intenta nuevamente`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
+            
+            console.log(error);
+            
+            return false;
+        }
+    }
 
-    //         if ( 'nodes' in item ) {
-    //             item.nodes = recursiveRemove ( item.nodes );
-    //         }
+    const quitarArchivoACarpeta = async (criteria = {}, cajaId) => {
 
-    //         return item;
-    //     });
-    // } 
+        try 
+        {
+            dispatch( setIsLoadingQuitarPdf(true) );
+
+            const { data } = await indetechApi.put('/Carpeta/PutQuitarArchivoAsync', criteria); 
+
+            await getCarpetasByCajaId(cajaId);
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Operacón exitosa!',
+                text: `El archivo fue quitado de la carpeta`,
+                showConfirmButton: true,
+                timer: 1500
+            });
+
+            dispatch( setIsLoadingQuitarPdf(false) );
+
+        }
+        catch(error)
+        {
+            dispatch( setIsLoadingQuitarPdf(false) );
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'Error de conexión con Dropbox!',
+                text: `Por favor intenta nuevamente`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
+
+            console.log(error);
+        }
+    }
 
     return {
         //* Propiedades
@@ -325,6 +375,8 @@ export const useCarpetaStore = () => {
         isOpenModalAsignar,
         isLoadingDropbox,
         archivosDropbox,
+        isLoadingAsignarPdf,
+        isLoadingQuitarPdf,
 
         //* Métodos
         crearCarpeta, 
@@ -337,6 +389,9 @@ export const useCarpetaStore = () => {
         setCarpetasByCajaId,
         openModalAsignar,
         closeModalAsignar,
-        buscarArchivosDropbox
+        buscarArchivosDropbox,
+        asignarArchivoACarpeta,
+        asignarArchivoACarpeta,
+        quitarArchivoACarpeta
     }
 }

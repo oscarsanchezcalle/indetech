@@ -1,16 +1,27 @@
 import React from 'react'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { useCarpetaStore } from '../../../hooks';
+import { useAuthStore, useCarpetaStore } from '../../../hooks';
 import { NumeroCaja } from '../organizar/NumeroCaja';
 import { AsignarImagenModal } from './AsignarImagenModal';
 
 export const TablaCarpetasImagenes = () => {
 
-  const { carpetasByCajaId, openModalAsignar } = useCarpetaStore();
+  const { carpetasByCajaId, openModalAsignar, quitarArchivoACarpeta, isLoadingQuitarPdf } = useCarpetaStore();
+  const { username } = useAuthStore();
 
   const  handleOpenModalAsignar = (carpeta) => {
     openModalAsignar(carpeta);
+  }
+
+  const handleQuitarArchivo = (carpeta) => {
+   
+    const criteria = {
+      "carpetaId": carpeta.id,
+      "fileId": "",
+      "username": username
+    }
+    quitarArchivoACarpeta(criteria, carpeta.cajaId);
   }
 
   return (
@@ -64,7 +75,9 @@ export const TablaCarpetasImagenes = () => {
                       </td>
                       <td className="tb-odr-action">
                         <div className="tb-odr-btns d-sm-inline">
-                        <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Asignar PDF</Tooltip>}>
+                        {
+                          (carpeta.fileId == "") &&
+                          <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Asignar PDF</Tooltip>}>
                           <span className="d-inline-block">
                             <a onClick={() => handleOpenModalAsignar(carpeta)}
                               className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
@@ -72,18 +85,25 @@ export const TablaCarpetasImagenes = () => {
                             </a>
                           </span>
                         </OverlayTrigger>
-                        <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Ver PDF</Tooltip>}>
-                            <a
-                              className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
-                                <em className="icon ni ni-eye"></em>
-                            </a>
-                        </OverlayTrigger>
-                        <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Quitar PDF</Tooltip>}>
-                          <a
-                            className="btn btn-icon btn-white btn-dim btn-sm btn-danger">
-                            <em className="icon ni ni-trash-fill"></em>
-                          </a>
-                        </OverlayTrigger>
+                        }
+                        {
+                          (carpeta.fileId != "") &&
+                            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Ver PDF</Tooltip>}>
+                                <a
+                                  className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
+                                    <em className="icon ni ni-eye"></em>
+                                </a>
+                            </OverlayTrigger>
+                         }
+                         { (carpeta.fileId != "") &&
+                            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Quitar PDF</Tooltip>}>
+                              <a onClick={() => handleQuitarArchivo(carpeta)}
+                                className="btn btn-icon btn-white btn-dim btn-sm btn-danger">
+                                
+                                {isLoadingQuitarPdf ? <i className="fas fa-circle-notch fa-spin"></i>: <em class="icon ni ni-file-remove"></em>}
+                              </a>
+                            </OverlayTrigger>
+                         }
                         </div>
                       </td>
                     </tr>

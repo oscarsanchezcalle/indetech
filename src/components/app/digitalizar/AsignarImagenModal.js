@@ -7,9 +7,10 @@ import TreeView from '@mui/lab/TreeView';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import { useCarpetaStore } from '../../../hooks';
+import { useAuthStore, useCarpetaStore } from '../../../hooks';
 import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
 import { RenderTree } from '../RenderTree';
+import { LoadingInButton } from '../LoadingInButton';
 
 export const AsignarImagenModal = () => {
   
@@ -19,10 +20,12 @@ export const AsignarImagenModal = () => {
   
   const { 
     carpetaActiva, isOpenModalAsignar, isLoadingDropbox,
-    closeModalAsignar, buscarArchivosDropbox, archivosDropbox } = useCarpetaStore();
-
-  //const { proyectoId, username } = useAuthStore();
+    closeModalAsignar, buscarArchivosDropbox, archivosDropbox,
+    asignarArchivoACarpeta, isLoadingAsignarPdf 
+  } = useCarpetaStore();
   
+  const { username } = useAuthStore();
+
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
     //console.log(carpetaActiva);
@@ -33,7 +36,7 @@ export const AsignarImagenModal = () => {
     closeModalAsignar({}, false);
   }
 
-  const handleAsignar = () => {
+  const handleAsignar = async () => {
     
     if (! archivo.includes("Archivo-")){
       Swal.fire({
@@ -48,7 +51,19 @@ export const AsignarImagenModal = () => {
 
     const archivoId = archivo.replace('Archivo-','');
 
-    //console.log(archivoId);
+    const criteria = {
+      "carpetaId": carpetaActiva.id,
+      "fileId": archivoId,
+      "username": username
+    };
+
+    const isCorrect = await asignarArchivoACarpeta(criteria, carpetaActiva.cajaId);
+    
+    if(isCorrect){
+      closeModal();
+      setArchivo("");
+    }
+
   }
 
   const handleRefrescar = () => {
@@ -57,20 +72,7 @@ export const AsignarImagenModal = () => {
  
   const handleFileSelect = (event, nodeId) => {
     setArchivo(nodeId);
-  };
-  
-  // var getSubMenuItem = function (subMenuItems, id) {
-  //   console.log(subMenuItems);
-  //   if (subMenuItems) {
-  //       for (var i = 0; i < subMenuItems.length; i++) {
-  //           if (subMenuItems[i].id == id) {
-  //               return subMenuItems[i];
-  //           }
-  //           var found = getSubMenuItem(subMenuItems[i].items, id);
-  //           if (found) return found;
-  //       }
-  //   }
-  // };
+  };  
 
   return (
     <>
@@ -178,8 +180,9 @@ export const AsignarImagenModal = () => {
                 </div>
               </div>  
               <div className="modal-footer">
-                
-                <button type="button" onClick={handleAsignar} className="btn btn-outline-primary btn-dim">Asignar</button>
+                <button onClick={handleAsignar}  disabled={isLoadingAsignarPdf} className="btn btn-outline-primary btn-dim">
+                    <LoadingInButton isLoading={isLoadingAsignarPdf} btnText="Asignar" />
+                </button>
                 <button type="button" onClick={closeModal} className="btn btn-outline-secondary btn-dim">Cancelar</button>
               </div>  
             </div>
