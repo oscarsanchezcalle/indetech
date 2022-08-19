@@ -4,10 +4,14 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { useAuthStore, useCarpetaStore } from '../../../hooks';
 import { NumeroCaja } from '../organizar/NumeroCaja';
 import { AsignarImagenModal } from './AsignarImagenModal';
+import { VerDocumentoPdfModal } from './VerDocumentoPdfModal';
 
 export const TablaCarpetasImagenes = () => {
 
-  const { carpetasByCajaId, openModalAsignar, quitarArchivoACarpeta, isLoadingQuitarPdf } = useCarpetaStore();
+  const { 
+     carpetasByCajaId, openModalAsignar, quitarArchivoACarpeta,
+     isLoadingQuitarPdf, openModalVerPdf, isLoadingAsignarPdf 
+  } = useCarpetaStore();
   const { username } = useAuthStore();
 
   const  handleOpenModalAsignar = (carpeta) => {
@@ -22,6 +26,10 @@ export const TablaCarpetasImagenes = () => {
       "username": username
     }
     quitarArchivoACarpeta(criteria, carpeta.cajaId);
+  }
+
+  const  handleOpenModalVerPdf = (carpeta) => {
+    openModalVerPdf(carpeta);
   }
 
   return (
@@ -89,7 +97,7 @@ export const TablaCarpetasImagenes = () => {
                         {
                           (carpeta.fileId != "") &&
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Ver PDF</Tooltip>}>
-                                <a
+                                 <a onClick={() => handleOpenModalVerPdf(carpeta)}
                                   className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
                                     <em className="icon ni ni-eye"></em>
                                 </a>
@@ -100,7 +108,7 @@ export const TablaCarpetasImagenes = () => {
                               <a onClick={() => handleQuitarArchivo(carpeta)}
                                 className="btn btn-icon btn-white btn-dim btn-sm btn-danger">
                                 
-                                {isLoadingQuitarPdf ? <i className="fas fa-circle-notch fa-spin"></i>: <em class="icon ni ni-file-remove"></em>}
+                                {isLoadingQuitarPdf ? <i className="fas fa-circle-notch fa-spin"></i>: <em className="icon ni ni-file-remove"></em>}
                               </a>
                             </OverlayTrigger>
                          }
@@ -116,6 +124,7 @@ export const TablaCarpetasImagenes = () => {
       </div>
 
       <AsignarImagenModal />
+      <VerDocumentoPdfModal />
     </>
   )
 }

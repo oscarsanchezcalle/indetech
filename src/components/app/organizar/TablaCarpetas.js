@@ -388,7 +388,7 @@ export const TablaCarpetas = () => {
                         <div className="modal-body modal-body-lg">
                                 <div className='col-md-12'>
                                     <div className='row'>
-                                        <div className='col-md-4'>
+                                        <div className='col-md-6'>
                                             <label className='form-label'>Serie <span className='text-danger'>*</span></label>
                                             <Select
                                                 options={series}   
@@ -397,7 +397,7 @@ export const TablaCarpetas = () => {
                                                 placeholder='Series'
                                                 />
                                         </div>
-                                        <div className='col-md-4'>
+                                        <div className='col-md-6'>
                                             <label className='form-label'>Subserie <span className='text-danger'>*</span></label>
                                             <Select
                                                 options={subseriesEdit}  
@@ -406,7 +406,7 @@ export const TablaCarpetas = () => {
                                                 placeholder='Subseries'
                                                 />
                                         </div>
-                                        <div className='col-md-4'>
+                                        <div className='col-md-4 d-none'>
                                             <label className='form-label'>Tipo Documental</label>
                                             <Select
                                                 options={tipoDocumentosEdit}
@@ -417,7 +417,7 @@ export const TablaCarpetas = () => {
                                         </div>
                                     </div>
                                     <div className='row mt-2'>
-                                        <div className='col-md-4'>
+                                        <div className='col-md-5'>
                                             <label className='form-label'>Fechas extremas</label>
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
@@ -439,31 +439,7 @@ export const TablaCarpetas = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='col-md-3'>
-                                            <label className='form-label'>Tomos</label>
-                                            <div className="form-control-wrap">
-                                                <div className="input-group">
-                                                    <input 
-                                                        name="tomoActual"
-                                                        onChange={handleInputChange}
-                                                        value={tomoActual}
-                                                        type="number" 
-                                                        autoComplete="off"
-                                                        className="form-control" 
-                                                        placeholder='Actual'/>
-                                                    <input 
-                                                        name="tomoFinal"
-                                                        onChange={handleInputChange}
-                                                        min={formValues.tomoActual}
-                                                        value={tomoFinal}
-                                                        type="number" 
-                                                        autoComplete="off"
-                                                        className="form-control" 
-                                                        placeholder='Final'/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className='col-md-3'>
+                                        <div className='col-md-4'>
                                             <label className='form-label'>Folios</label>
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
@@ -487,7 +463,7 @@ export const TablaCarpetas = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-md-2">
+                                        <div className="col-md-3">
                                             <label className='form-label'>Núm. Expediente <span className='text-danger'>*</span></label>
                                                 <input 
                                                     value={codigo}
@@ -500,7 +476,7 @@ export const TablaCarpetas = () => {
                                         </div>
                                     </div>
                                     <div className='row mt-2'>
-                                        <div className='col-md-3'>
+                                        <div className='col-md-3 d-none'>
                                             <label className='form-label'>Soporte</label>
                                             <Select
                                                 options={soportes}
@@ -509,7 +485,7 @@ export const TablaCarpetas = () => {
                                                 onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
                                                 />
                                         </div>
-                                        <div className='col-md-3'>
+                                        <div className='col-md-3 d-none'>
                                             <label className='form-label'>Frecuencia</label>
                                             <Select
                                                 options={frecuencias}    
@@ -518,7 +494,7 @@ export const TablaCarpetas = () => {
                                                 onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
                                                 />
                                         </div>
-                                        <div className="col-md-2">
+                                        <div className="col-md-3">
                                             <label className='form-label'>Cédula Catastral <span className='text-danger'>*</span></label>
                                                 <input 
                                                     name="cedulaCatastral"
@@ -544,7 +520,7 @@ export const TablaCarpetas = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-md-2">
+                                        <div className="col-md-3">
                                             <label className='form-label'>Auto de Cierre <span className='text-danger'>*</span></label>
                                             <Select
                                                 options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
@@ -552,6 +528,30 @@ export const TablaCarpetas = () => {
                                                 value={autoDeCierre}    
                                                 onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
                                                 />
+                                        </div>
+                                        <div className='col-md-4'>
+                                            <label className='form-label'>Tomos</label>
+                                            <div className="form-control-wrap">
+                                                <div className="input-group">
+                                                    <input 
+                                                        name="tomoActual"
+                                                        onChange={handleInputChange}
+                                                        value={tomoActual}
+                                                        type="number" 
+                                                        autoComplete="off"
+                                                        className="form-control" 
+                                                        placeholder='Actual'/>
+                                                    <input 
+                                                        name="tomoFinal"
+                                                        onChange={handleInputChange}
+                                                        min={formValues.tomoActual}
+                                                        value={tomoFinal}
+                                                        type="number" 
+                                                        autoComplete="off"
+                                                        className="form-control" 
+                                                        placeholder='Final'/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className='row mt-2'>

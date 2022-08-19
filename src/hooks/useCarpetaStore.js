@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import { isAfter, getYear, parseISO } from 'date-fns'
 
 import { indetechApi } from '../api';
 import { 
      onLoadCarpetasByCaja, setIsLoadingAddCarpeta, setIsLoadingAsignarPdf, setIsLoadingQuitarPdf,
      setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
-     setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox } from '../store';
+     setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox, setOpenModalVerPdf } from '../store';
 
 export const useCarpetaStore = () => {
   
@@ -14,8 +15,9 @@ export const useCarpetaStore = () => {
     const {
          carpetas, carpetasByCajaId, isLoadingAddCarpeta, 
          isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, 
-         isOpenModalAsignar, archivosDropbox, isLoadingDropbox, 
+         isOpenModalAsignar, isOpenModalVerPdf, archivosDropbox, isLoadingDropbox, 
          isLoadingAsignarPdf, isLoadingQuitarPdf } = useSelector( state => state.carpeta );
+
 
     const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
         
@@ -29,6 +31,27 @@ export const useCarpetaStore = () => {
                 folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre 
             } = criteria;
 
+            const fechaIni = new Date(parseISO(fechaExtremaInicial));
+
+            const fechaFin = new Date(parseISO(fechaExtremaFinal));
+            
+            const anioFechaIni = getYear(fechaIni);
+
+            if(isAfter(fechaIni, fechaFin) || anioFechaIni != parseInt(vigencia.label) ){
+
+                Swal.fire({
+                    //position: 'top-end',
+                    icon: 'error',
+                    title: 'Rango de fechas incorrecto',
+                    text: `Por favor verifica las fechas extremas`,
+                    showConfirmButton: true,
+                    //timer: 1500
+                });
+
+                dispatch(setIsLoadingAddCarpeta(false));
+                return;
+            }
+             
             const carpetaCajaCriteria = {
                 "proyectoId": proyectoId,
                 "dependenciaId": dependencia.value,
@@ -50,7 +73,7 @@ export const useCarpetaStore = () => {
                 "vigenciaId": vigencia.value,
                 "cedulaCatastral": cedulaCatastral,
                 "duplicidad": duplicidad == "" ? 0 : duplicidad,
-                "autoDeCierre": false,//autoDeCierre.value === 1 ? true : false,
+                "autoDeCierre": autoDeCierre.value === 1 ? true : false,
                 "Username": username
             }
 
@@ -99,6 +122,25 @@ export const useCarpetaStore = () => {
                 folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre, numeroCaja
             } = criteria;
 
+            const fechaIni = new Date(parseISO(fechaExtremaInicial));
+
+            const fechaFin = new Date(parseISO(fechaExtremaFinal));
+            
+            if(isAfter(fechaIni, fechaFin)){
+
+                Swal.fire({
+                    //position: 'top-end',
+                    icon: 'error',
+                    title: 'Rango de fechas incorrecto',
+                    text: `Por favor verifica las fechas extremas`,
+                    showConfirmButton: true,
+                    //timer: 1500
+                });
+
+                dispatch(setIsLoadingAddCarpeta(false));
+                return;
+            }
+
             const updateCriteria = {
                 "id": 0,
                 "codigo": codigo,
@@ -109,7 +151,7 @@ export const useCarpetaStore = () => {
                 "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
                 "serieId": serie.value,
                 "subserieId": subserie.value,
-                "tipoDocumentoId": tipoDocumento.value,
+                "tipoDocumentoId": 1,
                 "tipoSoporteId":  tipoSoporte.value === 'undefined' ? 0 : tipoSoporte.value,
                 "frecuenciaUsoId":  frecuenciaUso.value === 'undefined' ? 0 : frecuenciaUso.value,
                 "tomoInicial": tomoActual == "" ? 0 : tomoActual,
@@ -257,6 +299,18 @@ export const useCarpetaStore = () => {
         dispatch( setOpenModalAsignar(false) );
     }
 
+    const openModalVerPdf = (carpeta) => {
+
+        dispatch( setCarpetaActiva(carpeta) );
+        dispatch( setOpenModalVerPdf(true) );
+    }
+
+    const closeModalVerPdf = () => {
+
+        dispatch( setCarpetaActiva({}) );
+        dispatch( setOpenModalVerPdf(false) );
+    }
+
     const buscarArchivosDropbox = async (proyectoId, byPassSearchValidation) => {
 
         try 
@@ -320,7 +374,7 @@ export const useCarpetaStore = () => {
             });
             
             console.log(error);
-            
+
             return false;
         }
     }
@@ -373,6 +427,7 @@ export const useCarpetaStore = () => {
         carpetaActiva,
         isOpenModalMoverCarpeta,
         isOpenModalAsignar,
+        isOpenModalVerPdf,
         isLoadingDropbox,
         archivosDropbox,
         isLoadingAsignarPdf,
@@ -392,6 +447,8 @@ export const useCarpetaStore = () => {
         buscarArchivosDropbox,
         asignarArchivoACarpeta,
         asignarArchivoACarpeta,
-        quitarArchivoACarpeta
+        quitarArchivoACarpeta,
+        openModalVerPdf,
+        closeModalVerPdf
     }
 }
