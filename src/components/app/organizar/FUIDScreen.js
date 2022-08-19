@@ -48,7 +48,7 @@ export const FuidScreen = () => {
             notas: '',
             cedulaCatastral: '',
             duplicidad:'',
-            autoDeCierre: ''
+            autoDeCierre: {}
     };
 
     const [formValues, handleInputChange, handleSelectChange, resetFuidForm] = useForm(documentoForm);
@@ -200,7 +200,7 @@ export const FuidScreen = () => {
     }
     
     const handleBtnAgregar = async () => {
-
+        
         const {isValid, validationConditions} = isValidFormForSave(formValues);
         
         if (!isValid){
@@ -560,7 +560,7 @@ export const FuidScreen = () => {
                                     <Select
                                         options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
                                         placeholder='' 
-                                        value={{ value: 0, label: 'No'}}    
+                                        value={autoDeCierre}    
                                         onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
                                         />
                                 </div>

@@ -37,20 +37,23 @@ export const useCarpetaStore = () => {
             
             const anioFechaIni = getYear(fechaIni);
 
-            if(isAfter(fechaIni, fechaFin) || anioFechaIni != parseInt(vigencia.label) ){
+            if((fechaExtremaInicial != '' && fechaExtremaFinal != '') ){
+                if(isAfter(fechaIni, fechaFin) || anioFechaIni != parseInt(vigencia.label) ){
 
-                Swal.fire({
-                    //position: 'top-end',
-                    icon: 'error',
-                    title: 'Rango de fechas incorrecto',
-                    text: `Por favor verifica las fechas extremas`,
-                    showConfirmButton: true,
-                    //timer: 1500
-                });
-
-                dispatch(setIsLoadingAddCarpeta(false));
-                return;
+                    Swal.fire({
+                        //position: 'top-end',
+                        icon: 'error',
+                        title: 'Rango de fechas incorrecto',
+                        text: `Por favor verifica las fechas extremas`,
+                        showConfirmButton: true,
+                        //timer: 1500
+                    });
+    
+                    dispatch(setIsLoadingAddCarpeta(false));
+                    return;
+                }
             }
+           
              
             const carpetaCajaCriteria = {
                 "proyectoId": proyectoId,
