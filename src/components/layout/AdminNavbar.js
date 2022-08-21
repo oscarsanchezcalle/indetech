@@ -88,25 +88,23 @@ export const AdminNavbar = () => {
                   <span className="nk-menu-text">Digitalización</span>
                 </a>
                 <ul className="nk-menu-sub">
-                  {/* <li className="nk-menu-item">
-                  <Link 
-                    className="nk-menu-link"
-                    to="/CargueMasivo">
-                      <span className="nk-menu-text">Cargue Masivo</span> 
-                  </Link>  
-                  </li> */}
                   <li className="nk-menu-item">
-                  <Link 
-                    className="nk-menu-link"
-                    to="/asociarImagen">
-                      <span className="nk-menu-text">Asociar Imagen de Carpeta </span> 
-                  </Link>  
-                  <Link 
-                    className="nk-menu-link"
-                    to="/asociarImagenes">
-                      <span className="nk-menu-text">Asociar Imagenes de Carpeta </span> 
-                  </Link>  
+                    <Link 
+                      className="nk-menu-link"
+                      to="/asociarImagen">
+                        <span className="nk-menu-text">Asociar Imagen de Carpeta </span> 
+                    </Link> 
                   </li>
+                   { 
+                      rol.includes('ADMINISTRADOR') && 
+                        <li className="nk-menu-item">
+                        <Link 
+                          className="nk-menu-link"
+                          to="/asociarImagenes">
+                            <span className="nk-menu-text">Asociar Masivamente Imagenes de Carpetas </span> 
+                        </Link>  
+                    </li>
+                   }
                 </ul>
               </li>
               <li className="nk-menu-item has-sub">

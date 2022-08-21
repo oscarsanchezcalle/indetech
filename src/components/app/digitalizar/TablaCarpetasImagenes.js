@@ -1,7 +1,7 @@
 import React from 'react'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import { downloadURI, removeDropboxToRender } from '../../../helpers';
+import { downloadURI } from '../../../helpers';
 import { useAuthStore, useCarpetaStore } from '../../../hooks';
 import { NumeroCaja } from '../organizar/NumeroCaja';
 import { AsignarImagenModal } from './AsignarImagenModal';

@@ -6,7 +6,8 @@ import { indetechApi } from '../api';
 import { 
      onLoadCarpetasByCaja, setIsLoadingAddCarpeta, setIsLoadingAsignarPdf, setIsLoadingQuitarPdf,
      setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
-     setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox, setOpenModalVerPdf } from '../store';
+     setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox, setOpenModalVerPdf,
+     setCarpetasConPdf, setCarpetasSinPdf } from '../store';
 
 export const useCarpetaStore = () => {
   
@@ -16,7 +17,7 @@ export const useCarpetaStore = () => {
          carpetas, carpetasByCajaId, isLoadingAddCarpeta, 
          isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, 
          isOpenModalAsignar, isOpenModalVerPdf, archivosDropbox, isLoadingDropbox, 
-         isLoadingAsignarPdf, isLoadingQuitarPdf } = useSelector( state => state.carpeta );
+         isLoadingAsignarPdf, isLoadingQuitarPdf, carpetasConPdf, carpetasSinPdf } = useSelector( state => state.carpeta );
 
 
     const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
@@ -421,6 +422,43 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const putAsociarPdfACarpetas = async (proyectoId) => {
+        
+        try {
+
+            dispatch( setIsLoadingAsignarPdf(true) );
+
+            const { data } = await indetechApi.put('/carpeta/AsignarImagenesCarpeta/'+proyectoId);            
+            
+            dispatch(setCarpetasConPdf(data));
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Operacón exitosa!',
+                text: `Fueron asignados archivos masivamente a las carpetas...`,
+                showConfirmButton: true,
+                timer: 1500
+            });
+
+            dispatch( setIsLoadingAsignarPdf( false ) );
+
+        } catch (error) {
+          
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'Error de conexión con Dropbox!',
+                text: `Por favor intenta nuevamente`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
+
+          dispatch( setIsLoadingAsignarPdf( false ) );
+          console.log(error)
+        }
+    }
+
     return {
         //* Propiedades
         carpetas,
@@ -435,6 +473,8 @@ export const useCarpetaStore = () => {
         archivosDropbox,
         isLoadingAsignarPdf,
         isLoadingQuitarPdf,
+        carpetasConPdf,
+        carpetasSinPdf,
 
         //* Métodos
         crearCarpeta, 
@@ -452,6 +492,7 @@ export const useCarpetaStore = () => {
         asignarArchivoACarpeta,
         quitarArchivoACarpeta,
         openModalVerPdf,
-        closeModalVerPdf
+        closeModalVerPdf,
+        putAsociarPdfACarpetas
     }
 }
