@@ -101,6 +101,11 @@ export const AdminNavbar = () => {
                     to="/asociarImagen">
                       <span className="nk-menu-text">Asociar Imagen de Carpeta </span> 
                   </Link>  
+                  <Link 
+                    className="nk-menu-link"
+                    to="/asociarImagenes">
+                      <span className="nk-menu-text">Asociar Imagenes de Carpeta </span> 
+                  </Link>  
                   </li>
                 </ul>
               </li>

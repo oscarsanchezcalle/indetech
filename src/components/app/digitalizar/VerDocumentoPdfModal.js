@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
-
+import React from 'react'
 import Modal from 'react-modal';
-
+import { dropboxToRender } from '../../../helpers';
 import { useCarpetaStore } from '../../../hooks';
 import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
-import VerPdfCompleto from '../VerPdfCompleto';
+import Dropbox from 'https://www.dropbox.com/static/api/2/dropins.js';
 
 export const VerDocumentoPdfModal = () => {
-    
+
   Modal.setAppElement('#root');
 
   const { 
@@ -16,13 +15,40 @@ export const VerDocumentoPdfModal = () => {
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
-    console.log(carpetaActiva);
+    // dropboxToRender();
+      var element = document.getElementById("visor-pdf");
+
+      var options = {
+        // Shared link to Dropbox file
+        link: "https://www.dropbox.com/sh/keptcjl08q3wsid/AACui966iXcXPbagCJ2py2L-a?dl=0",
+        file: {
+          // Sets the zoom mode for embedded files. Defaults to 'best'.
+          zoom: "best" // or "fit"
+        },
+        folder: {
+          // Sets the view mode for embedded folders. Defaults to 'list'.
+          view: "list", // or "grid"
+          headerSize: "normal" // or "small"
+        }
+      }
+
+       Dropbox.embed(options, element)
   }
 
   function closeModal() {
     closeModalVerPdf({}, false);
+
   }
 
+  const pruebaDropbox = () => {
+    
+    // create session ref:
+    // const dropbox = dropboxV2Api.authenticate({
+    //   token: 'sl.BNuPfL2AvN-hQM-WcJLUNjKqUFMQ0T5E0ouNH1iTTJEeKnD83h2GhGpzvamc7vN59ZD5aK7AY1FLAiXogMj6a1onocO10_RKIBMn1mcbfHEN9CWXJLxd_Susv4EAsWWjCRDwd20kkZVm'
+    // });
+  }
+ 
+  
  return (
     <>
         <Modal
@@ -55,29 +81,25 @@ export const VerDocumentoPdfModal = () => {
             }
             contentLabel="Imagen de carpeta Pdf"> 
 
-            <div className="modal-header pb-2">
+              <div className="modal-header">
+               
                 <h5 className="modal-title">Detalle de Carpeta con Imagen</h5>
                 <ul className="btn-toolbar">   
                     <a href="#" onClick={closeModal} className="close">
                         <em className="icon ni ni-cross" />
                     </a>
                 </ul>
-            </div>
-            <div className="modal-body modal-body-lg pt-5">  
-              <div className='row'>
-                <div className='col-md-12'>
-                    <RotuloCarpeta />
-                </div>
-              </div>
-              <div className='row pt-3'>
-                <div className='col-md-12'>
-                    <VerPdfCompleto pdf="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"/>
-                </div>
-              </div>
-              <div className="modal-footer mt-3">
-                <button type="button" onClick={closeModal} className="btn btn-outline-secondary btn-dim">Cancelar</button>
+             </div> 
+             <div id="visor-pdf"></div>
+              {/* <a href={carpetaActiva.fileUrl}
+                  className="dropbox-embed mt-4"
+                  data-height="500px"
+                  data-width="100%"
+              ></a> */}
+                  
+              <div className='col-md-12 pt-2'>
+                 <RotuloCarpeta />
               </div> 
-            </div>
         </Modal>
     </>
   )

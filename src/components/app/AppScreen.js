@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom'
 import { useAuthStore } from '../../hooks'
 
 export const AppScreen = () => {
-
+  
   const { isLoading } = useAuthStore();
 
   return (

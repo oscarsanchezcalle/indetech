@@ -10,15 +10,16 @@ import { Dashboard } from '../components/app/dashboard/Dashboard';
 import { PageNotFound } from '../components/app/notFound/PageNotFound';
 import { useAuthStore } from '../hooks';
 import { AsociarImagenCarpeta } from '../components/app/digitalizar/AsociarImagenCarpeta';
+import { AsociarImagenes } from '../components/app/digitalizar/AsociarImagenes';
 
   
 export const AppRouter = () => {
   
   const { isAuthenticated, checkAuthToken } = useAuthStore();
   
-    useEffect(() => {
-        checkAuthToken();
-    }, []);
+  useEffect(() => {
+    checkAuthToken();
+  }, []);
 
   return (
     
@@ -37,9 +38,10 @@ export const AppRouter = () => {
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/administrarFuid" element={<FuidScreen/>}/>
                             <Route path="/asociarImagen" element={<AsociarImagenCarpeta />}/>                    
+                            <Route path="/asociarImagenes" element={<AsociarImagenes/>}></Route>                  
                             <Route path="/tareasAnalista" element={<TareasAsignadas />} />  
                             <Route path="/indexar" element={<IndexarDocumento />} />  
-                            <Route path="/cargueMasivo" element={<CargueMasivo />}/>                    
+                            <Route path="/cargueMasivo" element={<CargueMasivo />}/>  
                             <Route index element={<Dashboard/>}/>
                             
                             <Route path="/auth/login"  element={  <Navigate to="/" /> } />

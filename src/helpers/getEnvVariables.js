@@ -16,4 +16,6 @@ const baseUrl = 'https://localhost:7177/api';
 //API Produccion
 //const baseUrl = 'https://protechapi.azurewebsites.net/api';
 
-export { baseUrl };
+const dropboxApiKey = "w14iicvzw24u3st";
+
+export { baseUrl, dropboxApiKey };

@@ -1,6 +1,7 @@
 import React from 'react'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { downloadURI, removeDropboxToRender } from '../../../helpers';
 import { useAuthStore, useCarpetaStore } from '../../../hooks';
 import { NumeroCaja } from '../organizar/NumeroCaja';
 import { AsignarImagenModal } from './AsignarImagenModal';
@@ -10,7 +11,7 @@ export const TablaCarpetasImagenes = () => {
 
   const { 
      carpetasByCajaId, openModalAsignar, quitarArchivoACarpeta,
-     isLoadingQuitarPdf, openModalVerPdf, isLoadingAsignarPdf 
+     isLoadingQuitarPdf, openModalVerPdf, isOpenModalVerPdf
   } = useCarpetaStore();
   const { username } = useAuthStore();
 
@@ -30,8 +31,15 @@ export const TablaCarpetasImagenes = () => {
 
   const  handleOpenModalVerPdf = (carpeta) => {
     openModalVerPdf(carpeta);
+    console.log(carpeta);
   }
 
+  const handleDescargarPdf = (fileUrl) => {
+    var uri = fileUrl.replace(/.$/,"1");
+    downloadURI(uri, "pdfDrobox");
+  }
+
+  
   return (
     <>
       <div className="nk-block">
@@ -96,16 +104,25 @@ export const TablaCarpetasImagenes = () => {
                         }
                         {
                           (carpeta.fileId != "") &&
-                            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Ver PDF</Tooltip>}>
+                            <OverlayTrigger key={Math.random()} overlay={<Tooltip id="tooltip-disabled">Ver PDF</Tooltip>}>
                                  <a onClick={() => handleOpenModalVerPdf(carpeta)}
                                   className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
                                     <em className="icon ni ni-eye"></em>
                                 </a>
                             </OverlayTrigger>
                          }
+                         {
+                          (carpeta.fileId != "") &&
+                            <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Descargar PDF</Tooltip>}>
+                                 <a target="_blank" onClick={() => handleDescargarPdf(carpeta.fileUrl)}
+                                  className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
+                                    <em className="icon ni ni-download"></em>
+                                </a>
+                            </OverlayTrigger>
+                         }
                          { (carpeta.fileId != "") &&
                             <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Quitar PDF</Tooltip>}>
-                              <a onClick={() => handleQuitarArchivo(carpeta)}
+                              <a target="_blank" onClick={() => handleQuitarArchivo(carpeta)}
                                 className="btn btn-icon btn-white btn-dim btn-sm btn-danger">
                                 
                                 {isLoadingQuitarPdf ? <i className="fas fa-circle-notch fa-spin"></i>: <em className="icon ni ni-file-remove"></em>}
@@ -124,7 +141,7 @@ export const TablaCarpetasImagenes = () => {
       </div>
 
       <AsignarImagenModal />
-      <VerDocumentoPdfModal />
+      <VerDocumentoPdfModal/>
     </>
   )
 }

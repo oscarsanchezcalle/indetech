@@ -115,16 +115,6 @@ export const TareasAsignadas = () => {
                                             <Estado estado={tarea.estado} />
                                         </td>
                                         <td className="tb-odr-action">
-                                            {/* ToDo actualizar el estado global y  */}
-                                            {/* <Link 
-                                                to={{     
-                                                    pathname: '/indexar',
-                                                    documento:tarea
-                                                }}
-                                                className='btn btn-dim btn-xs btn-primary'>
-                                                <em className="icon ni ni-printer-fill" />&nbsp;Indexar
-                                            </Link> */}
-                                            
                                         </td>
                                      </tr>         
                                 ))}
