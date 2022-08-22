@@ -20,7 +20,6 @@ export const TablaCarpetasImagenes = () => {
   }
 
   const handleQuitarArchivo = (carpeta) => {
-   
     const criteria = {
       "carpetaId": carpeta.id,
       "fileId": "",
@@ -29,9 +28,9 @@ export const TablaCarpetasImagenes = () => {
     quitarArchivoACarpeta(criteria, carpeta.cajaId);
   }
 
-  const  handleOpenModalVerPdf = (carpeta) => {
-    openModalVerPdf(carpeta);
+  const handleOpenModalVerPdf = (carpeta) => {
     console.log(carpeta);
+    openModalVerPdf(carpeta);
   }
 
   const handleDescargarPdf = (fileUrl) => {
@@ -105,7 +104,9 @@ export const TablaCarpetasImagenes = () => {
                         {
                           (carpeta.fileId != "") &&
                             <OverlayTrigger key={Math.random()} overlay={<Tooltip id="tooltip-disabled">Ver PDF</Tooltip>}>
-                                 <a onClick={() => handleOpenModalVerPdf(carpeta)}
+                                 <a 
+                                 //  target="_blank" href={carpeta.fileUrl}
+                                  onClick={() => handleOpenModalVerPdf(carpeta)}
                                   className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
                                     <em className="icon ni ni-eye"></em>
                                 </a>

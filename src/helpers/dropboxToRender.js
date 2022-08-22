@@ -38,3 +38,4 @@ export const downloadURI = (uri, name) => {
     link.href = uri;
     link.click();
   }
+

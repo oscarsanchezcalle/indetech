@@ -1,9 +1,8 @@
 import React from 'react'
 import Modal from 'react-modal';
-import { dropboxToRender } from '../../../helpers';
 import { useCarpetaStore } from '../../../hooks';
 import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
-import Dropbox from 'https://www.dropbox.com/static/api/2/dropins.js';
+import  VerPdfCompleto  from '../VerPdfCompleto';
 
 export const VerDocumentoPdfModal = () => {
 
@@ -15,24 +14,6 @@ export const VerDocumentoPdfModal = () => {
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
-    // dropboxToRender();
-      var element = document.getElementById("visor-pdf");
-
-      var options = {
-        // Shared link to Dropbox file
-        link: "https://www.dropbox.com/sh/keptcjl08q3wsid/AACui966iXcXPbagCJ2py2L-a?dl=0",
-        file: {
-          // Sets the zoom mode for embedded files. Defaults to 'best'.
-          zoom: "best" // or "fit"
-        },
-        folder: {
-          // Sets the view mode for embedded folders. Defaults to 'list'.
-          view: "list", // or "grid"
-          headerSize: "normal" // or "small"
-        }
-      }
-
-       Dropbox.embed(options, element)
   }
 
   function closeModal() {
@@ -40,15 +21,6 @@ export const VerDocumentoPdfModal = () => {
 
   }
 
-  const pruebaDropbox = () => {
-    
-    // create session ref:
-    // const dropbox = dropboxV2Api.authenticate({
-    //   token: 'sl.BNuPfL2AvN-hQM-WcJLUNjKqUFMQ0T5E0ouNH1iTTJEeKnD83h2GhGpzvamc7vN59ZD5aK7AY1FLAiXogMj6a1onocO10_RKIBMn1mcbfHEN9CWXJLxd_Susv4EAsWWjCRDwd20kkZVm'
-    // });
-  }
- 
-  
  return (
     <>
         <Modal
@@ -91,12 +63,8 @@ export const VerDocumentoPdfModal = () => {
                 </ul>
              </div> 
              <div id="visor-pdf"></div>
-              {/* <a href={carpetaActiva.fileUrl}
-                  className="dropbox-embed mt-4"
-                  data-height="500px"
-                  data-width="100%"
-              ></a> */}
-                  
+             {/* https://www.dropbox.com/s/q50rol56e66i926/sample%20-%20copia.pdf?dl=0 */}
+              <VerPdfCompleto pdf={"https://dl.dropboxusercontent.com/s/q50rol56e66i926/sample%20-%20copia.pdf"}/>   
               <div className='col-md-12 pt-2'>
                  <RotuloCarpeta />
               </div> 
