@@ -26,7 +26,7 @@ export const TablaCarpetasConPDFAsociado = () => {
                         <span className="tb-odr-status d-md-inline-block">Dependencia - Sub Dependencia - Vigencia</span>
                     </th>
                     <th className="">
-                        <span className="tb-odr-status d-md-inline-block">#Caja - Serie - Subserie</span>
+                        <span className="tb-odr-status d-md-inline-block">#Caja - #Carpeta - Serie - Subserie</span>
                     </th>
                     <th className="">
                         <span className="tb-odr-total d-md-inline-block">Expediente - Cédula Catastral</span>
@@ -44,7 +44,7 @@ export const TablaCarpetasConPDFAsociado = () => {
                     </td>
                     <td className="tb-odr-amount">
                         <span className="tb-odr-status">
-                            <span className="amount">{carpeta.numeroCaja} - {carpeta.serie.descripcion} - {carpeta.subserie.descripcion}</span>
+                            <span className="amount">{carpeta.numeroCaja} - {carpeta.numeroCarpeta} - {carpeta.serie.descripcion} - {carpeta.subserie.descripcion}</span>
                         </span>
                     </td>
                     <td className="tb-odr-amount">

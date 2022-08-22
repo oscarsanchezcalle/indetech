@@ -7,7 +7,7 @@ import {
      onLoadCarpetasByCaja, setIsLoadingAddCarpeta, setIsLoadingAsignarPdf, setIsLoadingQuitarPdf,
      setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
      setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox, setOpenModalVerPdf,
-     setCarpetasConPdf, setCarpetasSinPdf } from '../store';
+     setCarpetasConPdf, setCarpetasSinPdf, setIsLoadingBuscarEstadoAsignacionImagenes } from '../store';
 
 export const useCarpetaStore = () => {
   
@@ -17,7 +17,8 @@ export const useCarpetaStore = () => {
          carpetas, carpetasByCajaId, isLoadingAddCarpeta, 
          isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, 
          isOpenModalAsignar, isOpenModalVerPdf, archivosDropbox, isLoadingDropbox, 
-         isLoadingAsignarPdf, isLoadingQuitarPdf, carpetasConPdf, carpetasSinPdf } = useSelector( state => state.carpeta );
+         isLoadingAsignarPdf, isLoadingQuitarPdf, carpetasConPdf, carpetasSinPdf,
+         isLoadingBuscarEstadoAsignacionImagenes } = useSelector( state => state.carpeta );
 
 
     const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
@@ -459,6 +460,28 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const buscarEstadoAsignacionArchivos = async (criteria = {}) => {
+
+        try 
+        {
+            dispatch( setIsLoadingBuscarEstadoAsignacionImagenes(true) );
+            
+            const { data } = await indetechApi.post('Carpeta/SearchEstadoAsignacionImagenes', criteria);            
+            
+            dispatch( setCarpetasConPdf(data.carpetasConArchivo) );
+
+            dispatch( setCarpetasSinPdf(data.carpetasSinArchivo) );
+            
+            dispatch( setIsLoadingBuscarEstadoAsignacionImagenes(false) );
+            
+        }
+        catch(error)
+        {
+            dispatch( setIsLoadingBuscarEstadoAsignacionImagenes(false) );
+            console.log(error);
+        }
+    }
+
     return {
         //* Propiedades
         carpetas,
@@ -475,6 +498,7 @@ export const useCarpetaStore = () => {
         isLoadingQuitarPdf,
         carpetasConPdf,
         carpetasSinPdf,
+        isLoadingBuscarEstadoAsignacionImagenes,
 
         //* Métodos
         crearCarpeta, 
@@ -493,6 +517,7 @@ export const useCarpetaStore = () => {
         quitarArchivoACarpeta,
         openModalVerPdf,
         closeModalVerPdf,
-        putAsociarPdfACarpetas
+        putAsociarPdfACarpetas,
+        buscarEstadoAsignacionArchivos
     }
 }

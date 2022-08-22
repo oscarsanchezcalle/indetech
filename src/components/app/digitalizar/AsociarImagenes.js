@@ -1,13 +1,16 @@
 import React from 'react'
 import { useAuthStore, useCarpetaStore } from '../../../hooks';
 import { LoadingInButton } from '../LoadingInButton';
+import { FiltrosVigencia } from './FiltrosVigencia';
 import { TablaCarpetasConPDFAsociado } from './TablaCarpetasConPDFAsociado';
+import { TablaCarpetasSinPDFAsociado } from './TablaCarpetasSinPDFAsociado';
 
 export const AsociarImagenes = () => {
   
   const { proyecto, proyectoId } = useAuthStore();
 
-  const { putAsociarPdfACarpetas, carpetasConPdf, isLoadingAsignarPdf } = useCarpetaStore();
+  const { putAsociarPdfACarpetas, carpetasConPdf, isLoadingAsignarPdf, buscarEstadoAsignacionArchivos,
+    isLoadingBuscarEstadoAsignacionImagenes } = useCarpetaStore();
 
   const handleAsignarPdfaCarpetas = () => {
     putAsociarPdfACarpetas(proyectoId);
@@ -30,6 +33,9 @@ export const AsociarImagenes = () => {
                         </div>
                     </div>
                   </div>
+                </div>
+                <div className='row'>
+                  <FiltrosVigencia />
                 </div>
             </div>
         </div>
@@ -60,14 +66,14 @@ export const AsociarImagenes = () => {
                       </a>
                       <div className="accordion-body collapse show" id="accordion-item-2" data-bs-parent="#accordion2" style={{}}>
                           <div className="accordion-inner">
-
+                              <TablaCarpetasSinPDFAsociado/>
                           </div>
                       </div>
                   </div>
               </div>
            </div>
         </div>
-        <div className='row pt-3'>
+        {/* <div className='row pt-3'>
           <div className='col-md-12'>
               <div id="accordion3" className="accordion">
                   <div className="accordion-item">
@@ -83,7 +89,7 @@ export const AsociarImagenes = () => {
                   </div>
               </div>
            </div>
-        </div>
+        </div> */}
       </div>
     </>
   )
