@@ -29,7 +29,6 @@ export const TablaCarpetasImagenes = () => {
   }
 
   const handleOpenModalVerPdf = (carpeta) => {
-    console.log(carpeta);
     openModalVerPdf(carpeta);
   }
 
@@ -104,8 +103,9 @@ export const TablaCarpetasImagenes = () => {
                         {
                           (carpeta.fileId != "") &&
                             <OverlayTrigger key={Math.random()} overlay={<Tooltip id="tooltip-disabled">Ver PDF</Tooltip>}>
-                                 <a 
+                                 <a href="#"
                                  //  target="_blank" href={carpeta.fileUrl}
+
                                   onClick={() => handleOpenModalVerPdf(carpeta)}
                                   className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
                                     <em className="icon ni ni-eye"></em>

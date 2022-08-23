@@ -1,8 +1,9 @@
 import React from 'react'
 import Modal from 'react-modal';
+
 import { useCarpetaStore } from '../../../hooks';
 import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
-import  VerPdfCompleto  from '../VerPdfCompleto';
+import  VerPdfCompleto  from '../pdf/VerPdfCompleto';
 
 export const VerDocumentoPdfModal = () => {
 
@@ -39,8 +40,8 @@ export const VerDocumentoPdfModal = () => {
                 content: {
                     position: 'absolute',
                     top: '80px',
-                    left: '10%',
-                    right: '10%',
+                    left: '5%',
+                    right: '5%',
                     bottom: '2%',
                     border: '1px solid #ccc',
                     background: '#fff',
@@ -48,26 +49,29 @@ export const VerDocumentoPdfModal = () => {
                     WebkitOverflowScrolling: 'touch',
                     borderRadius: '4px',
                     outline: 'none',
-                    padding: '20px'
+                    padding: '0px'
                 }}
             }
             contentLabel="Imagen de carpeta Pdf"> 
 
               <div className="modal-header">
                
-                <h5 className="modal-title">Detalle de Carpeta con Imagen</h5>
+                <h6 className="modal-title">
+                  Expediente: <small>{carpetaActiva?.codigo}</small> - 
+                  Cédula Catastral: <small>{carpetaActiva?.cedulaCatastral}</small> -
+                  Serie-Subserie: <small>{carpetaActiva?.serie?.descripcion} - {carpetaActiva?.subserie?.descripcion}</small>
+                </h6>
                 <ul className="btn-toolbar">   
                     <a href="#" onClick={closeModal} className="close">
                         <em className="icon ni ni-cross" />
                     </a>
                 </ul>
              </div> 
-             <div id="visor-pdf"></div>
-             {/* https://www.dropbox.com/s/q50rol56e66i926/sample%20-%20copia.pdf?dl=0 */}
-              <VerPdfCompleto pdf={"https://dl.dropboxusercontent.com/s/q50rol56e66i926/sample%20-%20copia.pdf"}/>   
-              <div className='col-md-12 pt-2'>
+              {/* https://www.dropbox.com/s/q50rol56e66i926/sample%20-%20copia.pdf?dl=0 */}
+              <VerPdfCompleto pdf={"https://dl.dropboxusercontent.com/s/0wtf8q2jwbwteud/2014-0001.PDF"}/>   
+              {/* <div className='col-md-12 pt-2'>
                  <RotuloCarpeta />
-              </div> 
+              </div>  */}
         </Modal>
     </>
   )
