@@ -11,6 +11,7 @@ import { PageNotFound } from '../components/app/notFound/PageNotFound';
 import { useAuthStore } from '../hooks';
 import { AsociarImagenCarpeta } from '../components/app/digitalizar/AsociarImagenCarpeta';
 import { AsociarImagenes } from '../components/app/digitalizar/AsociarImagenes';
+import { ListaCarpetas } from '../components/app/indexar/ListaCarpetas';
 
   
 export const AppRouter = () => {
@@ -39,8 +40,9 @@ export const AppRouter = () => {
                             <Route path="/administrarFuid" element={<FuidScreen/>}/>
                             <Route path="/asociarImagen" element={<AsociarImagenCarpeta />}/>                    
                             <Route path="/asociarImagenes" element={<AsociarImagenes/>}></Route>                  
-                            <Route path="/tareasAnalista" element={<TareasAsignadas />} />  
+                            <Route path="/listaCarpetas" element={<ListaCarpetas />} />  
                             <Route path="/indexar" element={<IndexarDocumento />} />  
+                            <Route path="/tareasAnalista" element={<TareasAsignadas />} />  
                             <Route path="/cargueMasivo" element={<CargueMasivo />}/>  
                             <Route index element={<Dashboard/>}/>
                             

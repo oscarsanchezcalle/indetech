@@ -1,26 +1,26 @@
 import React, { useEffect } from 'react'
 import { useCarpetaStore } from '../../../hooks';
-import { FiltrosCaja } from './FiltrosCaja'
-import { TablaCarpetasImagenes } from './TablaCarpetasImagenes'
+import { FiltrosCaja } from './../digitalizar/FiltrosCaja'
+import { TablaCarpetasAIndexar } from './TablaCarpetasAIndexar';
 
-export const AsociarImagenCarpeta = () => {
+export const ListaCarpetas = () => {
   
-    const { setCarpetasByCajaId } = useCarpetaStore();
+   const { setCarpetasByCajaId } = useCarpetaStore();
 
-    useEffect(() => {
+   useEffect(() => {
         setCarpetasByCajaId();
-    }, []);
-
-    return (
-        <>
+   }, []);
+    
+  return (
+    <>
             <div className='row'>
                 <div className='col-md-12'>
-                    <FiltrosCaja titulo="Asignar PDF a Carpeta"/>
+                    <FiltrosCaja titulo="Indexar documentos"/>
                 </div>
             </div>
             <div className='row pt-3'>
                 <div className='col-md-12'>
-                    <TablaCarpetasImagenes />
+                    <TablaCarpetasAIndexar/>
                 </div>  
             </div>
         </>

@@ -107,7 +107,7 @@ export const AdminNavbar = () => {
                    }
                 </ul>
               </li>
-              <li className="nk-menu-item has-sub">
+              {/* <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">Asignación</span>
                 </a>
@@ -116,21 +116,18 @@ export const AdminNavbar = () => {
                     <a href="#"  className="nk-menu-link"><span className="nk-menu-text">Asignar Documentos</span></a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
               <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
-                  <span className="nk-menu-text">Indexación</span>
+                  <span className="nk-menu-text">Carpetas</span>
                 </a>
                 <ul className="nk-menu-sub">
                   <li className="nk-menu-item">
-                    <Link to="/tareasAnalista" className="nk-menu-link"><span className="nk-menu-text">Tareas Asignadas</span> </Link>
-                  </li>
-                  <li className="nk-menu-item">
-                    <a href="#"  className="nk-menu-link"><span className="nk-menu-text">Documentos Indexados</span></a>
+                    <Link to="/listaCarpetas" className="nk-menu-link"><span className="nk-menu-text">Indexar Documentos</span> </Link>
                   </li>
                 </ul>
               </li>
-              <li className="nk-menu-item has-sub">
+              {/* <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">Reportes</span>
                 </a>
@@ -166,6 +163,7 @@ export const AdminNavbar = () => {
                   </li>
                 </ul>
               </li>
+               */}
             </ul>
           </div>
           <div className="nk-header-tools">

@@ -482,6 +482,10 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const setCarpetaActivaActual = (carpeta) => {
+        dispatch( setCarpetaActiva(carpeta) );
+    }
+
     return {
         //* Propiedades
         carpetas,
@@ -518,6 +522,7 @@ export const useCarpetaStore = () => {
         openModalVerPdf,
         closeModalVerPdf,
         putAsociarPdfACarpetas,
-        buscarEstadoAsignacionArchivos
+        buscarEstadoAsignacionArchivos,
+        setCarpetaActivaActual
     }
 }

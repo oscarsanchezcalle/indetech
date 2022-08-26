@@ -2,7 +2,6 @@ import React from 'react'
 import Modal from 'react-modal';
 
 import { useCarpetaStore } from '../../../hooks';
-import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
 import  VerPdfCompleto  from '../pdf/VerPdfCompleto';
 
 export const VerDocumentoPdfModal = () => {
@@ -57,9 +56,9 @@ export const VerDocumentoPdfModal = () => {
               <div className="modal-header">
                
                 <h6 className="modal-title">
+                  Serie-Subserie: <small>{carpetaActiva?.serie?.descripcion} - {carpetaActiva?.subserie?.descripcion}</small> - 
                   Expediente: <small>{carpetaActiva?.codigo}</small> - 
-                  Cédula Catastral: <small>{carpetaActiva?.cedulaCatastral}</small> -
-                  Serie-Subserie: <small>{carpetaActiva?.serie?.descripcion} - {carpetaActiva?.subserie?.descripcion}</small>
+                  Cédula Catastral: <small>{carpetaActiva?.cedulaCatastral}</small>
                 </h6>
                 <ul className="btn-toolbar">   
                     <a href="#" onClick={closeModal} className="close">

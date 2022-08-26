@@ -5,7 +5,7 @@ import { LoadingInButton } from '../LoadingInButton';
 import Swal from 'sweetalert2';
 
 
-export const FiltrosCaja = () => {
+export const FiltrosCaja = ({titulo}) => {
 
     const { dependencias, dependenciaActiva, startLoadingDependencias, setDependenciaSelected } = useDependieciaStore();
     const { startLoadingOficinas, oficinas, oficinaActiva, setOficinaSelected } = useOficinaStore();
@@ -111,7 +111,7 @@ export const FiltrosCaja = () => {
     return (
         <>
             <div className='col-md-12'>
-            <h6 className="title pb-2"><em className="icon ni ni-file-text-fill"></em> Asignar PDF a Carpeta</h6>
+            <h6 className="title pb-2"><em className="icon ni ni-file-text-fill"></em> {titulo}</h6>
                 <div className="card card-bordered h-100">
                     <div className="card-inner">
                         <div className=" row">
@@ -182,7 +182,7 @@ export const FiltrosCaja = () => {
                                 <label className='form-label'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
                                 <button onClick={handleBtnBuscarCarpetas} disabled={isLoading} 
                                         className="btn btn-block btn-outline-primary btn-dim">
-                                        <LoadingInButton isLoading={isLoading} btnText="Buscar Caja" /> 
+                                        <LoadingInButton isLoading={isLoading} btnText="Buscar Carpetas" /> 
                                 </button>
                                 </div>
                             </div>
