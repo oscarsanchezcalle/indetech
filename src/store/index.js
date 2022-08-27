@@ -9,6 +9,6 @@ export * from './auth/authSlice';
 export * from './soporte/soporteSlice';
 export * from './frecuencia/frecuenciaSlice';
 export * from './vigencia/vigenciaSlice';
-
+export * from './documento/documentoSlice';
 
 export * from './store';
