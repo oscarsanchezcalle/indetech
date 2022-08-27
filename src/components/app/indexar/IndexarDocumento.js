@@ -67,8 +67,6 @@ export const IndexarDocumento = () => {
       }else{
         handleSelectChange("", "folios")
       }
-     
-
     }catch(error){}
   }, [folioInicial, folioFinal]);
 
