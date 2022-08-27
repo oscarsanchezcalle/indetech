@@ -49,6 +49,28 @@ export const useTipoDocumentoStore = () => {
         }
     }
 
+    const startLoadingTipoDocumentosFromIndexar = async(id) => {
+       
+        try 
+        {
+            dispatch( isLoadingTipoDocumentos( true ) );
+            
+            const { data } = await indetechApi.get('/TipoDocumento/GetTipoDocumentoBySubserieID?id='+id);
+            
+            const tipoDocumentosForSelect = convertTipoDocumentosToSelect(data);
+
+            const result = tipoDocumentosForSelect.filter(td => td.label !== "N/A");
+
+            dispatch( onLoadTipoDocumentos( result ) );
+
+        } catch (error) 
+        {
+            dispatch( isSuccessTipoDocumentos( false ) );
+            dispatch( isLoadingTipoDocumentos( false ) );
+
+        }
+    }
+
     const resetTipoDocumento = async() => {
         dispatch( resetTipoDocumentos() );
     }
@@ -63,6 +85,7 @@ export const useTipoDocumentoStore = () => {
         //* Métodos
         startLoadingTipoDocumentos,
         resetTipoDocumento,
-        startLoadingTipoDocumentosEdit
+        startLoadingTipoDocumentosEdit,
+        startLoadingTipoDocumentosFromIndexar
     }
 }
