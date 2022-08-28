@@ -32,7 +32,7 @@ export const documentoSlice = createSlice({
         setDocumentoActivo: ( state, {payload} ) => {
             state.documentoActivo = payload ;
         },
-        setIsOpenModalEditarDocumento: ( state, {payload} ) => {
+        setOpenModalEditarDocumento: ( state, {payload} ) => {
             state.isOpenModalEditarDocumento = payload ;
         }
     }
@@ -46,5 +46,5 @@ export const {
     setIsLoadingDeleteDocumento,
     setIsLoadingEditDocumento,
     setDocumentoActivo,
-    setIsOpenModalEditarDocumento
+    setOpenModalEditarDocumento
 } = documentoSlice.actions;

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import { isAfter, getYear, parseISO } from 'date-fns'
+import { isAfter, isBefore, getYear, parseISO, format } from 'date-fns'
 
 import { indetechApi } from '../api';
 
@@ -11,7 +11,7 @@ import {
     setIsLoadingDeleteDocumento,
     setIsLoadingEditDocumento,
     setDocumentoActivo,
-    setIsOpenModalEditarDocumento } from '../store';
+    setOpenModalEditarDocumento } from '../store';
 
 export const useDocumentoStore = () => {
   
@@ -27,73 +27,53 @@ export const useDocumentoStore = () => {
         isOpenModalEditarDocumento
      } = useSelector( state => state.documento );
 
-    const crearDocumento = async (criteria = {}, proyectoId, username ) => {
+    const crearDocumento = async (criteria = {}, proyectoId, username, carpetaFechaIni, carpetaFechaFin, carpetaId ) => {
         
-        dispatch(isLoadingAddDocumento(true));
+        dispatch(setIsLoadingAddDocumento(true));
 
         try
         {
-            const {
-                dependencia, oficina, vigencia, numeroCaja, serie, subserie, tipoDocumento,
-                tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
-                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre 
-            } = criteria;
+        const {
+            tipoDocumento,
+            folioInicial,
+            folioFinal,
+            folios,
+            notas,
+            fecha
+        } = criteria;
 
-            const fechaIni = new Date(parseISO(fechaExtremaInicial));
-
-            const fechaFin = new Date(parseISO(fechaExtremaFinal));
-            
-            const anioFechaIni = getYear(fechaIni);
-
-            if((fechaExtremaInicial != '' && fechaExtremaFinal != '') ){
-                if(isAfter(fechaIni, fechaFin) || anioFechaIni != parseInt(vigencia.label) ){
-
-                    Swal.fire({
-                        //position: 'top-end',
-                        icon: 'error',
-                        title: 'Rango de fechas incorrecto',
-                        text: `Por favor verifica las fechas extremas`,
-                        showConfirmButton: true,
-                        //timer: 1500
-                    });
+        const {isValid, validationConditions} = isValidForm(criteria, carpetaFechaIni, carpetaFechaFin);
     
-                    dispatch(setIsLoadingAddCarpeta(false));
-                    return;
-                }
-            }
-            
-            const carpetaCajaCriteria = {
-                "proyectoId": proyectoId,
-                "dependenciaId": dependencia.value,
-                "oficinaId": oficina.value,
-                "numeroCaja": parseInt(numeroCaja),
-                "serieId": serie.value,
-                "subserieId": subserie.value,
-                "tipoDocumentoId": 1,
-                "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
-                "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
-                "tomoActual": tomoActual == "" ? 0 : tomoActual,
-                "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
-                "folioInicial": folioInicial == "" ? 0 : folioInicial,
-                "folioFinal": folioFinal == "" ? 0 : folioFinal,
-                "codigo": codigo,
-                "tipoSoporteId": tipoSoporte.value === 'undefined' ? 0 : tipoSoporte.value,
-                "frecuenciaUsoId": frecuenciaUso.value === 'undefined' ? 0 : frecuenciaUso.value,
-                "notas": notas,
-                "vigenciaId": vigencia.value,
-                "cedulaCatastral": cedulaCatastral,
-                "duplicidad": duplicidad == "" ? 0 : duplicidad,
-                "autoDeCierre": autoDeCierre.value === 1 ? true : false,
-                "Username": username
-            }
+        if (!isValid){
 
-            //llamar al end point que crea las carpetas y las asigna a la caja
-            const {data} = await indetechApi.post('/Carpeta/AgregarCarpetaACaja', carpetaCajaCriteria);
-            
-            //Actualizar la tabla de las carpetas by Caja.
-            getCarpetasByCajaId(data.cajaId);
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campos incompletos',
+                text: `Verifica los campos y/o errores: ${String(validationConditions)}`,
+                showConfirmButton: true
+            });
+            dispatch(setIsLoadingAddDocumento(false));
+            return false;
+        }
 
-            dispatch(isLoadingAddDocumento(false));
+        const documentoCriteria = {
+            "tipoDocumentoId": tipoDocumento.value,
+            "folioInicial": folioInicial === "" ? 0 : folioInicial,
+            "foliofinal": folioFinal === "" ? 0: folioFinal,
+            "folios": folios,
+            "fecha": fecha,
+            "observaciones": notas,
+            "username": username,
+            "carpetaId": carpetaId,
+            "proyectoId": proyectoId
+            }
+        
+            const {data} = await indetechApi.post('/documento', documentoCriteria);
+        
+            // Acualizar la tabla de las documentos by carpeta ir.
+            await getDocumentosByCarpetaId(data.carpetaId);
+
+            dispatch(setIsLoadingAddDocumento(false));
 
             Swal.fire({
                 //position: 'top-end',
@@ -103,37 +83,38 @@ export const useDocumentoStore = () => {
                 showConfirmButton: true,
                 timer: 1500
             });
+            return true;
         }
         catch(error)
         {
-            dispatch(isLoadingAddDocumento(false));
+            dispatch(setIsLoadingAddDocumento(false));
 
             console.log(error);
             Swal.fire({
-                //position: 'top-end',
                 icon: 'error',
                 title: 'Error de conexión al servidor',
                 text: `Por favor intente nuevamente`,
-                showConfirmButton: true,
-                //timer: 1500
+                showConfirmButton: true
             });
+            return false;
         }
     }
-  
+
     const getDocumentosByCarpetaId = async (carpetaId) => {
         
         try {
 
-            dispatch( isLoadingDocumentosByCarpeta(true) );
-            const { data } = await indetechApi.get('/documento/GetdocumentosByCarpetaID?id='+carpetaId);            
+            dispatch( setIsLoadingDocumentosByCarpeta(true) );
+
+            const { data } = await indetechApi.get('Documento/GetByCarpetaIdAsync?carpetaId='+carpetaId);            
             
             dispatch( setListaDocumento( data ) );
 
-            dispatch( isLoadingDocumentosByCarpeta(false) );
+            dispatch( setIsLoadingDocumentosByCarpeta(false) );
 
         } catch (error) {
 
-           dispatch( isLoadingDocumentosByCarpeta(true) );
+           dispatch( setIsLoadingDocumentosByCarpeta(true) );
            console.log(error)
         }
     }
@@ -162,7 +143,6 @@ export const useDocumentoStore = () => {
             dispatch( setIsLoadingDeleteDocumento('deleted') );
 
         } catch (error) {
-          console.log('Error eliminando la carpeta'+ carpetaId);
           console.log(error)
         }
     }
@@ -178,6 +158,70 @@ export const useDocumentoStore = () => {
         dispatch( setDocumentoActivo({}) );
         dispatch( setOpenModalEditarDocumento(false) );
     }
+
+    const isValidForm = (criteria = {}, carpFechaIni = "", carpFechaFin = "") => {
+        
+        const {
+            tipoDocumento,
+            folioInicial,
+            folioFinal,
+            folios,
+            fecha,
+            switchFolios } = criteria;
+
+        const validationConditions = [];
+        let isValid = true;
+
+        if ( typeof tipoDocumento.value === 'undefined' || fecha === '') 
+        {            
+            if(typeof tipoDocumento.value === 'undefined' ){
+                validationConditions.push(' Tipo Documental');
+            }
+            if(fecha === ''){
+                validationConditions.push(' Fecha');
+            }
+            isValid = false;
+
+            return {
+                isValid,
+                validationConditions
+            }; 
+        }
+
+        const carpetaFechaIni = new Date(parseISO(carpFechaIni));
+        const carpetaFechaFin = new Date(parseISO(carpFechaFin));
+        const documentoFecha = new Date(parseISO(fecha));
+
+        const anioCarpetaFechaIni = getYear(carpetaFechaIni);
+        const anioCarpetaFechaFin = getYear(carpetaFechaFin);
+
+        if((anioCarpetaFechaIni !== 1 && anioCarpetaFechaFin !== 1) ){
+            console.log(anioCarpetaFechaFin);
+            if(isBefore(documentoFecha, carpetaFechaIni) || isAfter(documentoFecha, carpetaFechaFin) ){
+                isValid = false;
+                validationConditions.push(`La fecha del documento debe estar entre las fechas de la carpeta ${format(parseISO(carpFechaIni), 'dd/MM/yyyy')} - ${format(parseISO(carpFechaFin), 'dd/MM/yyyy')}`);
+            }
+        }
+
+        if(switchFolios === false){
+            if(folioInicial == '' || folioInicial == '0' || folioFinal == '' || folioFinal == '0'){
+                validationConditions.push(' Rango de folios');
+                isValid = false;
+            }
+        }
+
+        if(switchFolios === true){
+            if(folios == '' || folios == '0'){
+                validationConditions.push(' total de folios');
+                isValid = false;
+            }
+        }
+       
+        return {
+            isValid,
+            validationConditions
+        };            
+    } 
 
     return {
         //* Propiedades

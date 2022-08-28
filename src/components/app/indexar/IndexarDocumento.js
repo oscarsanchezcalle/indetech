@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Select from 'react-select';
 import Switch from "react-switch";
 
-import { useCarpetaStore, useForm, useTipoDocumentoStore } from '../../../hooks';
+import { useAuthStore, useCarpetaStore, useDocumentoStore, useForm, useTipoDocumentoStore } from '../../../hooks';
+import { LoadingInButton } from '../LoadingInButton';
 import VerPdfCompleto from '../pdf/VerPdfCompleto';
+import { TablaDocumentos } from './TablaDocumentos';
 
 export const IndexarDocumento = () => {
   
@@ -11,6 +13,8 @@ export const IndexarDocumento = () => {
  
   const { carpetaActiva } = useCarpetaStore();
   const { tipoDocumentos, startLoadingTipoDocumentosFromIndexar } = useTipoDocumentoStore();
+  const { username, proyectoId } = useAuthStore();
+  const { isLoadingAddDocumento, crearDocumento, getDocumentosByCarpetaId } = useDocumentoStore();
 
   const documentoForm = {
     tipoDocumento:{},
@@ -22,7 +26,7 @@ export const IndexarDocumento = () => {
     switchFolios: false
   };
 
-  const [formValues, handleInputChange, handleSelectChange] = useForm(documentoForm);
+  const [formValues, handleInputChange, handleSelectChange, reset] = useForm(documentoForm);
  
   const {
     tipoDocumento,
@@ -38,6 +42,9 @@ export const IndexarDocumento = () => {
     setheight((window.innerHeight * 0.80) + 'px');
     if(carpetaActiva.subserieId > 0 ){
       startLoadingTipoDocumentosFromIndexar(carpetaActiva.subserieId);
+    }
+    if(carpetaActiva.id > 0 ){
+      getDocumentosByCarpetaId(carpetaActiva.id);
     }
   }, []);
 
@@ -70,12 +77,31 @@ export const IndexarDocumento = () => {
     }catch(error){}
   }, [folioInicial, folioFinal]);
 
+  useEffect(() => {
+    try{
+        if(switchFolios){
+          handleSelectChange("", "folioInicial");      
+        }
+    }catch(error){}
+  }, [switchFolios]);
+
+  useEffect(() => {
+    try{
+        if(switchFolios){
+          handleSelectChange("", "folioFinal");      
+        }
+    }catch(error){}
+  }, [folioInicial]);
+
   const handleSelectTipoDocumentoChange = ( selectedOption ) => {    
     handleSelectChange(selectedOption, "tipoDocumento");
   }
 
-  const handleBtnCrearDocumento = () => {
-    console.log(formValues);
+  const handleBtnCrearDocumento = async () => {
+    const result = await crearDocumento(formValues, proyectoId, username, carpetaActiva.fechaInicial, carpetaActiva.fechaFinal, carpetaActiva.id);
+    if(result){
+      reset();
+    }
   }
 
   const handleFolioSwitchChange = (nextChecked) => {
@@ -217,11 +243,20 @@ export const IndexarDocumento = () => {
               </div>
             </div>
               <div className="modal-footer pt-2 p-0">
-                <button type="button" onClick={handleBtnCrearDocumento} className="btn btn-primary">Crear documento</button>
+              <button 
+                    onClick={handleBtnCrearDocumento}
+                    type="button"
+                    disabled={isLoadingAddDocumento}
+                    className="btn btn-primary">
+                        <LoadingInButton isLoading={isLoadingAddDocumento} btnText="Crear documento" />
+                </button>
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Volver</button>
               </div>
           </div>
         </div>
+      </div>
+      <div className='row pt-3'>
+        <TablaDocumentos />
       </div>
     </>
   )

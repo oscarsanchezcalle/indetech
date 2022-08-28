@@ -9,7 +9,6 @@ export const TablaCarpetasAIndexar = () => {
   const { carpetasByCajaId, setCarpetaActivaActual } = useCarpetaStore();
 
   const handleIndexarDocs = (carpeta) => {
-    console.log(carpeta);
     setCarpetaActivaActual(carpeta);
   }
   

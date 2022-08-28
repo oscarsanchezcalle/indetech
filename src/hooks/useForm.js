@@ -53,6 +53,7 @@ export const useForm = ( initialState = {} ) => {
         handleSelectChange, 
         resetFuidForm, 
         reset, 
-        setEditFuidForm ];
+        setEditFuidForm
+         ];
 
 }

@@ -19,6 +19,6 @@ export const store = configureStore({
         soporte: soporteSlice.reducer,
         frecuencia: frecuenciaSlice.reducer,
         vigencia: vigenciaSlice.reducer,
-        documentoSlice: documentoSlice.reducer
+        documento: documentoSlice.reducer
     }
 });
