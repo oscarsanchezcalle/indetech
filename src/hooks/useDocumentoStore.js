@@ -123,7 +123,7 @@ export const useDocumentoStore = () => {
         dispatch( setListaDocumento( [] ) );
     }
 
-    const deleteDocumentoById = async (documentoId, username) => {
+    const deleteDocumentoById = async (documentoId, carpetaId, username) => {
 
         dispatch( setIsLoadingDeleteDocumento(true) );
 
@@ -140,10 +140,13 @@ export const useDocumentoStore = () => {
                 timer: 1000
             });
 
-            dispatch( setIsLoadingDeleteDocumento('deleted') );
+            await getDocumentosByCarpetaId(carpetaId);
+
+            dispatch( setIsLoadingDeleteDocumento(false) );
 
         } catch (error) {
           console.log(error)
+          dispatch( setIsLoadingDeleteDocumento(false) );
         }
     }
 
@@ -196,7 +199,6 @@ export const useDocumentoStore = () => {
         const anioCarpetaFechaFin = getYear(carpetaFechaFin);
 
         if((anioCarpetaFechaIni !== 1 && anioCarpetaFechaFin !== 1) ){
-            console.log(anioCarpetaFechaFin);
             if(isBefore(documentoFecha, carpetaFechaIni) || isAfter(documentoFecha, carpetaFechaFin) ){
                 isValid = false;
                 validationConditions.push(`La fecha del documento debe estar entre las fechas de la carpeta ${format(parseISO(carpFechaIni), 'dd/MM/yyyy')} - ${format(parseISO(carpFechaFin), 'dd/MM/yyyy')}`);

@@ -1,20 +1,34 @@
 import React from 'react'
+
+import Swal from 'sweetalert2';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-import { useDocumentoStore } from '../../../hooks';
+import { useAuthStore, useDocumentoStore } from '../../../hooks';
 import { parseISO, format } from 'date-fns'
+import { EditarDocumentoModal } from './EditarDocumentoModal';
 
 export const TablaDocumentos = () => {
 
-  const { documentos } = useDocumentoStore();
+  const { documentos, deleteDocumentoById, isLoadingDeleteDocumento, openModalEditarDocumento } = useDocumentoStore();
+  const { username } = useAuthStore();
 
   const handleOpenModalEditar = (documento) => {
-    console.log(documento);
+    openModalEditarDocumento(documento);
   }
 
   const handleEliminar = (documento) => {
-    console.log(documento);
+    Swal.fire({  
+      title: '¿Está seguro de eliminar el documento?',  
+      showCancelButton: true,  
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: `Si`,  
+      
+      }).then((result) => {  
+          if (result.isConfirmed) {    
+              deleteDocumentoById(documento.id, documento.carpetaId, username);
+          }
+      });
   }
   
   return (
@@ -80,7 +94,7 @@ export const TablaDocumentos = () => {
                               <span className="d-inline-block">
                                 <a onClick={() => handleEliminar(documento)}
                                   className="btn btn-icon btn-white btn-dim btn-sm btn-danger">
-                                  <em className="icon ni ni-trash"></em>
+                                  {isLoadingDeleteDocumento ? <i className="fas fa-circle-notch fa-spin"></i>: <em className="icon ni ni-trash"></em>}
                                 </a>
                               </span>
                             </OverlayTrigger>
@@ -94,6 +108,7 @@ export const TablaDocumentos = () => {
           </div>
         </div>
       </div>
+      <EditarDocumentoModal />
     </>
   )
 }
