@@ -66,11 +66,16 @@ export const VerDocumentoPdfModal = () => {
                     </a>
                 </ul>
              </div> 
-              {/* https://www.dropbox.com/s/q50rol56e66i926/sample%20-%20copia.pdf?dl=0 */}
-              <VerPdfCompleto pdf={"https://dl.dropboxusercontent.com/s/0wtf8q2jwbwteud/2014-0001.PDF"}/>   
-              {/* <div className='col-md-12 pt-2'>
-                 <RotuloCarpeta />
-              </div>  */}
+             {
+                ( typeof carpetaActiva.fileUrl == "undefined" || carpetaActiva.fileUrl == "" )  
+                  ? (
+                    <VerPdfCompleto pdf={"./carpeta-sin-imagen.pdf"}/>
+
+                  )
+                  : (
+                      <VerPdfCompleto pdf={carpetaActiva.fileUrl}/>
+                  )
+              }
         </Modal>
     </>
   )

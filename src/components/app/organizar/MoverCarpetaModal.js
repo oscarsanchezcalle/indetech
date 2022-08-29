@@ -93,14 +93,10 @@ export const MoverCarpetaModal = () => {
     Modal.setAppElement('#root');
 
     function afterOpenModal() {
-        // references are now sync'd and can be accessed.
         //modifico el formulario con el estado global.
         handleSelectDependenciaChange(dependenciaActiva);
         handleSelectSubDependenciaChange(oficinaActiva);
         handleSelectVigenciaChange(vigenciaActiva);
-        //console.log(formValues);
-        // console.log('aqui');
-        //console.log(carpetaActiva);
     }
     
     function closeModal() {

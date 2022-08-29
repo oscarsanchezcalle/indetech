@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Select from 'react-select';
 import Switch from "react-switch";
 
-import { useAuthStore, useCarpetaStore, useDocumentoStore, useForm, useTipoDocumentoStore } from '../../../hooks';
+import { useAuthStore, useCarpetaStore, useDocumentoStore , useTipoDocumentoStore, useFormBasic } from '../../../hooks';
 import { LoadingInButton } from '../LoadingInButton';
 import VerPdfCompleto from '../pdf/VerPdfCompleto';
 import { TablaDocumentos } from './TablaDocumentos';
@@ -26,7 +26,7 @@ export const IndexarDocumento = () => {
     switchFolios: false
   };
 
-  const [formValues, handleInputChange, handleSelectChange, reset] = useForm(documentoForm);
+  const [formValues, handleInputChange, handleSelectChange, reset] = useFormBasic(documentoForm);
  
   const {
     tipoDocumento,
@@ -98,7 +98,9 @@ export const IndexarDocumento = () => {
   }
 
   const handleBtnCrearDocumento = async () => {
+    
     const result = await crearDocumento(formValues, proyectoId, username, carpetaActiva.fechaInicial, carpetaActiva.fechaFinal, carpetaActiva.id);
+    
     if(result){
       reset();
     }
@@ -117,7 +119,16 @@ export const IndexarDocumento = () => {
               <div className="card-aside-wrap">
                 <div className="card-content">
                   <ul className="p-0 nav-tabs-card" style={{height: height}}>
-                    <VerPdfCompleto pdf={"https://dl.dropboxusercontent.com/s/0wtf8q2jwbwteud/2014-0001.PDF"}/>   
+                    {
+                      ( typeof carpetaActiva.fileUrl == "undefined" || carpetaActiva.fileUrl == "" )  
+                        ? (
+                          <VerPdfCompleto pdf={"./carpeta-sin-imagen.pdf"}/>
+
+                        )
+                        : (
+                            <VerPdfCompleto pdf={carpetaActiva.fileUrl}/>
+                        )
+                    }          
                   </ul>
                 </div>
                </div>

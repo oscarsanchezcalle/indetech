@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Select from 'react-select';
 import Switch from "react-switch";
+import { parseISO, format } from 'date-fns'
 
 import Modal from 'react-modal';
 
-import { useAuthStore, useDocumentoStore, useForm, useTipoDocumentoStore } from '../../../hooks';
+import { useAuthStore, useCarpetaStore, useDocumentoStore, useForm, useTipoDocumentoStore } from '../../../hooks';
 import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
 import { LoadingInButton } from '../LoadingInButton';
 
@@ -13,7 +14,9 @@ export const EditarDocumentoModal = () => {
   Modal.setAppElement('#root');
   
   const { username } = useAuthStore();
-  const { tipoDocumentos, startLoadingTipoDocumentosFromIndexar } = useTipoDocumentoStore();
+  const { tipoDocumentos } = useTipoDocumentoStore();
+  const { editarDocumento } = useDocumentoStore();
+  const { carpetaActiva } = useCarpetaStore();
 
   const documentoForm = {
     tipoDocumento:{},
@@ -25,7 +28,7 @@ export const EditarDocumentoModal = () => {
     switchFolios: false
   };
 
-  const [formValues, handleInputChange, handleSelectChange, reset] = useForm(documentoForm);
+  const [formValues, handleInputChange, handleSelectChange, reset, setFormValues] = useForm(documentoForm);
  
   const {
     tipoDocumento,
@@ -37,44 +40,92 @@ export const EditarDocumentoModal = () => {
     switchFolios
   } = formValues;
 
-  const handleFolioSwitchChange = (nextChecked) => {
-    handleSelectChange(nextChecked, "switchFolios");
-  };
+  useEffect(() => {
+    try{
+      const restaFolio = parseInt(folioFinal) - parseInt(folioInicial);
+      
+      if (parseInt(folioFinal) >= parseInt(folioInicial)){
+        if(restaFolio === 0){
+          if(parseInt(folioFinal) > 0){
+            handleSelectChange(1, "folios")
+          }else{
+            handleSelectChange(0, "folios")
+          }
+          return;
+        }
+        
+        if(restaFolio > 0){
+          if(parseInt(folioInicial) > 0){
+            handleSelectChange(restaFolio+1, "folios")
+          }else{
+            handleSelectChange("", "folios")
+          }
+  
+          return;
+        }
+      }else{
+        handleSelectChange("", "folios")
+      }
+      }catch(error){}
+    }, [folioInicial, folioFinal]);
 
-  const { 
-    documentoActivo, closeModalEditarDocumento, isOpenModalEditarDocumento,
-    isLoadingEditDocumento
-   } = useDocumentoStore();
+    useEffect(() => {
+      try{
+          if(switchFolios){
+            handleSelectChange("", "folioInicial");      
+          }
+      }catch(error){}
+    }, [switchFolios]);
+
+    useEffect(() => {
+      try{
+          if(switchFolios){
+            handleSelectChange("", "folioFinal");      
+          }
+      }catch(error){}
+    }, [folioInicial]);
+    
+    const handleFolioSwitchChange = (nextChecked) => {
+      handleSelectChange(nextChecked, "switchFolios");
+    };
+
+    const { 
+      documentoActivo, closeModalEditarDocumento, isOpenModalEditarDocumento,
+      isLoadingEditDocumento
+    } = useDocumentoStore();
    
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    console.log(documentoActivo);
-    
-  }
+    function afterOpenModal() {
 
-  const handleSelectTipoDocumentoChange = ( selectedOption ) => {    
-    handleSelectChange(selectedOption, "tipoDocumento");
-  }
+      const newValues = {
+        tipoDocumento:{
+          label: documentoActivo.tipoDocumento.descripcion,
+          value: documentoActivo.tipoDocumento.id,
+        },
+        folioInicial: documentoActivo.folioInicial,
+        folioFinal: documentoActivo.foliofinal,
+        folios: documentoActivo.folios,
+        notas: documentoActivo.observaciones,
+        fecha: format(parseISO(documentoActivo.fecha), 'yyyy-MM-dd'),
+        switchFolios: false
+      };
 
-  function closeModal() {
-    closeModalEditarDocumento({}, false);
-  }
+      setFormValues(newValues);
+    }
 
-  const handleEditar = async () => {
-    
-    // const criteria = {
-    //   "carpetaId": carpetaActiva.id,
-    //   "fileId": archivoId,
-    //   "username": username
-    // };
+    const handleSelectTipoDocumentoChange = ( selectedOption ) => {    
+      handleSelectChange(selectedOption, "tipoDocumento");
+    }
 
-    // const isCorrect = await asignarArchivoACarpeta(criteria, carpetaActiva.cajaId);
-    
-    // if(isCorrect){
-    //   closeModal();
-    // }
+    function closeModal() {
+      closeModalEditarDocumento({}, false);
+    }
 
-  }
+    const handleEditar = async () => {
+      const isCorrect = await editarDocumento(formValues, documentoActivo.id, username, carpetaActiva.fechaInicial, carpetaActiva.fechaFinal, carpetaActiva.id);
+      if(isCorrect){
+        closeModal();
+      }
+   }
   return (
   <>
       <Modal

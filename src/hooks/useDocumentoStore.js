@@ -100,6 +100,78 @@ export const useDocumentoStore = () => {
         }
     }
 
+    const editarDocumento = async (criteria = {}, documentoId, username, carpetaFechaIni, carpetaFechaFin, carpetaId ) => {
+        
+        dispatch(setIsLoadingEditDocumento(true));
+
+        try
+        {
+            const {
+                tipoDocumento,
+                folioInicial,
+                folioFinal,
+                folios,
+                notas,
+                fecha
+            } = criteria;
+
+            const {isValid, validationConditions} = isValidForm(criteria, carpetaFechaIni, carpetaFechaFin);
+        
+            if (!isValid){
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos incompletos',
+                    text: `Verifica los campos y/o errores: ${String(validationConditions)}`,
+                    showConfirmButton: true
+                });
+                dispatch(setIsLoadingEditDocumento(false));
+                return false;
+            }
+           
+            const documentoCriteria = {
+                "id": documentoId,
+                "tipoDocumentoId": tipoDocumento.value,
+                "folioInicial": folioInicial === "" ? 0 : folioInicial,
+                "foliofinal": folioFinal === "" ? 0: folioFinal,
+                "folios": folios,
+                "fecha": fecha,
+                "observaciones": notas,
+                "username": username,
+                }
+            
+                await indetechApi.put('/documento', documentoCriteria);
+            
+                // Acualizar la tabla de las documentos by carpeta ir.
+                await getDocumentosByCarpetaId(carpetaId);
+
+                dispatch(setIsLoadingEditDocumento(false));
+
+                Swal.fire({
+                    //position: 'top-end',
+                    icon: 'success',
+                    title: 'Registro correcto',
+                    text: ``,
+                    showConfirmButton: true,
+                    timer: 1500
+                });
+                return true;
+        }
+        catch(error)
+        {
+            dispatch(setIsLoadingEditDocumento(false));
+
+            console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión al servidor',
+                text: `Por favor intente nuevamente`,
+                showConfirmButton: true
+            });
+            return false;
+        }
+    }
+
     const getDocumentosByCarpetaId = async (carpetaId) => {
         
         try {
@@ -239,6 +311,7 @@ export const useDocumentoStore = () => {
         crearDocumento, 
         getDocumentosByCarpetaId,
         deleteDocumentoById,
+        editarDocumento,
         clearDocumentosByCarpetaId,
         openModalEditarDocumento,
         closeModalEditarDocumento,

@@ -8,6 +8,31 @@ export const useForm = ( initialState = {} ) => {
         setValues( newFormState );
     }
 
+    const setEditFuidForm = () => {
+     //no eliminar este metodo, es utilizado en el editar.
+    }
+
+    const handleInputChange = ({ target }) => {
+
+        setValues({
+            ...values,
+            [ target.name ]: target.value
+        });
+    }
+
+    const handleSelectChange = ( selectedOption, fieldName ) => {   
+        setValues({
+            ...values,
+            [ fieldName ]: selectedOption
+        });
+    }
+
+    const setFormValues = ( {newValues} ) => {   
+        setValues({
+            ...newValues
+        });
+    }
+
     const resetFuidForm = (frecuenciaUsoDefault, tipoSoporteDefualt) => {
      
         setValues({
@@ -29,31 +54,13 @@ export const useForm = ( initialState = {} ) => {
         });
     }
 
-    const setEditFuidForm = () => {
-     //no eliminar este metodo, es utilizado en el editar.
-    }
-
-    const handleInputChange = ({ target }) => {
-
-        setValues({
-            ...values,
-            [ target.name ]: target.value
-        });
-    }
-
-    const handleSelectChange = ( selectedOption, fieldName ) => {   
-        setValues({
-            ...values,
-            [ fieldName ]: selectedOption
-        });
-    }
-
     return [ values, 
         handleInputChange, 
         handleSelectChange, 
         resetFuidForm, 
         reset, 
-        setEditFuidForm
+        setEditFuidForm,
+        setFormValues
          ];
 
 }

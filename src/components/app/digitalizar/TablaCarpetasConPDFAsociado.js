@@ -6,11 +6,7 @@ import { downloadURI } from '../../../helpers';
 
 export const TablaCarpetasConPDFAsociado = () => {
 
-    const { carpetasConPdf, openModalVerPdf } = useCarpetaStore();
-
-    const  handleOpenModalVerPdf = (carpeta) => {
-        openModalVerPdf(carpeta);
-    }
+    const { carpetasConPdf } = useCarpetaStore();
 
     const handleDescargarPdf = (fileUrl) => {
         var uri = fileUrl.replace(/.$/,"1");
@@ -57,7 +53,8 @@ export const TablaCarpetasConPDFAsociado = () => {
                         {
                             (carpeta.archivo.fileId != "") &&
                             <OverlayTrigger key={Math.random()} overlay={<Tooltip id="tooltip-disabled">Ver PDF</Tooltip>}>
-                                    <a onClick={() => handleOpenModalVerPdf(carpeta)}
+                                    <a href={carpeta.archivo.fileUrl} target="_blank"
+                                    //onClick={() => handleOpenModalVerPdf(carpeta)}
                                     className="btn btn-icon btn-white btn-dim btn-sm btn-primary">
                                     <em className="icon ni ni-eye"></em>
                                 </a>

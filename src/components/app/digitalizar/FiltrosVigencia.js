@@ -63,8 +63,6 @@ export const FiltrosVigencia = () => {
 
     const handleBtnBuscarCarpetas = async () => {
         
-        console.log(formValues);
-
         if(!formValues.vigencia.value){
             Swal.fire({
                 //position: 'top-end',
