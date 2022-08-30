@@ -12,6 +12,7 @@ import { useAuthStore } from '../hooks';
 import { AsociarImagenCarpeta } from '../components/app/digitalizar/AsociarImagenCarpeta';
 import { AsociarImagenes } from '../components/app/digitalizar/AsociarImagenes';
 import { ListaCarpetas } from '../components/app/indexar/ListaCarpetas';
+import { FuidScreenSoacha } from '../components/app/organizar/FuidScreenSoacha';
 
   
 export const AppRouter = () => {
@@ -38,6 +39,7 @@ export const AppRouter = () => {
                         <Route path="/" element={<AppScreen />}>
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/administrarFuid" element={<FuidScreen/>}/>
+                            <Route path="/administrarFuidSoacha" element={<FuidScreenSoacha />}/>  
                             <Route path="/asociarImagen" element={<AsociarImagenCarpeta />}/>                    
                             <Route path="/asociarImagenes" element={<AsociarImagenes/>}></Route>                  
                             <Route path="/listaCarpetas" element={<ListaCarpetas />} />  

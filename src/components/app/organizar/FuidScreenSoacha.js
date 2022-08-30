@@ -3,7 +3,7 @@ import Select from 'react-select';
 
 import { RotuloCaja } from './RotuloCaja';
 import { TablaCarpetas } from './TablaCarpetas';
-import { LoadingInButton } from './../LoadingInButton';
+import { LoadingInButton } from '../LoadingInButton';
 
 import 
 { 
@@ -12,7 +12,7 @@ import
 } from '../../../hooks';
 import Swal from 'sweetalert2';
 
-export const FuidScreen = () => {
+export const FuidScreenSoacha = () => {
 
     const { proyectoId, proyecto, username } = useAuthStore();
     const { startLoadingDependencias, dependencias, setDependenciaSelected } = useDependieciaStore();
@@ -25,8 +25,9 @@ export const FuidScreen = () => {
     const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
     const { isLoadingRotuloCaja, buscarRotuloCaja, rotuloCaja } = useCajaStore();
     const { 
-        crearCarpeta, isLoadingAddCarpeta, getCarpetasByCajaId, 
-        isDeletingCarpeta, setCarpetasByCajaId, setTipoOrigenNumero
+         crearCarpeta, isLoadingAddCarpeta,
+         getCarpetasByCajaId, isDeletingCarpeta, setCarpetasByCajaId,
+         setTipoOrigenNumero
     } = useCarpetaStore();
     
 
@@ -86,7 +87,7 @@ export const FuidScreen = () => {
             startLoadingSoportes();
             startLoadingVigencias();
             setCarpetasByCajaId();
-            setTipoOrigenNumero(1);
+            setTipoOrigenNumero(2);
         }
     }, [proyectoId]);
 
@@ -98,13 +99,13 @@ export const FuidScreen = () => {
 
     useEffect(() => {
         if(oficinas?.length > 0 && proyectoId == 1){
-            handleSelectSubDependenciaChange(oficinas[0]);
+            handleSelectSubDependenciaChange(oficinas[1]);
         }
     }, [oficinas]);
 
     useEffect(() => {
         if(vigencias?.length > 0 && proyectoId == 1){
-            handleSelectVigenciaChange(vigencias[2]);
+            handleSelectVigenciaChange(vigencias[0]);
         }
     }, [vigencias]);
 
@@ -345,7 +346,7 @@ export const FuidScreen = () => {
     <>
     <div className='row'>
         <div className='col-md-7'>
-            <h6 className="title pb-2">Registro de Caja - SECRETARÍA DE HACIENDA</h6>
+            <h6 className="title pb-2">Registro de Caja - SECRETARÍA GENERAL</h6>
             <div className="row">
                 <label className="col-sm-3 col-form-label form-label">Entidad</label>
                 <div className="col-sm-9">
@@ -380,6 +381,7 @@ export const FuidScreen = () => {
                 <label className="col-sm-3 col-form-label form-label">Vigencia</label>
                 <div className="col-sm-9">
                     <Select
+                        isDisabled={proyectoId== 1 ? true : false}
                         options={vigencias}    
                         placeholder=''
                         value={vigencia}    
@@ -534,8 +536,8 @@ export const FuidScreen = () => {
                                         onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
                                         />
                                 </div>
-                                <div className="col-md-3">
-                                    <label className='form-label'>Cédula Catastral</label>
+                                <div className="col-md-5">
+                                    <label className='form-label'>Apellidos y Nombres</label>
                                         <input 
                                             name="cedulaCatastral"
                                             value={cedulaCatastral}
@@ -560,11 +562,12 @@ export const FuidScreen = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-2">
+                                <div className="col-md-2 d-none">
                                     <label className='form-label'>Auto de Cierre</label>
                                     <Select
-                                        options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
+                                        options={[{ value: 0, label: 'No'}]}    
                                         placeholder='' 
+                                        defaultValue={{ value: 0, value: 'No' }}
                                         value={autoDeCierre}    
                                         onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
                                         />
@@ -628,7 +631,7 @@ export const FuidScreen = () => {
     </div>
     <div className='row pt-3'>
         <div className='col-md-12'>
-            <TablaCarpetas  tipoOrigen={1}/>
+            <TablaCarpetas  tipoOrigen={2}/>
         </div>
     </div>
     </>

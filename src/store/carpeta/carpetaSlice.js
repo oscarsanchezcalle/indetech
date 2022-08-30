@@ -23,6 +23,7 @@ export const carpetaSlice = createSlice({
         isLoadingAsignarPdf: false,
         isLoadingQuitarPdf: false,
         isLoadingBuscarEstadoAsignacionImagenes: false,
+        tipoOrigen: 1
     },
     reducers: {
         onLoadCarpetas: (state, { payload = [] }) => {
@@ -73,6 +74,9 @@ export const carpetaSlice = createSlice({
         },
         setCarpetasSinPdf: ( state, {payload} ) => {
             state.carpetasSinPdf = payload ;
+        },
+        setTipoOrigen: ( state, {payload} ) => {
+            state.tipoOrigen = payload ;
         }
     }
 });
@@ -94,5 +98,6 @@ export const {
     setOpenModalVerPdf,
     setCarpetasConPdf,
     setCarpetasSinPdf,
-    setIsLoadingBuscarEstadoAsignacionImagenes
+    setIsLoadingBuscarEstadoAsignacionImagenes,
+    setTipoOrigen
 } = carpetaSlice.actions;

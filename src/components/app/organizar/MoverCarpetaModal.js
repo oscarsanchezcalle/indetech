@@ -18,8 +18,10 @@ export const MoverCarpetaModal = () => {
     const { vigencias, vigenciaActiva } = useVigenciaStore();
     const { cajas, startLoadingCajas, buscarRotuloCajaById } = useCajaStore();
     const { proyectoId, username } = useAuthStore();
-    const { carpetaActiva, isOpenModalMoverCarpeta, isLoadingAddCarpeta, 
-            closeModalMoverCarpeta, moverCarpeta } = useCarpetaStore();
+    const { 
+      carpetaActiva, isOpenModalMoverCarpeta, isLoadingAddCarpeta, 
+      closeModalMoverCarpeta, moverCarpeta, tipoOrigen 
+    } = useCarpetaStore();
 
     const documentoForm = {
       dependencia: {},
@@ -68,7 +70,7 @@ export const MoverCarpetaModal = () => {
     }
 
     const buscarCajas = async (criteria) => { 
-          await startLoadingCajas(criteria);
+      await startLoadingCajas(criteria);
     }
 
     // el useEffect setea el estado del formulario.
@@ -80,8 +82,15 @@ export const MoverCarpetaModal = () => {
 
     useEffect(() => {
         if(oficinas?.length > 0 && proyectoId == 1){
-            handleSelectSubDependenciaChange(oficinas[0]);
+          switch (tipoOrigen) {
+            case 1:
+              handleSelectSubDependenciaChange(oficinas[0]);
+              break;
+            case 2:
+              handleSelectSubDependenciaChange(oficinas[1]);
+          } 
         }
+        
     }, [oficinas]);
    
     useEffect(() => {
@@ -225,7 +234,7 @@ export const MoverCarpetaModal = () => {
                               Dependencia
                             </label>
                             <Select
-                              // isDisabled={proyectoId== 1 ? true : false}
+                              isDisabled={proyectoId== 1 ? true : false}
                               options={dependencias}    
                               value={dependencia}    
                               placeholder=''
@@ -239,7 +248,7 @@ export const MoverCarpetaModal = () => {
                               Sub Dependencia
                             </label>
                             <Select
-                              // isDisabled={proyectoId== 1 ? true : false}
+                              isDisabled={proyectoId== 1 ? true : false}
                               options={oficinas}   
                               placeholder=''
                               value={oficina}    
@@ -253,6 +262,7 @@ export const MoverCarpetaModal = () => {
                               Vigencia
                             </label>
                             <Select
+                                isDisabled={proyectoId == 1 && tipoOrigen === 2 ? true : false}
                                 options={vigencias}    
                                 placeholder=''
                                 value={vigencia}    
@@ -310,7 +320,7 @@ export const MoverCarpetaModal = () => {
             </div>
             <div className="row">
               <div className="col-md-12">
-                <RotuloCarpeta />
+                <RotuloCarpeta tipoOrigen={tipoOrigen} />
               </div>
             </div>
             <div className="row">

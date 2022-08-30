@@ -15,8 +15,9 @@ import
 
 import { convertSeriesToSelect, convertSubseriesToSelect, convertTipoDocumentosToSelect } from '../../../helpers';
 import { MoverCarpetaModal } from './MoverCarpetaModal';
+import { TituloColumna } from './TituloColumna';
 
-export const TablaCarpetas = () => {
+export const TablaCarpetas = ({tipoOrigen}) => {
 
     const { username } = useAuthStore();
     const { series } = useSerieStore();
@@ -280,7 +281,7 @@ export const TablaCarpetas = () => {
                                                 <span>Número del expediente</span>
                                             </th>
                                             <th >
-                                                <span>Cédula Catastral</span>
+                                                <TituloColumna estado={tipoOrigen} />
                                             </th>
                                             <th >
                                                 <span>Fechas Extremas</span>
@@ -494,8 +495,10 @@ export const TablaCarpetas = () => {
                                                 onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
                                                 />
                                         </div>
-                                        <div className="col-md-3">
-                                            <label className='form-label'>Cédula Catastral <span className='text-danger'>*</span></label>
+                                        <div className={`${tipoOrigen === 1 ? "col-md-3" : "col-md-6"}`}>
+                                            <label className='form-label'>
+                                                <TituloColumna estado={tipoOrigen} />
+                                            <span className='text-danger'>*</span></label>
                                                 <input 
                                                     name="cedulaCatastral"
                                                     value={cedulaCatastral}
@@ -520,8 +523,8 @@ export const TablaCarpetas = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-md-3">
-                                            <label className='form-label'>Auto de Cierre <span className='text-danger'>*</span></label>
+                                        <div className={`col-md-3 ${tipoOrigen === 1 ? "" : "d-none"}`}>
+                                            <label className='form-label'>Auto de Cierre<span className='text-danger'>*</span></label>
                                             <Select
                                                 options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
                                                 placeholder='' 

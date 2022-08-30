@@ -7,7 +7,7 @@ import {
      onLoadCarpetasByCaja, setIsLoadingAddCarpeta, setIsLoadingAsignarPdf, setIsLoadingQuitarPdf,
      setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
      setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox, setOpenModalVerPdf,
-     setCarpetasConPdf, setCarpetasSinPdf, setIsLoadingBuscarEstadoAsignacionImagenes } from '../store';
+     setCarpetasConPdf, setCarpetasSinPdf, setIsLoadingBuscarEstadoAsignacionImagenes, setTipoOrigen } from '../store';
 
 export const useCarpetaStore = () => {
   
@@ -18,7 +18,8 @@ export const useCarpetaStore = () => {
          isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, 
          isOpenModalAsignar, isOpenModalVerPdf, archivosDropbox, isLoadingDropbox, 
          isLoadingAsignarPdf, isLoadingQuitarPdf, carpetasConPdf, carpetasSinPdf,
-         isLoadingBuscarEstadoAsignacionImagenes } = useSelector( state => state.carpeta );
+         isLoadingBuscarEstadoAsignacionImagenes,tipoOrigen
+     } = useSelector( state => state.carpeta );
 
 
     const crearCarpeta = async (criteria = {}, proyectoId, username ) => {
@@ -486,6 +487,10 @@ export const useCarpetaStore = () => {
         dispatch( setCarpetaActiva(carpeta) );
     }
 
+    const setTipoOrigenNumero = async (tipoOrigeNumero) => { 
+        dispatch( setTipoOrigen(tipoOrigeNumero) );
+    }
+
     return {
         //* Propiedades
         carpetas,
@@ -503,6 +508,7 @@ export const useCarpetaStore = () => {
         carpetasConPdf,
         carpetasSinPdf,
         isLoadingBuscarEstadoAsignacionImagenes,
+        tipoOrigen,
 
         //* Métodos
         crearCarpeta, 
@@ -523,6 +529,7 @@ export const useCarpetaStore = () => {
         closeModalVerPdf,
         putAsociarPdfACarpetas,
         buscarEstadoAsignacionArchivos,
-        setCarpetaActivaActual
+        setCarpetaActivaActual,
+        setTipoOrigenNumero
     }
 }

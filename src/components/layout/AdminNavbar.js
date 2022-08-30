@@ -75,11 +75,18 @@ export const AdminNavbar = () => {
                 </a>
                 <ul className="nk-menu-sub">
                   <li className="nk-menu-item">
-                  <Link 
-                    className="nk-menu-link"
-                    to="/administrarFuid">
-                      <span className="nk-menu-text">Gestionar Carpetas</span> 
-                  </Link>  
+                    <Link 
+                      className="nk-menu-link"
+                      to="/administrarFuid">
+                        <span className="nk-menu-text">Gestionar Carpetas SECRETARIA HACIENDA</span> 
+                    </Link>  
+                  </li>
+                  <li className="nk-menu-item">
+                    <Link 
+                      className="nk-menu-link"
+                      to="/administrarFuidSoacha">
+                        <span className="nk-menu-text">Gestionar Carpetas SECRETARIA GENERAL</span> 
+                    </Link> 
                   </li>
                 </ul>
               </li>

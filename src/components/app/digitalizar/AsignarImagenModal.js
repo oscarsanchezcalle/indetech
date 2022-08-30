@@ -71,6 +71,7 @@ export const AsignarImagenModal = () => {
   }
  
   const handleFileSelect = (event, nodeId) => {
+    
     setArchivo(nodeId);
   };  
 
