@@ -39,7 +39,8 @@ export const useDocumentoStore = () => {
             folioFinal,
             folios,
             notas,
-            fecha
+            fecha,
+            nombreDocumento
         } = criteria;
 
         const {isValid, validationConditions} = isValidForm(criteria, carpetaFechaIni, carpetaFechaFin);
@@ -65,7 +66,8 @@ export const useDocumentoStore = () => {
             "observaciones": notas,
             "username": username,
             "carpetaId": carpetaId,
-            "proyectoId": proyectoId
+            "proyectoId": proyectoId,
+            "nombreDocumento": tipoDocumento.label === "Oficio" ? nombreDocumento : ""
             }
         
             const {data} = await indetechApi.post('/documento', documentoCriteria);
@@ -112,7 +114,8 @@ export const useDocumentoStore = () => {
                 folioFinal,
                 folios,
                 notas,
-                fecha
+                fecha,
+                nombreDocumento
             } = criteria;
 
             const {isValid, validationConditions} = isValidForm(criteria, carpetaFechaIni, carpetaFechaFin);
@@ -138,6 +141,7 @@ export const useDocumentoStore = () => {
                 "fecha": fecha,
                 "observaciones": notas,
                 "username": username,
+                "nombreDocumento": tipoDocumento.label === "Oficio" ? nombreDocumento : ""
                 }
             
                 await indetechApi.put('/documento', documentoCriteria);

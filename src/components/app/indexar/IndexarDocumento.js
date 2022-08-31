@@ -10,6 +10,7 @@ import { TablaDocumentos } from './TablaDocumentos';
 export const IndexarDocumento = () => {
   
   const [height, setheight] = useState("500px");
+  const [verNombreDocumento, setVerNombreDocumento] = useState(false);
  
   const { carpetaActiva } = useCarpetaStore();
   const { tipoDocumentos, startLoadingTipoDocumentosFromIndexar } = useTipoDocumentoStore();
@@ -23,7 +24,8 @@ export const IndexarDocumento = () => {
     folios: '',
     notas: '',
     fecha: '',
-    switchFolios: false
+    switchFolios: false,
+    nombreDocumento: ''
   };
 
   const [formValues, handleInputChange, handleSelectChange, reset] = useFormBasic(documentoForm);
@@ -35,7 +37,8 @@ export const IndexarDocumento = () => {
     folios,
     notas,
     fecha,
-    switchFolios
+    switchFolios,
+    nombreDocumento
   } = formValues;
 
   useEffect(() => {
@@ -93,12 +96,22 @@ export const IndexarDocumento = () => {
     }catch(error){}
   }, [folioInicial]);
 
+  useEffect(() => {
+    if(tipoDocumento.label == "Oficio"){
+      setVerNombreDocumento(true);
+      handleSelectChange("", "nombreDocumento"); 
+      return;
+    }
+
+    setVerNombreDocumento(false);
+  }, [tipoDocumento]);
+  
   const handleSelectTipoDocumentoChange = ( selectedOption ) => {    
     handleSelectChange(selectedOption, "tipoDocumento");
   }
 
   const handleBtnCrearDocumento = async () => {
-    
+   
     const result = await crearDocumento(formValues, proyectoId, username, carpetaActiva.fechaInicial, carpetaActiva.fechaFinal, carpetaActiva.id);
     
     if(result){
@@ -162,6 +175,22 @@ export const IndexarDocumento = () => {
                   </div>
               </div>
             </div>
+            
+            <div className={`row pt-2 ${verNombreDocumento ? "" : "d-none"}`}>
+              <div className="form-group">
+                  <label className="form-label">Nombre del documento</label>
+                  <div className="form-control-wrap">
+                    <input 
+                    type="text"
+                    className="form-control"
+                    value={nombreDocumento}
+                    name="nombreDocumento"
+                    onChange={handleInputChange}
+                  />
+                  </div>
+              </div>
+            </div>
+            
             <div className='row pt-2'>
               <div className='col-md-6'>
                 <label className='form-label'>Rango de Folios</label>

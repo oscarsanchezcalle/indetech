@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Select from 'react-select';
 import Switch from "react-switch";
 import { parseISO, format } from 'date-fns'
 
 import Modal from 'react-modal';
 
-import { useAuthStore, useCarpetaStore, useDocumentoStore, useForm, useTipoDocumentoStore } from '../../../hooks';
+import { useAuthStore, useCarpetaStore, useDocumentoStore, useFormBasic, useTipoDocumentoStore } from '../../../hooks';
 import { RotuloCarpeta } from '../organizar/RotuloCarpeta';
 import { LoadingInButton } from '../LoadingInButton';
 
 export const EditarDocumentoModal = () => {
   
   Modal.setAppElement('#root');
+  const [verNombreDocumento, setVerNombreDocumento] = useState(false);
   
   const { username } = useAuthStore();
   const { tipoDocumentos } = useTipoDocumentoStore();
@@ -25,10 +26,11 @@ export const EditarDocumentoModal = () => {
     folios: '',
     notas: '',
     fecha: '',
-    switchFolios: false
+    switchFolios: false,
+    nombreDocumento: ''
   };
 
-  const [formValues, handleInputChange, handleSelectChange, reset, setFormValues] = useForm(documentoForm);
+  const [formValues, handleInputChange, handleSelectChange, setFormValues] = useFormBasic(documentoForm);
  
   const {
     tipoDocumento,
@@ -37,7 +39,8 @@ export const EditarDocumentoModal = () => {
     folios,
     notas,
     fecha,
-    switchFolios
+    switchFolios,
+    nombreDocumento
   } = formValues;
 
   useEffect(() => {
@@ -85,6 +88,15 @@ export const EditarDocumentoModal = () => {
       }catch(error){}
     }, [folioInicial]);
     
+    useEffect(() => {
+      if(tipoDocumento.label == "Oficio"){
+        setVerNombreDocumento(true);
+        return;
+      }
+
+      setVerNombreDocumento(false);
+    }, [tipoDocumento]);
+
     const handleFolioSwitchChange = (nextChecked) => {
       handleSelectChange(nextChecked, "switchFolios");
     };
@@ -106,9 +118,10 @@ export const EditarDocumentoModal = () => {
         folios: documentoActivo.folios,
         notas: documentoActivo.observaciones,
         fecha: format(parseISO(documentoActivo.fecha), 'yyyy-MM-dd'),
-        switchFolios: false
+        switchFolios: false,
+        nombreDocumento: documentoActivo.nombre,
       };
-
+      
       setFormValues(newValues);
     }
 
@@ -146,7 +159,7 @@ export const EditarDocumentoModal = () => {
                   top: '80px',
                   left: '10%',
                   right: '10%',
-                  bottom: '16%',
+                  bottom: '10%',
                   border: '1px solid #ccc',
                   background: '#fff',
                   overflow: 'auto',
@@ -183,6 +196,20 @@ export const EditarDocumentoModal = () => {
                         onChange={(selectedOption) => handleSelectTipoDocumentoChange(selectedOption)}
                         placeholder='Tipo Documental'
                         />
+                    </div>
+                </div>
+              </div>
+              <div className={`${verNombreDocumento ? "col-md-8 pb-3" : "d-none"}`}>
+                <div className="form-group">
+                    <label className="form-label">Nombre del documento</label>
+                    <div className="form-control-wrap">
+                      <input 
+                      type="text"
+                      className="form-control"
+                      value={nombreDocumento}
+                      name="nombreDocumento"
+                      onChange={handleInputChange}
+                    />
                     </div>
                 </div>
               </div>

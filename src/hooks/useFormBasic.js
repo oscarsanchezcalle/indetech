@@ -23,10 +23,17 @@ export const useFormBasic = ( initialState = {} ) => {
         });
     }
 
+    const setFormValues = ( {newValues} ) => {   
+        setValues({
+            ...newValues
+        });
+    }
+
     return [ values, 
         handleInputChange, 
         handleSelectChange, 
-        reset
+        reset,
+        setFormValues
          ];
 
 }
