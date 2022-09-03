@@ -13,6 +13,7 @@ import { AsociarImagenCarpeta } from '../components/app/digitalizar/AsociarImage
 import { AsociarImagenes } from '../components/app/digitalizar/AsociarImagenes';
 import { ListaCarpetas } from '../components/app/indexar/ListaCarpetas';
 import { FuidScreenSoacha } from '../components/app/organizar/FuidScreenSoacha';
+import { FuidScreenGobernacion } from '../components/app/organizar/FuidScreenGobernacion';
 
   
 export const AppRouter = () => {
@@ -40,6 +41,7 @@ export const AppRouter = () => {
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/administrarFuid" element={<FuidScreen/>}/>
                             <Route path="/administrarFuidSoacha" element={<FuidScreenSoacha />}/>  
+                            <Route path="/administrarFuidGobernacion" element={<FuidScreenGobernacion />}/>  
                             <Route path="/asociarImagen" element={<AsociarImagenCarpeta />}/>                    
                             <Route path="/asociarImagenes" element={<AsociarImagenes/>}></Route>                  
                             <Route path="/listaCarpetas" element={<ListaCarpetas />} />  

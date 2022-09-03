@@ -7,7 +7,7 @@ import
 
 export const AdminNavbar = () => {
 
-  const { startLogout, rol, username } = useAuthStore();
+  const { startLogout, rol, username, proyectoId } = useAuthStore();
  
   const handleLogOut = () => {
     startLogout();
@@ -74,20 +74,36 @@ export const AdminNavbar = () => {
                   <span className="nk-menu-text">FUID</span>
                 </a>
                 <ul className="nk-menu-sub">
-                  <li className="nk-menu-item">
-                    <Link 
-                      className="nk-menu-link"
-                      to="/administrarFuid">
-                        <span className="nk-menu-text">Gestionar Carpetas SECRETARIA HACIENDA</span> 
-                    </Link>  
-                  </li>
-                  <li className="nk-menu-item">
-                    <Link 
-                      className="nk-menu-link"
-                      to="/administrarFuidSoacha">
-                        <span className="nk-menu-text">Gestionar Carpetas SECRETARIA GENERAL</span> 
-                    </Link> 
-                  </li>
+                  {
+                    proyectoId === "2" && 
+                    <li className="nk-menu-item">
+                      <Link 
+                        className="nk-menu-link"
+                        to="/administrarFuidGobernacion">
+                          <span className="nk-menu-text">Gestionar Carpetas</span> 
+                      </Link>  
+                    </li>
+                  }
+                  {
+                    proyectoId === "1" && 
+                    <>
+                     <li className="nk-menu-item">
+                      <Link 
+                        className="nk-menu-link"
+                        to="/administrarFuid">
+                          <span className="nk-menu-text">Gestionar Carpetas SECRETARIA HACIENDA</span> 
+                      </Link>  
+                    </li>
+                    <li className="nk-menu-item">
+                      <Link 
+                        className="nk-menu-link"
+                        to="/administrarFuidSoacha">
+                          <span className="nk-menu-text">Gestionar Carpetas SECRETARIA GENERAL</span> 
+                      </Link> 
+                    </li>
+                    </>
+                  }
+                 
                 </ul>
               </li>
               <li className="nk-menu-item has-sub">

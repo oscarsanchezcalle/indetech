@@ -8,11 +8,11 @@ import { LoadingInButton } from '../LoadingInButton';
 import 
 { 
     useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore, useSubserieStore, useTipoDocumentoStore,
-    useForm, useCarpetaStore, useVigenciaStore, useSoporteStore, useFrecuenciaStore, useCajaStore
+    useForm, useCarpetaStore, useVigenciaStore, useSoporteStore, useFrecuenciaStore, useCajaStore, useFormBasic
 } from '../../../hooks';
 import Swal from 'sweetalert2';
 
-export const FuidScreenSoacha = () => {
+export const FuidScreenGobernacion = () => {
 
     const { proyectoId, proyecto, username } = useAuthStore();
     const { startLoadingDependencias, dependencias, setDependenciaSelected } = useDependieciaStore();
@@ -35,38 +35,31 @@ export const FuidScreenSoacha = () => {
     const documentoForm = {
             dependencia: {},
             oficina: {},
-            vigencia: {},
             numeroCaja: '',
             serie: {},
             subserie: {},
-            tipoDocumento:{},
-            tipoSoporte:{},
-            frecuenciaUso:{},
             fechaExtremaInicial: '', 
             fechaExtremaFinal: '',
             tomoActual: '',
             tomoFinal: '',
             folioInicial: '',
             folioFinal: '',
-            codigo: '',
+            codigo: '', // expediente
+            cargo: '',
             notas: '',
-            cedulaCatastral: '',
+            cedulaCatastral: '', // nombres
             duplicidad:'',
-            autoDeCierre: {}
+            fechaPosesion: ''
     };
 
-    const [formValues, handleInputChange, handleSelectChange, resetFuidForm] = useForm(documentoForm);
+    const [formValues, handleInputChange, handleSelectChange] = useFormBasic(documentoForm);
 
     const {
         dependencia,
         oficina,
-        vigencia,
         numeroCaja,
         serie,
         subserie,
-        tipoDocumento,
-        tipoSoporte,
-        frecuenciaUso,
         fechaExtremaInicial, 
         fechaExtremaFinal,
         tomoActual,
@@ -77,17 +70,14 @@ export const FuidScreenSoacha = () => {
         notas,
         cedulaCatastral,
         duplicidad,
-        autoDeCierre
+        cargo,
+        fechaPosesion
     } = formValues;
    
     useEffect(() => {
         if(proyectoId > 0){
             startLoadingDependencias(proyectoId);
-            startLoadingFrecuencias();
-            startLoadingSoportes();
-            startLoadingVigencias();
             setCarpetasByCajaId();
-            setTipoOrigenNumero(2);
         }
     }, [proyectoId]);
 
@@ -120,24 +110,6 @@ export const FuidScreenSoacha = () => {
             handleSelectSubserieChange(subseries[0]);
         }
     }, [subseries]);
-
-    useEffect(() => {
-        if(tipoDocumentos?.length > 0 && proyectoId == 1){
-            handleSelectTipoDocumentoChange(tipoDocumentos[0]);
-        }
-    }, [tipoDocumentos]);
-
-    useEffect(() => {
-        if(frecuencias?.length > 0){
-            handleSelectFrecuenciaChange(frecuencias[0]);
-        }
-    }, [frecuencias]);
-
-    useEffect(() => {
-        if(soportes?.length > 0){
-            handleSelectSoporteChange(soportes[0]);
-        }
-    }, [soportes]);
 
     useEffect(() => {
         if(rotuloCaja.cajaId > 0){
@@ -183,25 +155,8 @@ export const FuidScreenSoacha = () => {
         handleSelectChange(selectedOption, "serie");
     }
 
-    const handleSelectSubserieChange = ( selectedOption) => {   
-        startLoadingTipoDocumentos(selectedOption.value);
+    const handleSelectSubserieChange = ( selectedOption) => { 
         handleSelectChange(selectedOption, "subserie");
-    }
-
-    const handleSelectTipoDocumentoChange = ( selectedOption) => {    
-        handleSelectChange(selectedOption, "tipoDocumento");
-    }
-
-    const handleSelectSoporteChange = ( selectedOption ) => {   
-        handleSelectChange(selectedOption, "tipoSoporte");
-    }
-
-    const handleSelectFrecuenciaChange = ( selectedOption ) => {   
-        handleSelectChange(selectedOption, "frecuenciaUso");
-    }
-
-    const handleSelectAutoDeCierreChange = ( selectedOption ) => {   
-        handleSelectChange(selectedOption, "autoDeCierre");
     }
     
     const handleBtnAgregar = async () => {
@@ -216,18 +171,12 @@ export const FuidScreenSoacha = () => {
                 title: 'Campos incompletos',
                 text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
                 showConfirmButton: true,
-                timer: 1500
             });
 
             return;
         }
-
-        await crearCarpeta(formValues, proyectoId, username);
         
-        const frecuenciaDefault = frecuencias.find(f => f.label == 'Sin Frecuencia');
-        const tipoSoporteDefault = soportes.find(f => f.label == 'Sin Soporte');
-
-        resetFuidForm(frecuenciaDefault, tipoSoporteDefault);
+       // await crearCarpeta(formValues, proyectoId, username);
     }
 
     const handleBtnBuscarCaja = () => {
@@ -242,7 +191,7 @@ export const FuidScreenSoacha = () => {
                 title: 'Campos incompletos',
                 text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
                 showConfirmButton: true,
-                //timer: 1500
+                
             });
 
             return;
@@ -262,30 +211,29 @@ export const FuidScreenSoacha = () => {
     const isValidFormForSave = (criteria = {}) => {
 
         const {
-             dependencia, oficina, numeroCaja,
-             serie, subserie, tipoDocumento, 
-             autoDeCierre, vigencia } = criteria;
+             numeroCaja, dependencia, oficina,
+             serie, subserie, codigo, cedulaCatastral, fechaPosesion, cargo } = criteria;
 
         const validationConditions = [];
         let isValid = true;
 
         if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
-             || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" ) || typeof serie.value === 'undefined'
-             || typeof  subserie.value   === 'undefined' 
-            //|| typeof tipoDocumento.value === 'undefined'
-             || typeof vigencia.value === 'undefined')
+             || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" )
+             || (typeof codigo === 'undefined' || numeroCaja === "" )
+             || (typeof cedulaCatastral === 'undefined' || cedulaCatastral === "" )
+             || (typeof fechaPosesion === 'undefined' || fechaPosesion === "" )
+             || (typeof cargo === 'undefined' || cargo === "" )
+             || typeof serie.value === 'undefined' || typeof  subserie.value   === 'undefined' )
         {            
+            
+            if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
+                validationConditions.push(' Número de Caja');
+            }
             if(typeof dependencia.value === 'undefined'){
                 validationConditions.push(' Dependencia');
             }
             if(typeof oficina.value === 'undefined'){
                 validationConditions.push(' Sub Dependencia');
-            }
-            if(typeof vigencia.value === 'undefined'){
-                validationConditions.push(' Vigencia');
-            }
-            if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
-                validationConditions.push(' Número de Caja');
             }
             if(typeof serie.value === 'undefined'){
                 validationConditions.push(' Serie');
@@ -293,7 +241,18 @@ export const FuidScreenSoacha = () => {
             if(typeof subserie.value === 'undefined'){
                 validationConditions.push(' Subserie');
             }
-            
+            if(typeof codigo === 'undefined' || codigo === ""){
+                validationConditions.push(' Número del expediente (Cédula)');
+            }
+            if(typeof cedulaCatastral === 'undefined' || cedulaCatastral === ""){
+                validationConditions.push(' Apellidos y Nombres');
+            }
+            if(typeof fechaPosesion === 'undefined' || fechaPosesion === "" ){
+                validationConditions.push(' Fecha de posesión');
+            }
+            if(typeof cargo === 'undefined' || cargo === "" ){
+                validationConditions.push(' Cargo');
+            }
             isValid = false;
         }
        
@@ -341,49 +300,14 @@ export const FuidScreenSoacha = () => {
     <>
     <div className='row'>
         <div className='col-md-7'>
-            <h6 className="title pb-2">Registro de Caja - SECRETARÍA GENERAL</h6>
+            <h6 className="title pb-2">Registro de Caja</h6>
             <div className="row">
                 <label className="col-sm-3 col-form-label form-label">Entidad</label>
                 <div className="col-sm-9">
                     <input type="text" className="form-control" disabled={true} value={ proyecto }/>
                 </div>
             </div>
-            <div className=" row">
-                <label className="col-sm-3 col-form-label form-label">Dependecia</label>
-                <div className="col-sm-9">
-                     <Select
-                        isDisabled={proyectoId== 1 ? true : false}
-                        options={dependencias}    
-                        value={dependencia}    
-                        placeholder=''
-                        onChange={(selectedOption) => handleSelectDependenciaChange(selectedOption)}
-                        />
-                </div>
-            </div>
-            <div className=" row">
-            <label className="col-sm-3 col-form-label form-label">Sub Dependencia</label>
-                <div className="col-sm-9">
-                    <Select
-                        isDisabled={proyectoId== 1 ? true : false}
-                        options={oficinas}   
-                        placeholder=''
-                        value={oficina}    
-                        onChange={(selectedOption) => handleSelectSubDependenciaChange(selectedOption)}
-                        />
-                </div>
-            </div>
-            <div className="row">
-                <label className="col-sm-3 col-form-label form-label">Vigencia</label>
-                <div className="col-sm-9">
-                    <Select
-                        isDisabled={proyectoId== 1 ? true : false}
-                        options={vigencias}    
-                        placeholder=''
-                        value={vigencia}    
-                        onChange={(selectedOption) => handleSelectVigenciaChange(selectedOption)}
-                        />
-                </div>
-            </div>
+            
             <div className=" row">
                 <label className="col-sm-3 col-form-label form-label">Caja</label>
                 <div className="col-sm-9">
@@ -408,10 +332,10 @@ export const FuidScreenSoacha = () => {
             </div>
         </div>
         <div className='col-md-5'>
-            <RotuloCaja />
+            {/* <RotuloCaja /> */}
         </div>
     </div>
-    <div className='row pt-3'>
+    <div className='row pt-1'>
         <div className='col-md-12'>
             <div id="accordion" className="accordion">
                 <div className="accordion-item">
@@ -421,9 +345,26 @@ export const FuidScreenSoacha = () => {
                     </a>
                     <div className="accordion-body collapse show" id="accordion-item-1" data-bs-parent="#accordion" style={{}}>
                         <div className="accordion-inner">
-
-                            <div className='row'>
+                            <div className=" row">
                                 <div className='col-md-6'>
+                                    <label className='form-label'>Dependencia</label>
+                                    <Select
+                                        options={dependencias}    
+                                        value={dependencia}    
+                                        placeholder=''
+                                        onChange={(selectedOption) => handleSelectDependenciaChange(selectedOption)}
+                                    />
+                                </div>
+                                <div className='col-md-6'>
+                                    <label className='form-label'>Sub Dependencia</label>
+                                    <Select
+                                        options={oficinas}   
+                                        placeholder=''
+                                        value={oficina}    
+                                        onChange={(selectedOption) => handleSelectSubDependenciaChange(selectedOption)}
+                                    />
+                                </div>
+                                <div className='col-md-6 pt-2'>
                                     <label className='form-label'>Serie</label>
                                     <Select
                                         options={series}   
@@ -432,7 +373,7 @@ export const FuidScreenSoacha = () => {
                                         placeholder='Series'
                                         />
                                 </div>
-                                <div className='col-md-6'>
+                                <div className='col-md-6 pt-2'>
                                     <label className='form-label'>Subserie</label>
                                     <Select
                                         options={subseries}  
@@ -441,18 +382,53 @@ export const FuidScreenSoacha = () => {
                                         placeholder='Subseries'
                                         />
                                 </div>
-                                <div className='col-md-4 d-none'>
-                                    <label className='form-label'>Tipo Documental</label>
-                                    <Select
-                                        options={{tipoDocumentos}}  
-                                        value={tipoDocumento}   
-                                        
-                                        onChange={(selectedOption) => handleSelectTipoDocumentoChange(selectedOption)}
-                                        placeholder='Tipo Documental'
-                                        />
+                            </div>
+
+                            <div className='row mt-2'>
+                                <div className="col-md-3">
+                                    <label className='form-label'>Núm. Expediente</label>
+                                        <input 
+                                            value={codigo}
+                                            name="codigo"
+                                            onChange={handleInputChange}
+                                            type="text" 
+                                            className="form-control" 
+                                            placeholder=''
+                                            autoComplete="off"/>
+                                </div>
+                                <div className="col-md-5">
+                                    <label className='form-label'>Apellidos y Nombres</label>
+                                        <input 
+                                            name="cedulaCatastral"
+                                            value={cedulaCatastral}
+                                            onChange={handleInputChange}
+                                            type="text" 
+                                            className="form-control" 
+                                            placeholder=''/>
+                                </div>
+                                <div className="col-md-4">
+                                    <label className='form-label'>Cargo</label>
+                                    <input 
+                                        name="cargo"
+                                        value={cargo}
+                                        onChange={handleInputChange}
+                                        type="text" 
+                                        className="form-control" 
+                                        placeholder=''/>
                                 </div>
                             </div>
+
                             <div className='row mt-2'>
+                                <div className='col-md-3'>
+                                    <label className='form-label'>Fecha de Posesión</label>
+                                    <input
+                                        name="fechaPosesion" 
+                                        onChange={handleInputChange} 
+                                        type="date" 
+                                        value={fechaPosesion}
+                                        className="form-control"
+                                    />
+                                </div>
                                 <div className='col-md-5'>
                                     <label className='form-label'>Fechas extremas</label>
                                     <div className="form-control-wrap">
@@ -498,49 +474,9 @@ export const FuidScreenSoacha = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-md-3">
-                                    <label className='form-label'>Núm. Expediente</label>
-                                        <input 
-                                            value={codigo}
-                                            name="codigo"
-                                            onChange={handleInputChange}
-                                            type="text" 
-                                            className="form-control" 
-                                            placeholder=''
-                                            autoComplete="off"/>
-                                </div>
                             </div>
+
                             <div className='row mt-2'>
-                                <div className='col-md-3 d-none'>
-                                    <label className='form-label'>Soporte</label>
-                                    <Select
-                                        options={soportes}
-                                        placeholder='' 
-                                        isDisabled={true}
-                                        value={tipoSoporte}    
-                                        onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
-                                        />
-                                </div>
-                                <div className='col-md-3 d-none'>
-                                    <label className='form-label'>Frecuencia</label>
-                                    <Select
-                                        options={frecuencias}    
-                                        placeholder='' 
-                                        isDisabled={true}
-                                        value={frecuenciaUso}    
-                                        onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
-                                        />
-                                </div>
-                                <div className="col-md-5">
-                                    <label className='form-label'>Apellidos y Nombres</label>
-                                        <input 
-                                            name="cedulaCatastral"
-                                            value={cedulaCatastral}
-                                            onChange={handleInputChange}
-                                            type="text" 
-                                            className="form-control" 
-                                            placeholder=''/>
-                                </div>
                                 <div className='col-md-3'>
                                     <label className='form-label'>Duplicidad</label>
                                     <div className="form-control-wrap">
@@ -556,16 +492,6 @@ export const FuidScreenSoacha = () => {
                                                 autoComplete="off"/>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="col-md-2 d-none">
-                                    <label className='form-label'>Auto de Cierre</label>
-                                    <Select
-                                        options={[{ value: 0, label: 'No'}]}    
-                                        placeholder='' 
-                                        defaultValue={{ value: 0, value: 'No' }}
-                                        value={autoDeCierre}    
-                                        onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
-                                        />
                                 </div>
                                 <div className='col-md-4'>
                                     <label className='form-label'>Tomos</label>
@@ -592,6 +518,7 @@ export const FuidScreenSoacha = () => {
                                     </div>
                                 </div>
                             </div>
+
                             <div className='row mt-2'>
                                 <div className='col-md-10'>
                                     <label className='form-label'>Notas</label>
@@ -624,7 +551,7 @@ export const FuidScreenSoacha = () => {
             </div>
         </div>
     </div>
-    <div className='row pt-3'>
+    <div className='row pt-1'>
         <div className='col-md-12'>
             <TablaCarpetas  tipoOrigen={2}/>
         </div>
