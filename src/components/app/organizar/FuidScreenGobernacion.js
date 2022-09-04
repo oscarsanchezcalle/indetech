@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Select from 'react-select';
+import { isAfter, getYear, parseISO } from 'date-fns'
 
 import { RotuloCaja } from './RotuloCaja';
 import { TablaCarpetas } from './TablaCarpetas';
@@ -7,8 +8,8 @@ import { LoadingInButton } from '../LoadingInButton';
 
 import 
 { 
-    useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore, useSubserieStore, useTipoDocumentoStore,
-    useForm, useCarpetaStore, useVigenciaStore, useSoporteStore, useFrecuenciaStore, useCajaStore, useFormBasic
+    useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore, useSubserieStore,
+    useCarpetaStore, useCajaStore, useFormBasic
 } from '../../../hooks';
 import Swal from 'sweetalert2';
 
@@ -19,13 +20,9 @@ export const FuidScreenGobernacion = () => {
     const { startLoadingOficinas, oficinas, setOficinaSelected } = useOficinaStore();
     const { series, startLoadingSeries } = useSerieStore();
     const { subseries, startLoadingSubseries } = useSubserieStore();
-    const { tipoDocumentos, startLoadingTipoDocumentos } = useTipoDocumentoStore();
-    const { vigencias, startLoadingVigencias, setVigenciaSelected } = useVigenciaStore();
-    const { soportes, startLoadingSoportes } = useSoporteStore();
-    const { frecuencias, startLoadingFrecuencias } = useFrecuenciaStore();
     const { isLoadingRotuloCaja, buscarRotuloCaja, rotuloCaja } = useCajaStore();
     const { 
-         crearCarpeta, isLoadingAddCarpeta,
+         crearCarpetaGobernacion, isLoadingAddCarpeta,
          getCarpetasByCajaId, isDeletingCarpeta, setCarpetasByCajaId,
          setTipoOrigenNumero
     } = useCarpetaStore();
@@ -52,26 +49,12 @@ export const FuidScreenGobernacion = () => {
             fechaPosesion: ''
     };
 
-    const [formValues, handleInputChange, handleSelectChange] = useFormBasic(documentoForm);
+    const [formValues, handleInputChange, handleSelectChange, reset] = useFormBasic(documentoForm);
 
     const {
-        dependencia,
-        oficina,
-        numeroCaja,
-        serie,
-        subserie,
-        fechaExtremaInicial, 
-        fechaExtremaFinal,
-        tomoActual,
-        tomoFinal,
-        folioInicial,
-        folioFinal,
-        codigo,
-        notas,
-        cedulaCatastral,
-        duplicidad,
-        cargo,
-        fechaPosesion
+        dependencia, oficina, numeroCaja, serie, subserie, fechaExtremaInicial, 
+        fechaExtremaFinal,tomoActual,tomoFinal,folioInicial, folioFinal,codigo,notas,
+        cedulaCatastral, duplicidad,cargo,fechaPosesion
     } = formValues;
    
     useEffect(() => {
@@ -92,12 +75,6 @@ export const FuidScreenGobernacion = () => {
             handleSelectSubDependenciaChange(oficinas[1]);
         }
     }, [oficinas]);
-
-    useEffect(() => {
-        if(vigencias?.length > 0 && proyectoId == 1){
-            handleSelectVigenciaChange(vigencias[0]);
-        }
-    }, [vigencias]);
 
     useEffect(() => {
         if(series?.length > 0 && proyectoId == 1){
@@ -145,11 +122,6 @@ export const FuidScreenGobernacion = () => {
         setOficinaSelected(selectedOption);
     }
     
-    const handleSelectVigenciaChange = ( selectedOption ) => {   
-        handleSelectChange(selectedOption, "vigencia");
-        setVigenciaSelected(selectedOption);
-    }
-
     const handleSelectSerieChange = ( selectedOption) => {   
         startLoadingSubseries(selectedOption.value);
         handleSelectChange(selectedOption, "serie");
@@ -175,8 +147,10 @@ export const FuidScreenGobernacion = () => {
 
             return;
         }
-        
-       // await crearCarpeta(formValues, proyectoId, username);
+
+        await crearCarpetaGobernacion(formValues, proyectoId, username);
+
+        reset();
     }
 
     const handleBtnBuscarCaja = () => {
@@ -189,7 +163,7 @@ export const FuidScreenGobernacion = () => {
                 //position: 'top-end',
                 icon: 'warning',
                 title: 'Campos incompletos',
-                text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
+                text: `El ${String(validationConditions)} es obligatorio`,
                 showConfirmButton: true,
                 
             });
@@ -212,10 +186,32 @@ export const FuidScreenGobernacion = () => {
 
         const {
              numeroCaja, dependencia, oficina,
-             serie, subserie, codigo, cedulaCatastral, fechaPosesion, cargo } = criteria;
+             serie, subserie, codigo, cedulaCatastral, 
+             fechaPosesion, cargo, fechaExtremaInicial, fechaExtremaFinal } = criteria;
 
         const validationConditions = [];
         let isValid = true;
+        let isValidFechas = true; 
+        
+        if( (fechaExtremaInicial == '' && fechaExtremaFinal != '')){
+            isValidFechas = false;
+        }
+
+        if( (fechaExtremaInicial != '' && fechaExtremaFinal == '') ){
+            isValidFechas = false;
+        }
+
+        if((fechaExtremaInicial != '' && fechaExtremaFinal != '') ){
+            
+            const fechaIni = new Date(parseISO(fechaExtremaInicial));
+            const fechaFin = new Date(parseISO(fechaExtremaFinal));
+
+            if(isAfter(fechaIni, fechaFin)){
+                isValidFechas = false; 
+            }else{
+                isValidFechas = true; 
+            }
+        }  
 
         if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
              || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" )
@@ -223,7 +219,8 @@ export const FuidScreenGobernacion = () => {
              || (typeof cedulaCatastral === 'undefined' || cedulaCatastral === "" )
              || (typeof fechaPosesion === 'undefined' || fechaPosesion === "" )
              || (typeof cargo === 'undefined' || cargo === "" )
-             || typeof serie.value === 'undefined' || typeof  subserie.value   === 'undefined' )
+             || typeof serie.value === 'undefined' || typeof  subserie.value   === 'undefined' 
+             || !isValidFechas)
         {            
             
             if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
@@ -253,6 +250,9 @@ export const FuidScreenGobernacion = () => {
             if(typeof cargo === 'undefined' || cargo === "" ){
                 validationConditions.push(' Cargo');
             }
+            if(!isValidFechas){
+                validationConditions.push(' Rango de fechas extremas');
+            }
             isValid = false;
         }
        
@@ -261,31 +261,18 @@ export const FuidScreenGobernacion = () => {
             validationConditions
         };            
     } 
-    
+
     const isValidFormForBuscarRotulo = (criteria = {}) => {
 
-        const {
-             numeroCaja, dependencia,
-             oficina, vigencia } = criteria;
+        const { numeroCaja } = criteria;
 
         const validationConditions = [];
         let isValid = true;
 
-        if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
-             || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" ) 
-             || typeof vigencia.value === 'undefined')
-        {            
-            if(typeof dependencia.value === 'undefined'){
-                validationConditions.push(' Dependencia');
-            }
-            if(typeof oficina.value === 'undefined'){
-                validationConditions.push(' Sub Dependencia');
-            }
-            if(typeof vigencia.value === 'undefined'){
-                validationConditions.push(' Vigencia');
-            }
+        if ( (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" ) )
+        {   
             if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
-                validationConditions.push(' Número de Caja');
+                validationConditions.push(' número de la caja');
             }
             isValid = false;
         }

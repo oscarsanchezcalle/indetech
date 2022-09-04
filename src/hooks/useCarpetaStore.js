@@ -56,7 +56,6 @@ export const useCarpetaStore = () => {
                     return;
                 }
             }
-           
              
             const carpetaCajaCriteria = {
                 "proyectoId": proyectoId,
@@ -112,6 +111,73 @@ export const useCarpetaStore = () => {
                 text: `Por favor intente nuevamente`,
                 showConfirmButton: true,
                 //timer: 1500
+            });
+        }
+    }
+
+    const crearCarpetaGobernacion = async (formValues = {}, proyectoId, username ) => {
+        
+        dispatch(setIsLoadingAddCarpeta(true));
+
+        try
+        {
+            const {
+                dependencia, oficina, numeroCaja, serie, subserie, fechaExtremaInicial, 
+                fechaExtremaFinal,tomoActual,tomoFinal,folioInicial, folioFinal,codigo,notas,
+                cedulaCatastral, duplicidad,cargo,fechaPosesion
+            } = formValues;
+             
+            const createCriteria = 
+            {
+                "proyectoId": proyectoId,
+                "numero": parseInt(numeroCaja),
+                "dependenciaId": dependencia.value,
+                "oficinaId": oficina.value,
+                "serieId": serie.value,
+                "subserieId": subserie.value,
+                "codigo": codigo,
+                "cedulaCatastral": cedulaCatastral,
+                "cargo": cargo,
+                "fechaPosesion": fechaPosesion,
+                "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
+                "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
+                "folioInicial": folioInicial == "" ? 0 : folioInicial,
+                "folioFinal": folioFinal == "" ? 0 : folioFinal,
+                "duplicidad": duplicidad == "" ? 0 : duplicidad,
+                "tomoActual": tomoActual == "" ? 0 : tomoActual,
+                "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
+                "fechaIndexacion": "2022-09-04T14:54:58.943Z",
+                "fechaRegistro": "2022-09-04T14:54:58.943Z",
+                "notas": notas,
+                "Username": username
+            }
+
+            //llamar al end point que crea las carpetas y las asigna a la caja
+            const {data} = await indetechApi.post('/Carpeta/gobernacion', createCriteria);
+            
+            //Actualizar la tabla de las carpetas by Caja.
+            getCarpetasByCajaId(data.cajaId);
+
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Registro correcto',
+                text: ``,
+                showConfirmButton: true,
+                timer: 1500
+            });
+        }
+        catch(error)
+        {
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión al servidor',
+                text: `Por favor intente nuevamente`,
+                showConfirmButton: true,
             });
         }
     }
@@ -512,6 +578,7 @@ export const useCarpetaStore = () => {
 
         //* Métodos
         crearCarpeta, 
+        crearCarpetaGobernacion,
         getCarpetasByCajaId,
         deleteCarpetaById,
         editarCarpeta,
