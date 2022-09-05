@@ -1,5 +1,6 @@
 import React from 'react'
 import Modal from 'react-modal';
+import { parseISO, format } from 'date-fns'
 
 import { useCarpetaStore } from '../../../hooks';
 import  VerPdfCompleto  from '../pdf/VerPdfCompleto';
@@ -14,6 +15,7 @@ export const VerDocumentoPdfModal = () => {
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
+    
   }
 
   function closeModal() {
@@ -59,7 +61,17 @@ export const VerDocumentoPdfModal = () => {
                   Serie-Subserie: <small>{carpetaActiva?.serie?.descripcion} - {carpetaActiva?.subserie?.descripcion}</small> - 
                   Expediente: <small>{carpetaActiva?.codigo}</small> - 
                   Cédula Catastral: <small>{carpetaActiva?.cedulaCatastral}</small>
+                  { (typeof carpetaActiva?.fechaInicial != 'undefined')  &&
+                    <>
+                      <br />
+                      Fechas Extremas: <small>{format(parseISO(carpetaActiva?.fechaInicial), 'yyyy-MM-dd')} - {format(parseISO(carpetaActiva?.fechaFinal), 'yyyy-MM-dd')}</small> - 
+                      Folios: <small>{carpetaActiva?.folioInicial} - {carpetaActiva?.folioFinal} </small>
+                    </>
+                  }
+                  
                 </h6>
+                <br/>
+              
                 <ul className="btn-toolbar">   
                     <a href="#" onClick={closeModal} className="close">
                         <em className="icon ni ni-cross" />
