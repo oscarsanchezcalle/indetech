@@ -106,30 +106,34 @@ export const AdminNavbar = () => {
                  
                 </ul>
               </li>
-              <li className="nk-menu-item has-sub">
-                <a href="#" className="nk-menu-link nk-menu-toggle">
-                  <span className="nk-menu-text">Digitalización</span>
-                </a>
-                <ul className="nk-menu-sub">
-                  <li className="nk-menu-item">
-                    <Link 
-                      className="nk-menu-link"
-                      to="/asociarImagen">
-                        <span className="nk-menu-text">Asociar Imagen de Carpeta </span> 
-                    </Link> 
-                  </li>
-                   { 
-                      rol.includes('ADMINISTRADOR') && 
-                        <li className="nk-menu-item">
-                        <Link 
-                          className="nk-menu-link"
-                          to="/asociarImagenes">
-                            <span className="nk-menu-text">Asociar Masivamente Imagenes de Carpetas </span> 
-                        </Link>  
+              {proyectoId == 1 && 
+                <li className="nk-menu-item has-sub">
+                  <a href="#" className="nk-menu-link nk-menu-toggle">
+                    <span className="nk-menu-text">Digitalización</span>
+                  </a>
+                  
+                  <ul className="nk-menu-sub">
+                    <li className="nk-menu-item">
+                      <Link 
+                        className="nk-menu-link"
+                        to="/asociarImagen">
+                          <span className="nk-menu-text">Asociar Imagen de Carpeta </span> 
+                      </Link> 
                     </li>
-                   }
-                </ul>
-              </li>
+                    { 
+                        rol.includes('ADMINISTRADOR') && 
+                          <li className="nk-menu-item">
+                          <Link 
+                            className="nk-menu-link"
+                            to="/asociarImagenes">
+                              <span className="nk-menu-text">Asociar Masivamente Imagenes de Carpetas </span> 
+                          </Link>  
+                      </li>
+                    }
+                  </ul>
+
+                </li>
+              }
               {/* <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">Asignación</span>

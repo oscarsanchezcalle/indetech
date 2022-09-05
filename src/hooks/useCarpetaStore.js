@@ -1,13 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import { isAfter, getYear, parseISO } from 'date-fns'
+import { isAfter, getYear, parseISO, format } from 'date-fns'
 
 import { indetechApi } from '../api';
 import { 
      onLoadCarpetasByCaja, setIsLoadingAddCarpeta, setIsLoadingAsignarPdf, setIsLoadingQuitarPdf,
      setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
      setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox, setOpenModalVerPdf,
-     setCarpetasConPdf, setCarpetasSinPdf, setIsLoadingBuscarEstadoAsignacionImagenes, setTipoOrigen } from '../store';
+     setCarpetasConPdf, setCarpetasSinPdf, setIsLoadingBuscarEstadoAsignacionImagenes, 
+     setTipoOrigen, setOpenModalEditarCarpetaGobernacion, setIsLoading
+} from '../store';
 
 export const useCarpetaStore = () => {
   
@@ -18,7 +20,7 @@ export const useCarpetaStore = () => {
          isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, 
          isOpenModalAsignar, isOpenModalVerPdf, archivosDropbox, isLoadingDropbox, 
          isLoadingAsignarPdf, isLoadingQuitarPdf, carpetasConPdf, carpetasSinPdf,
-         isLoadingBuscarEstadoAsignacionImagenes,tipoOrigen
+         isLoadingBuscarEstadoAsignacionImagenes,tipoOrigen, isOpenModalEditarCarpetaGobernacion
      } = useSelector( state => state.carpeta );
 
 
@@ -156,7 +158,7 @@ export const useCarpetaStore = () => {
             const {data} = await indetechApi.post('/Carpeta/gobernacion', createCriteria);
             
             //Actualizar la tabla de las carpetas by Caja.
-            getCarpetasByCajaId(data.cajaId);
+            await getCarpetasByCajaId(data.cajaId);
 
             dispatch(setIsLoadingAddCarpeta(false));
 
@@ -265,6 +267,71 @@ export const useCarpetaStore = () => {
             });
         }
     }
+
+    const editarCarpetaGobernacion = async (formValues = {}, proyectoId, username, carpetaId ) => {
+        
+        dispatch(setIsLoadingAddCarpeta(true));
+
+        try
+        {
+            const {
+                dependencia, oficina, numeroCaja, serie, subserie, fechaExtremaInicial, 
+                fechaExtremaFinal,tomoActual,tomoFinal,folioInicial, folioFinal,codigo,notas,
+                cedulaCatastral, duplicidad,cargo,fechaPosesion
+            } = formValues;
+             
+            const criteria = 
+            {
+                "proyectoId": proyectoId,
+                "numero": parseInt(numeroCaja),
+                "dependenciaId": dependencia.value,
+                "oficinaId": oficina.value,
+                "serieId": serie.value,
+                "subserieId": subserie.value,
+                "codigo": codigo,
+                "cedulaCatastral": cedulaCatastral,
+                "cargo": cargo,
+                "fechaPosesion": fechaPosesion,
+                "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
+                "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
+                "folioInicial": folioInicial == "" ? 0 : folioInicial,
+                "folioFinal": folioFinal == "" ? 0 : folioFinal,
+                "duplicidad": duplicidad == "" ? 0 : duplicidad,
+                "tomoActual": tomoActual == "" ? 0 : tomoActual,
+                "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
+                "fechaIndexacion": "0001-01-01",
+                "fechaRegistro": format(new Date(), "yyyy-MM-dd"),
+                "notas": notas,
+                "Username": username
+            }
+
+            const {data} = await indetechApi.put('/Carpeta/editarCarpetaGobernacion/'+carpetaId, criteria);
+
+            await getCarpetasByCajaId(data.cajaId);
+
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Registro correcto',
+                text: ``,
+                showConfirmButton: true,
+                timer: 1500
+            });
+        }
+        catch(error)
+        {
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión al servidor',
+                text: `Por favor intente nuevamente`,
+                showConfirmButton: true,
+            });
+        }
+    }
     
     const getCarpetasByCajaId = async (cajaId) => {
         
@@ -281,6 +348,28 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const getCarpetasByNumeroCaja = async (numeroCaja, proyectoId) => {
+        
+        dispatch( setIsLoadingAddCarpeta( true ) );
+
+        try {
+            const criteria = {
+                numero: numeroCaja,
+                proyectoId: proyectoId
+            };
+
+            const { data } = await indetechApi.post('/carpeta/GetCarpetasByNumeroCaja',criteria);            
+            
+            dispatch( onLoadCarpetasByCaja( data ) );
+
+            dispatch( setIsLoadingAddCarpeta( false ) );
+
+        } catch (error) {
+          console.log(error)
+          dispatch( setIsLoadingAddCarpeta( false ) );
+        }
+    }
+    
     const setCarpetasByCajaId = () => {
         dispatch( onLoadCarpetasByCaja( [] ) );
     }
@@ -293,6 +382,33 @@ export const useCarpetaStore = () => {
             
             await indetechApi.delete('/Carpeta?id='+carpetaId+'&username='+username); 
             
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Operación exitosa!',
+                text: `La carpeta fue eliminada`,
+                showConfirmButton: true,
+                timer: 1000
+            });
+
+            dispatch( setIsDeletingCarpeta('deleted') );
+
+        } catch (error) {
+          console.log('Error eliminando la carpeta'+ carpetaId);
+          console.log(error)
+        }
+    }
+
+    const deleteCarpetaGobernacionById = async (carpetaId, username, numeroCaja, proyectoId)  => {
+
+        dispatch( setIsDeletingCarpeta('') );
+
+        try {
+            
+            await indetechApi.delete('/Carpeta/gobernacion?id='+carpetaId+'&username='+username); 
+            
+            getCarpetasByNumeroCaja(numeroCaja, proyectoId);
+
             Swal.fire({
                 //position: 'top-end',
                 icon: 'success',
@@ -357,6 +473,18 @@ export const useCarpetaStore = () => {
 
         dispatch( setCarpetaActiva({}) );
         dispatch( setOpenModalMoverCarpeta(false) );
+    }
+
+    const openModalEditarCarpetaGobernacion = (carpeta) => {
+
+        dispatch( setCarpetaActiva(carpeta) );
+        dispatch( setOpenModalEditarCarpetaGobernacion(true) );
+    }
+
+    const closeModalEditarCarpetaGobernacion = () => {
+
+        dispatch( setCarpetaActiva({}) );
+        dispatch( setOpenModalEditarCarpetaGobernacion(false) );
     }
 
     const openModalAsignar = (carpeta) => {
@@ -575,14 +703,18 @@ export const useCarpetaStore = () => {
         carpetasSinPdf,
         isLoadingBuscarEstadoAsignacionImagenes,
         tipoOrigen,
+        isOpenModalEditarCarpetaGobernacion,
 
         //* Métodos
         crearCarpeta, 
         crearCarpetaGobernacion,
         getCarpetasByCajaId,
         deleteCarpetaById,
+        deleteCarpetaGobernacionById,
         editarCarpeta,
+        editarCarpetaGobernacion,
         openModalMoverCarpeta,
+        getCarpetasByNumeroCaja,
         closeModalMoverCarpeta,
         moverCarpeta,
         setCarpetasByCajaId,
@@ -597,6 +729,8 @@ export const useCarpetaStore = () => {
         putAsociarPdfACarpetas,
         buscarEstadoAsignacionArchivos,
         setCarpetaActivaActual,
-        setTipoOrigenNumero
+        setTipoOrigenNumero,
+        openModalEditarCarpetaGobernacion,
+        closeModalEditarCarpetaGobernacion
     }
 }

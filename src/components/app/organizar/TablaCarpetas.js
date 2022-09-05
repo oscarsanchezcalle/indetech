@@ -16,16 +16,20 @@ import
 import { convertSeriesToSelect, convertSubseriesToSelect, convertTipoDocumentosToSelect } from '../../../helpers';
 import { MoverCarpetaModal } from './MoverCarpetaModal';
 import { TituloColumna } from './TituloColumna';
+import { EditarCarpetaGobernacionModal } from './EditarCarpetaGobernacionModal';
 
 export const TablaCarpetas = ({tipoOrigen}) => {
 
-    const { username } = useAuthStore();
+    const { username, proyectoId } = useAuthStore();
     const { series } = useSerieStore();
     const { subseriesEdit, startLoadingSubseriesEdit } = useSubserieStore();
     const { tipoDocumentosEdit, startLoadingTipoDocumentosEdit } = useTipoDocumentoStore();
     const { soportes } = useSoporteStore();
     const { frecuencias,  } = useFrecuenciaStore();
-    const { isLoadingAddCarpeta, editarCarpeta, openModalMoverCarpeta, carpetasByCajaId, deleteCarpetaById } = useCarpetaStore();
+    const { 
+        isLoadingAddCarpeta, editarCarpeta, openModalMoverCarpeta, carpetasByCajaId, 
+        deleteCarpetaById, deleteCarpetaGobernacionById, openModalEditarCarpetaGobernacion } 
+    = useCarpetaStore();
     const { rotuloCaja, buscarRotuloCajaById } = useCajaStore();
 
     //useForm
@@ -89,8 +93,17 @@ export const TablaCarpetas = ({tipoOrigen}) => {
         confirmButtonText: `Si`,  
         
         }).then((result) => {  
-            if (result.isConfirmed) {    
-                deleteCarpetaById(carpetaId, username);
+            if (result.isConfirmed) {   
+                //soacha
+                if(tipoOrigen === 1 || tipoOrigen === 2) {
+                    deleteCarpetaById(carpetaId, username);
+                }
+
+                //gobernacion
+                if(tipoOrigen === 3) {
+                    deleteCarpetaGobernacionById(carpetaId, username, carpetasByCajaId[0]?.numeroCaja, proyectoId);
+                }
+                
             }
         });
     }
@@ -171,6 +184,10 @@ export const TablaCarpetas = ({tipoOrigen}) => {
 
     const handleSelectAutoDeCierreChange = ( selectedOption ) => {   
         handleSelectChange(selectedOption, "autoDeCierre");
+    }
+
+    const handleEditarCarpetaGobernacion = (carpeta) => {
+        openModalEditarCarpetaGobernacion(carpeta);
     }
 
     const handleBtnModificar = async () => {
@@ -274,8 +291,14 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                                             <th>
                                                 <span># Carpeta</span>
                                             </th>
+                                            {
+                                                tipoOrigen === 3 && 
+                                                <th>
+                                                    <span>Dependencia, Sub Dependencia</span>
+                                                </th>
+                                            }
                                             <th>
-                                                <span>Serie, Subserie o tipo documental</span>
+                                                <span>Serie, Subserie</span>
                                             </th>
                                             <th >
                                                 <span>Número del expediente</span>
@@ -306,8 +329,14 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                                                         {carpeta.numero}
                                                     </span>
                                                 </td>
+                                                {
+                                                    tipoOrigen === 3 && 
+                                                    <td>
+                                                        {carpeta.dependencia.descripcion} - {carpeta.oficina.descripcion}
+                                                    </td>
+                                                }
                                                 <td>
-                                                    {carpeta.serie.descripcion} - {carpeta.subserie.descripcion} - {carpeta.tipoDocumento.descripcion}
+                                                    {carpeta.serie.descripcion} - {carpeta.subserie.descripcion}
                                                 </td>
                                                 <td>
                                                     {carpeta.codigo}
@@ -337,18 +366,36 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                                                         </a>
                                                         <div className="dropdown-menu dropdown-menu-end" style={{}}>
                                                             <ul className="link-list-opt no-bdr">
-                                                                <li>
-                                                                    <a href="#" onClick={() => handleMoverCarpeta(carpeta)}>
-                                                                        <em className="icon ni ni-external" />
-                                                                        <span>Mover carpeta a otra caja</span>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="#" onClick={() => openModal(carpeta)}>
-                                                                        <em className="icon ni ni-edit" />
-                                                                        <span>Editar</span>
-                                                                    </a>
-                                                                </li>
+                                                               {
+                                                                    (tipoOrigen === 1 || tipoOrigen === 2) && 
+                                                                    <li>
+                                                                        <a href="#" onClick={() => handleMoverCarpeta(carpeta)}>
+                                                                            <em className="icon ni ni-external" />
+                                                                            <span>Mover carpeta a otra caja</span>
+                                                                        </a>
+                                                                    </li>
+                                                               }
+                                                                
+                                                                { 
+                                                                    (tipoOrigen === 1 || tipoOrigen === 2) && 
+                                                                    <li>
+                                                                        <a href="#" onClick={() => openModal(carpeta)}>
+                                                                            <em className="icon ni ni-edit" />
+                                                                            <span>Editar</span>
+                                                                        </a>
+                                                                    </li>
+                                                                }
+
+                                                                { 
+                                                                    (tipoOrigen === 3) && 
+                                                                    <li>
+                                                                        <a href="#" onClick={() => handleEditarCarpetaGobernacion(carpeta)}>
+                                                                            <em className="icon ni ni-edit" />
+                                                                            <span>Editar</span>
+                                                                        </a>
+                                                                    </li>
+                                                                }
+                                                               
                                                                 <li>
                                                                     <a href='#' onClick={() => handleBtnEliminar(carpeta.id)}>
                                                                         <em className="icon ni ni-trash" />
@@ -369,226 +416,235 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                     </div>{/* .card */}
                 </div>{/* .nk-block */}
 
-                <Modal
-                    isOpen={modalIsOpen}
-                    onAfterOpen={afterOpenModal}
-                    onRequestClose={closeModal}
-                    style={customStyles}
-                    contentLabel="Editar Carpeta"
-                >   
-                        <div className="modal-header">
-                            <h5 className="modal-title">Editar Carpeta</h5>
-                            <ul className="btn-toolbar">  
-                                <NumeroCaja numeroCaja={carpetasByCajaId[0]?.numeroCaja}/>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                <a href="#" onClick={closeModal} className="close">
-                                    <em className="icon ni ni-cross" />
-                                </a>
-                            </ul>
-                        </div>
-                        <div className="modal-body modal-body-lg">
-                                <div className='col-md-12'>
-                                    <div className='row'>
-                                        <div className='col-md-6'>
-                                            <label className='form-label'>Serie <span className='text-danger'>*</span></label>
-                                            <Select
-                                                options={series}   
-                                                value={serie}    
-                                                onChange={(selectedOption) => handleSelectSerieChange(selectedOption)}
-                                                placeholder='Series'
-                                                />
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <label className='form-label'>Subserie <span className='text-danger'>*</span></label>
-                                            <Select
-                                                options={subseriesEdit}  
-                                                value={subserie}    
-                                                onChange={(selectedOption) => handleSelectSubserieChange(selectedOption)}
-                                                placeholder='Subseries'
-                                                />
-                                        </div>
-                                        <div className='col-md-4 d-none'>
-                                            <label className='form-label'>Tipo Documental</label>
-                                            <Select
-                                                options={tipoDocumentosEdit}
-                                                value={tipoDocumento}   
-                                                onChange={(selectedOption) => handleSelectTipoDocumentoChange(selectedOption)}
-                                                placeholder='Tipo Documental'
-                                                />
-                                        </div>
-                                    </div>
-                                    <div className='row mt-2'>
-                                        <div className='col-md-5'>
-                                            <label className='form-label'>Fechas extremas</label>
-                                            <div className="form-control-wrap">
-                                                <div className="input-group">
-                                                    <input 
-                                                        
-                                                        name="fechaExtremaInicial" 
-                                                        onChange={handleInputChange} 
-                                                        type="date" 
-                                                        value={fechaExtremaInicial}
-                                                        className="form-control"/>
-                                                    <input 
-                                                        
-                                                        name="fechaExtremaFinal"
-                                                        onChange={handleInputChange}
-                                                        value={fechaExtremaFinal}
-                                                        type="date" 
-                                                        min={formValues.fechaExtremaInicial}
-                                                        className="form-control" />
+                {
+                    (tipoOrigen === 1 || tipoOrigen === 2) && 
+                        <Modal
+                            isOpen={modalIsOpen}
+                            onAfterOpen={afterOpenModal}
+                            onRequestClose={closeModal}
+                            style={customStyles}
+                            contentLabel="Editar Carpeta"
+                        >   
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Editar Carpeta</h5>
+                                    <ul className="btn-toolbar">  
+                                        <NumeroCaja numeroCaja={carpetasByCajaId[0]?.numeroCaja}/>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a href="#" onClick={closeModal} className="close">
+                                            <em className="icon ni ni-cross" />
+                                        </a>
+                                    </ul>
+                                </div>
+                                <div className="modal-body modal-body-lg">
+                                    
+                                        <div className='col-md-12'>
+                                            <div className='row'>
+                                                <div className='col-md-6'>
+                                                    <label className='form-label'>Serie <span className='text-danger'>*</span></label>
+                                                    <Select
+                                                        options={series}   
+                                                        value={serie}    
+                                                        onChange={(selectedOption) => handleSelectSerieChange(selectedOption)}
+                                                        placeholder='Series'
+                                                        />
+                                                </div>
+                                                <div className='col-md-6'>
+                                                    <label className='form-label'>Subserie <span className='text-danger'>*</span></label>
+                                                    <Select
+                                                        options={subseriesEdit}  
+                                                        value={subserie}    
+                                                        onChange={(selectedOption) => handleSelectSubserieChange(selectedOption)}
+                                                        placeholder='Subseries'
+                                                        />
+                                                </div>
+                                                <div className='col-md-4 d-none'>
+                                                    <label className='form-label'>Tipo Documental</label>
+                                                    <Select
+                                                        options={tipoDocumentosEdit}
+                                                        value={tipoDocumento}   
+                                                        onChange={(selectedOption) => handleSelectTipoDocumentoChange(selectedOption)}
+                                                        placeholder='Tipo Documental'
+                                                        />
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className='col-md-4'>
-                                            <label className='form-label'>Folios</label>
-                                            <div className="form-control-wrap">
-                                                <div className="input-group">
-                                                    <input 
-                                                        name="folioInicial"
-                                                        onChange={handleInputChange}
-                                                        type="number" 
-                                                        className="form-control"
-                                                        value={folioInicial} 
-                                                        placeholder='Inicial'
-                                                        autoComplete="off"/>
-                                                    <input 
-                                                        name="folioFinal"
-                                                        onChange={handleInputChange}
-                                                        value={folioFinal}
-                                                        min={formValues.folioInicial}
-                                                        type="number" 
-                                                        className="form-control" 
-                                                        placeholder='Final'
-                                                        autoComplete="off"/>
+                                            <div className='row mt-2'>
+                                                <div className='col-md-5'>
+                                                    <label className='form-label'>Fechas extremas</label>
+                                                    <div className="form-control-wrap">
+                                                        <div className="input-group">
+                                                            <input 
+                                                                
+                                                                name="fechaExtremaInicial" 
+                                                                onChange={handleInputChange} 
+                                                                type="date" 
+                                                                value={fechaExtremaInicial}
+                                                                className="form-control"/>
+                                                            <input 
+                                                                
+                                                                name="fechaExtremaFinal"
+                                                                onChange={handleInputChange}
+                                                                value={fechaExtremaFinal}
+                                                                type="date" 
+                                                                min={formValues.fechaExtremaInicial}
+                                                                className="form-control" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className='col-md-4'>
+                                                    <label className='form-label'>Folios</label>
+                                                    <div className="form-control-wrap">
+                                                        <div className="input-group">
+                                                            <input 
+                                                                name="folioInicial"
+                                                                onChange={handleInputChange}
+                                                                type="number" 
+                                                                className="form-control"
+                                                                value={folioInicial} 
+                                                                placeholder='Inicial'
+                                                                autoComplete="off"/>
+                                                            <input 
+                                                                name="folioFinal"
+                                                                onChange={handleInputChange}
+                                                                value={folioFinal}
+                                                                min={formValues.folioInicial}
+                                                                type="number" 
+                                                                className="form-control" 
+                                                                placeholder='Final'
+                                                                autoComplete="off"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-md-3">
+                                                    <label className='form-label'>Núm. Expediente <span className='text-danger'>*</span></label>
+                                                        <input 
+                                                            value={codigo}
+                                                            name="codigo"
+                                                            onChange={handleInputChange}
+                                                            type="text" 
+                                                            className="form-control" 
+                                                            placeholder=''
+                                                            autoComplete="off"/>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="col-md-3">
-                                            <label className='form-label'>Núm. Expediente <span className='text-danger'>*</span></label>
-                                                <input 
-                                                    value={codigo}
-                                                    name="codigo"
-                                                    onChange={handleInputChange}
-                                                    type="text" 
-                                                    className="form-control" 
-                                                    placeholder=''
-                                                    autoComplete="off"/>
-                                        </div>
-                                    </div>
-                                    <div className='row mt-2'>
-                                        <div className='col-md-3 d-none'>
-                                            <label className='form-label'>Soporte</label>
-                                            <Select
-                                                options={soportes}
-                                                placeholder='' 
-                                                value={tipoSoporte}    
-                                                onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
-                                                />
-                                        </div>
-                                        <div className='col-md-3 d-none'>
-                                            <label className='form-label'>Frecuencia</label>
-                                            <Select
-                                                options={frecuencias}    
-                                                placeholder='' 
-                                                value={frecuenciaUso}    
-                                                onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
-                                                />
-                                        </div>
-                                        <div className={`${tipoOrigen === 1 ? "col-md-3" : "col-md-6"}`}>
-                                            <label className='form-label'>
-                                                <TituloColumna estado={tipoOrigen} />
-                                            <span className='text-danger'>*</span></label>
-                                                <input 
-                                                    name="cedulaCatastral"
-                                                    value={cedulaCatastral}
-                                                    onChange={handleInputChange}
-                                                    type="text" 
-                                                    className="form-control" 
-                                                    placeholder=''/>
-                                        </div>
-                                        <div className='col-md-2'>
-                                            <label className='form-label'>Duplicidad</label>
-                                            <div className="form-control-wrap">
-                                                <div className="input-group">
-                                                    <input 
-                                                        name="duplicidad"
-                                                        value={duplicidad}
-                                                        onChange={handleInputChange}
-                                                        type="text" 
-                                                        className="form-control" 
-                                                        placeholder='#'
-                                                        min={0}
-                                                        autoComplete="off"/>
+                                            <div className='row mt-2'>
+                                                <div className='col-md-3 d-none'>
+                                                    <label className='form-label'>Soporte</label>
+                                                    <Select
+                                                        options={soportes}
+                                                        placeholder='' 
+                                                        value={tipoSoporte}    
+                                                        onChange={(selectedOption) => handleSelectSoporteChange(selectedOption)}
+                                                        />
+                                                </div>
+                                                <div className='col-md-3 d-none'>
+                                                    <label className='form-label'>Frecuencia</label>
+                                                    <Select
+                                                        options={frecuencias}    
+                                                        placeholder='' 
+                                                        value={frecuenciaUso}    
+                                                        onChange={(selectedOption) => handleSelectFrecuenciaChange(selectedOption)}
+                                                        />
+                                                </div>
+                                                <div className={`${tipoOrigen === 1 ? "col-md-3" : "col-md-6"}`}>
+                                                    <label className='form-label'>
+                                                        <TituloColumna estado={tipoOrigen} />
+                                                    <span className='text-danger'>*</span></label>
+                                                        <input 
+                                                            name="cedulaCatastral"
+                                                            value={cedulaCatastral}
+                                                            onChange={handleInputChange}
+                                                            type="text" 
+                                                            className="form-control" 
+                                                            placeholder=''/>
+                                                </div>
+                                                <div className='col-md-2'>
+                                                    <label className='form-label'>Duplicidad</label>
+                                                    <div className="form-control-wrap">
+                                                        <div className="input-group">
+                                                            <input 
+                                                                name="duplicidad"
+                                                                value={duplicidad}
+                                                                onChange={handleInputChange}
+                                                                type="text" 
+                                                                className="form-control" 
+                                                                placeholder='#'
+                                                                min={0}
+                                                                autoComplete="off"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className={`col-md-3 ${tipoOrigen === 1 ? "" : "d-none"}`}>
+                                                    <label className='form-label'>Auto de Cierre<span className='text-danger'>*</span></label>
+                                                    <Select
+                                                        options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
+                                                        placeholder='' 
+                                                        value={autoDeCierre}    
+                                                        onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
+                                                        />
+                                                </div>
+                                                <div className='col-md-4'>
+                                                    <label className='form-label'>Tomos</label>
+                                                    <div className="form-control-wrap">
+                                                        <div className="input-group">
+                                                            <input 
+                                                                name="tomoActual"
+                                                                onChange={handleInputChange}
+                                                                value={tomoActual}
+                                                                type="number" 
+                                                                autoComplete="off"
+                                                                className="form-control" 
+                                                                placeholder='Actual'/>
+                                                            <input 
+                                                                name="tomoFinal"
+                                                                onChange={handleInputChange}
+                                                                min={formValues.tomoActual}
+                                                                value={tomoFinal}
+                                                                type="number" 
+                                                                autoComplete="off"
+                                                                className="form-control" 
+                                                                placeholder='Final'/>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className={`col-md-3 ${tipoOrigen === 1 ? "" : "d-none"}`}>
-                                            <label className='form-label'>Auto de Cierre<span className='text-danger'>*</span></label>
-                                            <Select
-                                                options={[{ value: 1, label: 'Si'},{ value: 0, label: 'No'}]}    
-                                                placeholder='' 
-                                                value={autoDeCierre}    
-                                                onChange={(selectedOption) => handleSelectAutoDeCierreChange(selectedOption)}
-                                                />
-                                        </div>
-                                        <div className='col-md-4'>
-                                            <label className='form-label'>Tomos</label>
-                                            <div className="form-control-wrap">
-                                                <div className="input-group">
-                                                    <input 
-                                                        name="tomoActual"
-                                                        onChange={handleInputChange}
-                                                        value={tomoActual}
-                                                        type="number" 
-                                                        autoComplete="off"
-                                                        className="form-control" 
-                                                        placeholder='Actual'/>
-                                                    <input 
-                                                        name="tomoFinal"
-                                                        onChange={handleInputChange}
-                                                        min={formValues.tomoActual}
-                                                        value={tomoFinal}
-                                                        type="number" 
-                                                        autoComplete="off"
-                                                        className="form-control" 
-                                                        placeholder='Final'/>
+                                            <div className='row mt-2'>
+                                                <div className='col-md-10'>
+                                                    <label className='form-label'>Notas</label>
+                                                    <div className="form-control-wrap">
+                                                        <div className="input-group">
+                                                            <input 
+                                                                type="text"
+                                                                className='form-control no-resize'
+                                                                value={notas}
+                                                                onChange={handleInputChange} 
+                                                                name="notas"
+                                                                autoComplete="off"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className='col-md-2'>
+                                                    <br />
+                                                    <button 
+                                                        onClick={handleBtnModificar}
+                                                        type="button"
+                                                        disabled={isLoadingAddCarpeta}
+                                                        className="btn btn-outline-primary btn-dim  mt-1 btn-block">
+                                                            <LoadingInButton isLoading={isLoadingAddCarpeta} btnText="Modificar" />
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className='row mt-2'>
-                                        <div className='col-md-10'>
-                                            <label className='form-label'>Notas</label>
-                                            <div className="form-control-wrap">
-                                                <div className="input-group">
-                                                    <input 
-                                                        type="text"
-                                                        className='form-control no-resize'
-                                                        value={notas}
-                                                        onChange={handleInputChange} 
-                                                        name="notas"
-                                                        autoComplete="off"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className='col-md-2'>
-                                            <br />
-                                            <button 
-                                                onClick={handleBtnModificar}
-                                                type="button"
-                                                disabled={isLoadingAddCarpeta}
-                                                className="btn btn-outline-primary btn-dim  mt-1 btn-block">
-                                                    <LoadingInButton isLoading={isLoadingAddCarpeta} btnText="Modificar" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>  
-                                
-                        </div>   
-                </Modal>
+                                        </div>  
+                                        
+                                </div>   
+                        </Modal>
+                }
 
                 <MoverCarpetaModal />
+
+                {
+                    (tipoOrigen === 3) && 
+                        <EditarCarpetaGobernacionModal /> 
+                }
                 
             </>
         )

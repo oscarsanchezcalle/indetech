@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Select from 'react-select';
-import { isAfter, getYear, parseISO } from 'date-fns'
+import { isAfter, parseISO } from 'date-fns'
 
-import { RotuloCaja } from './RotuloCaja';
+
 import { TablaCarpetas } from './TablaCarpetas';
 import { LoadingInButton } from '../LoadingInButton';
 
@@ -20,11 +20,11 @@ export const FuidScreenGobernacion = () => {
     const { startLoadingOficinas, oficinas, setOficinaSelected } = useOficinaStore();
     const { series, startLoadingSeries } = useSerieStore();
     const { subseries, startLoadingSubseries } = useSubserieStore();
-    const { isLoadingRotuloCaja, buscarRotuloCaja, rotuloCaja } = useCajaStore();
+    const { isLoadingRotuloCaja, buscarRotuloCajaById, rotuloCaja } = useCajaStore();
     const { 
          crearCarpetaGobernacion, isLoadingAddCarpeta,
          getCarpetasByCajaId, isDeletingCarpeta, setCarpetasByCajaId,
-         setTipoOrigenNumero
+         getCarpetasByNumeroCaja
     } = useCarpetaStore();
     
 
@@ -98,14 +98,8 @@ export const FuidScreenGobernacion = () => {
         if(isDeletingCarpeta === 'deleted' && rotuloCaja.cajaId && numeroCaja != ""){
             
             getCarpetasByCajaId(rotuloCaja.cajaId);
-            const criteria = {
-                "numero": parseInt(numeroCaja),
-                "proyectoId": proyectoId,
-                "dependenciaId": formValues.dependencia.value,
-                "oficinaId": formValues.oficina.value,
-                "vigenciaId": formValues.vigencia.value
-            };
-            buscarRotuloCaja(criteria);
+            
+            //buscarRotuloCajaById(parseInt(numeroCaja));
             
         }
     }, [isDeletingCarpeta]);
@@ -171,15 +165,7 @@ export const FuidScreenGobernacion = () => {
             return;
         }
 
-        const criteria = {
-            "numero": parseInt(numeroCaja),
-            "proyectoId": proyectoId,
-            "dependenciaId": formValues.dependencia.value,
-            "oficinaId": formValues.oficina.value,
-            "vigenciaId": formValues.vigencia.value
-        };
-
-        buscarRotuloCaja(criteria);
+        getCarpetasByNumeroCaja(parseInt(numeroCaja), proyectoId);
     }    
 
     const isValidFormForSave = (criteria = {}) => {
@@ -540,7 +526,7 @@ export const FuidScreenGobernacion = () => {
     </div>
     <div className='row pt-1'>
         <div className='col-md-12'>
-            <TablaCarpetas  tipoOrigen={2}/>
+            <TablaCarpetas  tipoOrigen={3}/>
         </div>
     </div>
     </>
