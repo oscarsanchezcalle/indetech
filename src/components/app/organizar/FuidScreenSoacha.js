@@ -263,8 +263,8 @@ export const FuidScreenSoacha = () => {
 
         const {
              dependencia, oficina, numeroCaja,
-             serie, subserie, tipoDocumento, 
-             autoDeCierre, vigencia } = criteria;
+             serie, subserie, 
+             vigencia } = criteria;
 
         const validationConditions = [];
         let isValid = true;
@@ -272,7 +272,6 @@ export const FuidScreenSoacha = () => {
         if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
              || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" ) || typeof serie.value === 'undefined'
              || typeof  subserie.value   === 'undefined' 
-            //|| typeof tipoDocumento.value === 'undefined'
              || typeof vigencia.value === 'undefined')
         {            
             if(typeof dependencia.value === 'undefined'){

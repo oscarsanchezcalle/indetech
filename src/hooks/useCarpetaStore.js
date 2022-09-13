@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import { isAfter, getYear, parseISO, format } from 'date-fns'
+import { isAfter, parseISO, format } from 'date-fns'
 
 import { indetechApi } from '../api';
 import { 
@@ -31,7 +31,7 @@ export const useCarpetaStore = () => {
         try
         {
             const {
-                dependencia, oficina, vigencia, numeroCaja, serie, subserie, tipoDocumento,
+                dependencia, oficina, vigencia, numeroCaja, serie, subserie,
                 tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
                 folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre 
             } = criteria;
@@ -40,24 +40,21 @@ export const useCarpetaStore = () => {
 
             const fechaFin = new Date(parseISO(fechaExtremaFinal));
             
-            const anioFechaIni = getYear(fechaIni);
-
             if((fechaExtremaInicial != '' && fechaExtremaFinal != '') ){
-                if(isAfter(fechaIni, fechaFin) || anioFechaIni != parseInt(vigencia.label) ){
+                if(isAfter(fechaIni, fechaFin) ){
 
-                    Swal.fire({
-                        //position: 'top-end',
-                        icon: 'error',
-                        title: 'Rango de fechas incorrecto',
-                        text: `Por favor verifica las fechas extremas`,
-                        showConfirmButton: true,
-                        //timer: 1500
-                    });
-    
-                    dispatch(setIsLoadingAddCarpeta(false));
-                    return;
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Rango de fechas incorrecto',
+                            text: `Por favor verifica las fechas extremas`,
+                            showConfirmButton: true,
+                        });
+        
+                        dispatch(setIsLoadingAddCarpeta(false));
+                        return;
+                    }
                 }
-            }
+            
              
             const carpetaCajaCriteria = {
                 "proyectoId": proyectoId,
@@ -146,7 +143,7 @@ export const useCarpetaStore = () => {
                 "folioInicial": folioInicial == "" ? 0 : folioInicial,
                 "folioFinal": folioFinal == "" ? 0 : folioFinal,
                 "duplicidad": duplicidad == "" ? 0 : duplicidad,
-                "tomoActual": tomoActual == "" ? 0 : tomoActual,
+                "tomoInicial": tomoActual == "" ? 0 : tomoActual,
                 "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
                 "fechaIndexacion": "2022-09-04T14:54:58.943Z",
                 "fechaRegistro": "2022-09-04T14:54:58.943Z",
@@ -297,7 +294,7 @@ export const useCarpetaStore = () => {
                 "folioInicial": folioInicial == "" ? 0 : folioInicial,
                 "folioFinal": folioFinal == "" ? 0 : folioFinal,
                 "duplicidad": duplicidad == "" ? 0 : duplicidad,
-                "tomoActual": tomoActual == "" ? 0 : tomoActual,
+                "tomoInicial": tomoActual == "" ? 0 : tomoActual,
                 "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
                 "fechaIndexacion": "0001-01-01",
                 "fechaRegistro": format(new Date(), "yyyy-MM-dd"),

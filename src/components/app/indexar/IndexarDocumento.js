@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Select from 'react-select';
 import Switch from "react-switch";
+import { Link } from "react-router-dom"
 
 import { useAuthStore, useCarpetaStore, useDocumentoStore , useTipoDocumentoStore, useFormBasic } from '../../../hooks';
 import { LoadingInButton } from '../LoadingInButton';
@@ -290,7 +291,7 @@ export const IndexarDocumento = () => {
                     className="btn btn-primary">
                         <LoadingInButton isLoading={isLoadingAddDocumento} btnText="Crear documento" />
                 </button>
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Volver</button>
+                <Link to="/listaCarpetas" className="btn btn-secondary">Volver</Link>
               </div>
           </div>
         </div>

@@ -15,7 +15,6 @@ export const RotuloCaja = () => {
         <h6 className="overline-title title">Rótulo de caja</h6>
         <RotuloLine name="Serie" value={rotuloCaja.series} />
         <RotuloLine name="Subserie" value={rotuloCaja.subseries} />
-        <RotuloLine name="Expediente" value={rotuloCaja.expedientes}/>
         <RotuloLine name="# Expediente" value={rotuloCaja.numeroExpedientes} />
         <RotuloLine name="Fechas" value={rotuloCaja.fechasExtremas} />
       </div>

@@ -11,7 +11,7 @@ export const FiltrosCaja = ({titulo}) => {
     const { startLoadingOficinas, oficinas, oficinaActiva, setOficinaSelected } = useOficinaStore();
     const { vigencias, vigenciaActiva, setVigenciaSelected, startLoadingVigencias } = useVigenciaStore();
     const { cajas, startLoadingCajas } = useCajaStore();
-    const { proyectoId, username, proyecto } = useAuthStore();
+    const { proyectoId, proyecto } = useAuthStore();
     const { isLoading, getCarpetasByCajaId } = useCarpetaStore();
 
     useEffect(() => {
@@ -29,25 +29,51 @@ export const FiltrosCaja = ({titulo}) => {
 
     useEffect(() => {
         if(oficinas?.length > 0 && proyectoId == 1){
+            if(typeof oficinaActiva != "undefined"){
+                handleSelectSubDependenciaChange(oficinaActiva);
+                return;    
+            }
             handleSelectSubDependenciaChange(oficinas[0]);
         }
     }, [oficinas]);
 
-    // useEffect(() => {
-    //     if(vigencias?.length > 0 && proyectoId == 1){
-    //         handleSelectVigenciaChange(vigencias[2]);
-    //     }
-    // }, [vigencias]);
+    useEffect(() => {
+        if(vigencias?.length > 0 && proyectoId == 1){
+            handleSelectVigenciaChange(vigenciaActiva);
+        }
+    }, [vigencias]);
 
     const handleSelectDependenciaChange = ( selectedOption ) => {    
         startLoadingOficinas(selectedOption.value);
         handleSelectChange(selectedOption, "dependencia");
         setDependenciaSelected(selectedOption);
+
+        if(dependenciaActiva && oficinaActiva && vigenciaActiva && proyectoId){
+            const criteria = 
+            {
+                "proyectoId": parseInt(proyectoId),
+                "dependenciaId": selectedOption.value,
+                "oficinaId": oficinaActiva.value,
+                "vigenciaId": vigenciaActiva.value
+            };
+            buscarCajas(criteria);
+        }
     }
 
     const handleSelectSubDependenciaChange = ( selectedOption ) => {           
         handleSelectChange(selectedOption, "oficina"); 
         setOficinaSelected(selectedOption);
+
+        if(dependenciaActiva && oficinaActiva && vigenciaActiva && proyectoId){
+            const criteria = 
+            {
+                "proyectoId": parseInt(proyectoId),
+                "dependenciaId": dependenciaActiva.value,
+                "oficinaId": selectedOption.value,
+                "vigenciaId": vigenciaActiva.value
+            };
+            buscarCajas(criteria);
+        }
     }
 
     const handleSelectVigenciaChange = ( selectedOption ) => {   

@@ -348,7 +348,7 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                                                 {`${format(parseISO(carpeta.fechaInicial), 'dd/MM/yyyy')} - ${format(parseISO(carpeta.fechaFinal), 'dd/MM/yyyy')}`}
                                                 </td>
                                                 <td>
-                                                    {carpeta.tomoInicial} hasta {carpeta.tomoFinal}
+                                                    {carpeta.tomoInicial} de {carpeta.tomoFinal}
                                                 </td>
                                                 <td>
                                                      {carpeta.folioInicial} hasta {carpeta.folioFinal}

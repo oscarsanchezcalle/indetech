@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Select from 'react-select';
-import { useAuthStore, useCajaStore, useCarpetaStore, useDependieciaStore, useForm, useOficinaStore, useVigenciaStore } from '../../../hooks';
+import { useAuthStore, useCarpetaStore, useDependieciaStore, useForm, useOficinaStore, useVigenciaStore } from '../../../hooks';
 import { LoadingInButton } from '../LoadingInButton';
 import Swal from 'sweetalert2';
 
@@ -10,7 +10,7 @@ export const FiltrosVigencia = () => {
     const { startLoadingOficinas, oficinas, setOficinaSelected } = useOficinaStore();
     const { vigencias, startLoadingVigencias } = useVigenciaStore();
     const { proyectoId } = useAuthStore();
-    const { isLoading, getCarpetasByCajaId, isLoadingBuscarEstadoAsignacionImagenes, buscarEstadoAsignacionArchivos } = useCarpetaStore();
+    const {  isLoadingBuscarEstadoAsignacionImagenes, buscarEstadoAsignacionArchivos } = useCarpetaStore();
 
     useEffect(() => {
         if(proyectoId > 0){
