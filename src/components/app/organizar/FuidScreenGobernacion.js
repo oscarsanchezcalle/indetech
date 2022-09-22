@@ -177,36 +177,37 @@ export const FuidScreenGobernacion = () => {
 
         const validationConditions = [];
         let isValid = true;
-        let isValidFechas = true; 
+        // let isValidFechas = true; 
         
-        if( (fechaExtremaInicial == '' && fechaExtremaFinal != '')){
-            isValidFechas = false;
-        }
+        // if( (fechaExtremaInicial == '' && fechaExtremaFinal != '')){
+        //     isValidFechas = false;
+        // }
 
-        if( (fechaExtremaInicial != '' && fechaExtremaFinal == '') ){
-            isValidFechas = false;
-        }
+        // if( (fechaExtremaInicial != '' && fechaExtremaFinal == '') ){
+        //     isValidFechas = false;
+        // }
 
-        if((fechaExtremaInicial != '' && fechaExtremaFinal != '') ){
+        // if((fechaExtremaInicial != '' && fechaExtremaFinal != '') ){
             
-            const fechaIni = new Date(parseISO(fechaExtremaInicial));
-            const fechaFin = new Date(parseISO(fechaExtremaFinal));
+        //     const fechaIni = new Date(parseISO(fechaExtremaInicial));
+        //     const fechaFin = new Date(parseISO(fechaExtremaFinal));
 
-            if(isAfter(fechaIni, fechaFin)){
-                isValidFechas = false; 
-            }else{
-                isValidFechas = true; 
-            }
-        }  
+        //     if(isAfter(fechaIni, fechaFin)){
+        //         isValidFechas = false; 
+        //     }else{
+        //         isValidFechas = true; 
+        //     }
+        // }  
 
         if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
              || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" )
-             || (typeof codigo === 'undefined' || numeroCaja === "" )
-             || (typeof cedulaCatastral === 'undefined' || cedulaCatastral === "" )
-             || (typeof fechaPosesion === 'undefined' || fechaPosesion === "" )
-             || (typeof cargo === 'undefined' || cargo === "" )
+            //  || (typeof codigo === 'undefined' || numeroCaja === "" )
+            //  || (typeof cedulaCatastral === 'undefined' || cedulaCatastral === "" )
+            //  || (typeof fechaPosesion === 'undefined' || fechaPosesion === "" )
+            //  || (typeof cargo === 'undefined' || cargo === "" )
              || typeof serie.value === 'undefined' || typeof  subserie.value   === 'undefined' 
-             || !isValidFechas)
+             //|| !isValidFechas
+            )
         {            
             
             if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
@@ -224,21 +225,21 @@ export const FuidScreenGobernacion = () => {
             if(typeof subserie.value === 'undefined'){
                 validationConditions.push(' Subserie');
             }
-            if(typeof codigo === 'undefined' || codigo === ""){
-                validationConditions.push(' Número del expediente (Cédula)');
-            }
-            if(typeof cedulaCatastral === 'undefined' || cedulaCatastral === ""){
-                validationConditions.push(' Apellidos y Nombres');
-            }
-            if(typeof fechaPosesion === 'undefined' || fechaPosesion === "" ){
-                validationConditions.push(' Fecha de posesión');
-            }
-            if(typeof cargo === 'undefined' || cargo === "" ){
-                validationConditions.push(' Cargo');
-            }
-            if(!isValidFechas){
-                validationConditions.push(' Rango de fechas extremas');
-            }
+            // if(typeof codigo === 'undefined' || codigo === ""){
+            //     validationConditions.push(' Número del expediente (Cédula)');
+            // }
+            // if(typeof cedulaCatastral === 'undefined' || cedulaCatastral === ""){
+            //     validationConditions.push(' Apellidos y Nombres');
+            // }
+            // if(typeof fechaPosesion === 'undefined' || fechaPosesion === "" ){
+            //     validationConditions.push(' Fecha de posesión');
+            // }
+            // if(typeof cargo === 'undefined' || cargo === "" ){
+            //     validationConditions.push(' Cargo');
+            // }
+            // if(!isValidFechas){
+            //     validationConditions.push(' Rango de fechas extremas');
+            // }
             isValid = false;
         }
        

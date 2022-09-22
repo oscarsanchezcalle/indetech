@@ -43,7 +43,7 @@ export const useDocumentoStore = () => {
             nombreDocumento
         } = criteria;
 
-        const {isValid, validationConditions} = isValidForm(criteria, carpetaFechaIni, carpetaFechaFin);
+        const {isValid, validationConditions} = isValidForm(criteria, carpetaFechaIni, carpetaFechaFin, proyectoId);
     
         if (!isValid){
 
@@ -62,7 +62,7 @@ export const useDocumentoStore = () => {
             "folioInicial": folioInicial === "" ? 0 : folioInicial,
             "foliofinal": folioFinal === "" ? 0: folioFinal,
             "folios": folios,
-            "fecha": fecha,
+            "fecha": fecha === '' ? '0001-01-01' : fecha,
             "observaciones": notas,
             "username": username,
             "carpetaId": carpetaId,
@@ -102,7 +102,7 @@ export const useDocumentoStore = () => {
         }
     }
 
-    const editarDocumento = async (criteria = {}, documentoId, username, carpetaFechaIni, carpetaFechaFin, carpetaId ) => {
+    const editarDocumento = async (criteria = {}, documentoId, username, carpetaFechaIni, carpetaFechaFin, carpetaId, proyectoId ) => {
         
         dispatch(setIsLoadingEditDocumento(true));
 
@@ -118,7 +118,7 @@ export const useDocumentoStore = () => {
                 nombreDocumento
             } = criteria;
 
-            const {isValid, validationConditions} = isValidForm(criteria, carpetaFechaIni, carpetaFechaFin);
+            const {isValid, validationConditions} = isValidForm(criteria, carpetaFechaIni, carpetaFechaFin, proyectoId);
         
             if (!isValid){
 
@@ -238,7 +238,7 @@ export const useDocumentoStore = () => {
         dispatch( setOpenModalEditarDocumento(false) );
     }
 
-    const isValidForm = (criteria = {}, carpFechaIni = "", carpFechaFin = "") => {
+    const isValidForm = (criteria = {}, carpFechaIni = "", carpFechaFin = "", proyectoId) => {
         
         const {
             tipoDocumento,
@@ -250,13 +250,13 @@ export const useDocumentoStore = () => {
 
         const validationConditions = [];
         let isValid = true;
-
-        if ( typeof tipoDocumento.value === 'undefined' || fecha === '') 
+        
+        if ( typeof tipoDocumento.value === 'undefined' || (fecha === '' && proyectoId != 2)) 
         {            
             if(typeof tipoDocumento.value === 'undefined' ){
                 validationConditions.push(' Tipo Documental');
             }
-            if(fecha === ''){
+            if(fecha === '' && proyectoId != 2){
                 validationConditions.push(' Fecha');
             }
             isValid = false;
@@ -274,7 +274,7 @@ export const useDocumentoStore = () => {
         const anioCarpetaFechaIni = getYear(carpetaFechaIni);
         const anioCarpetaFechaFin = getYear(carpetaFechaFin);
 
-        if((anioCarpetaFechaIni !== 1 && anioCarpetaFechaFin !== 1) ){
+        if((anioCarpetaFechaIni !== 1 && anioCarpetaFechaFin !== 1 && proyectoId != 2) ){
             if(isBefore(documentoFecha, carpetaFechaIni) || isAfter(documentoFecha, carpetaFechaFin) ){
                 isValid = false;
                 validationConditions.push(`La fecha del documento debe estar entre las fechas de la carpeta ${format(parseISO(carpFechaIni), 'dd/MM/yyyy')} - ${format(parseISO(carpFechaFin), 'dd/MM/yyyy')}`);

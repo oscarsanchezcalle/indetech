@@ -14,7 +14,7 @@ export const EditarDocumentoModal = () => {
   Modal.setAppElement('#root');
   const [verNombreDocumento, setVerNombreDocumento] = useState(false);
   
-  const { username } = useAuthStore();
+  const { username, proyectoId } = useAuthStore();
   const { tipoDocumentos } = useTipoDocumentoStore();
   const { editarDocumento } = useDocumentoStore();
   const { carpetaActiva } = useCarpetaStore();
@@ -134,7 +134,7 @@ export const EditarDocumentoModal = () => {
     }
 
     const handleEditar = async () => {
-      const isCorrect = await editarDocumento(formValues, documentoActivo.id, username, carpetaActiva.fechaInicial, carpetaActiva.fechaFinal, carpetaActiva.id);
+      const isCorrect = await editarDocumento(formValues, documentoActivo.id, username, carpetaActiva.fechaInicial, carpetaActiva.fechaFinal, carpetaActiva.id, proyectoId);
       if(isCorrect){
         closeModal();
       }
