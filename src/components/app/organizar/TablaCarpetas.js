@@ -17,6 +17,7 @@ import { convertSeriesToSelect, convertSubseriesToSelect, convertTipoDocumentosT
 import { MoverCarpetaModal } from './MoverCarpetaModal';
 import { TituloColumna } from './TituloColumna';
 import { EditarCarpetaGobernacionModal } from './EditarCarpetaGobernacionModal';
+import { MoverCarpetaGobernacionModal } from './MoverCarpetaGobernacionModal';
 
 export const TablaCarpetas = ({tipoOrigen}) => {
 
@@ -27,7 +28,7 @@ export const TablaCarpetas = ({tipoOrigen}) => {
     const { soportes } = useSoporteStore();
     const { frecuencias,  } = useFrecuenciaStore();
     const { 
-        isLoadingAddCarpeta, editarCarpeta, openModalMoverCarpeta, carpetasByCajaId, 
+        isLoadingAddCarpeta, editarCarpeta, openModalMoverCarpeta, openModalMoverCarpetaGobernacion, carpetasByCajaId, 
         deleteCarpetaById, deleteCarpetaGobernacionById, openModalEditarCarpetaGobernacion } 
     = useCarpetaStore();
     const { rotuloCaja, buscarRotuloCajaById } = useCajaStore();
@@ -110,6 +111,10 @@ export const TablaCarpetas = ({tipoOrigen}) => {
 
     const handleMoverCarpeta = (carpeta) => {
         openModalMoverCarpeta(carpeta);
+    }
+
+    const handleMoverCarpetaGobernacion = (carpeta) => {
+        openModalMoverCarpetaGobernacion(carpeta);
     }
 
     function openModal(carpeta) {
@@ -322,7 +327,7 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        { carpetasByCajaId.map( carpeta => (
+                                        { carpetasByCajaId.map( (carpeta, index) => (
                                             <tr key={carpeta.id }>
                                                 <td>
                                                     <span className="tb-odr-id">
@@ -366,7 +371,7 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                                                         </a>
                                                         <div className="dropdown-menu dropdown-menu-end" style={{}}>
                                                             <ul className="link-list-opt no-bdr">
-                                                               {
+                                                                {
                                                                     (tipoOrigen === 1 || tipoOrigen === 2) && 
                                                                     <li>
                                                                         <a href="#" onClick={() => handleMoverCarpeta(carpeta)}>
@@ -374,8 +379,8 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                                                                             <span>Mover carpeta a otra caja</span>
                                                                         </a>
                                                                     </li>
-                                                               }
-                                                                
+                                                                }
+  
                                                                 { 
                                                                     (tipoOrigen === 1 || tipoOrigen === 2) && 
                                                                     <li>
@@ -386,12 +391,22 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                                                                     </li>
                                                                 }
 
-                                                                { 
+                                                                {   // Gobernacion
                                                                     (tipoOrigen === 3) && 
                                                                     <li>
                                                                         <a href="#" onClick={() => handleEditarCarpetaGobernacion(carpeta)}>
                                                                             <em className="icon ni ni-edit" />
                                                                             <span>Editar</span>
+                                                                        </a>
+                                                                    </li>
+                                                                }
+
+                                                                {   // Gobernacion
+                                                                    (tipoOrigen === 3) && 
+                                                                    <li>
+                                                                        <a href="#" onClick={() => handleMoverCarpetaGobernacion(carpeta)}>
+                                                                            <em className="icon ni ni-external" />
+                                                                            <span>Mover carpeta a otra caja</span>
                                                                         </a>
                                                                     </li>
                                                                 }
@@ -417,6 +432,7 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                 </div>{/* .nk-block */}
 
                 {
+                    //Proyecto 1 soacha
                     (tipoOrigen === 1 || tipoOrigen === 2) && 
                         <Modal
                             isOpen={modalIsOpen}
@@ -644,6 +660,11 @@ export const TablaCarpetas = ({tipoOrigen}) => {
                 {
                     (tipoOrigen === 3) && 
                         <EditarCarpetaGobernacionModal /> 
+                }
+                
+                {
+                    (tipoOrigen === 3) && 
+                        <MoverCarpetaGobernacionModal/>
                 }
                 
             </>

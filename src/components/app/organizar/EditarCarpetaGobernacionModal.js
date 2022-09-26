@@ -287,7 +287,7 @@ export const EditarCarpetaGobernacionModal = () => {
         contentLabel="Mover Carpeta"> 
 
           <div className="modal-header ">
-            <h5 className="modal-title">Mover carpeta a otra caja</h5>
+            <h5 className="modal-title">Editar carpeta</h5>
             <ul className="btn-toolbar">   
                 <a href="#" onClick={closeModal} className="close">
                     <em className="icon ni ni-cross" />

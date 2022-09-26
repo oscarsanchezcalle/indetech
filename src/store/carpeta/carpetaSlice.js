@@ -14,6 +14,7 @@ export const carpetaSlice = createSlice({
         isDeletingCarpeta: '',
         carpetaActiva: {},
         isOpenModalMoverCarpeta: false,
+        isOpenModalMoverCarpetaGobernacion: false,
         isOpenModalEditarCarpetaGobernacion: false,
         isOpenModalAsignar: false,
         isOpenModalVerPdf: false,
@@ -48,6 +49,9 @@ export const carpetaSlice = createSlice({
         },
         setOpenModalMoverCarpeta: ( state, {payload} ) => {
             state.isOpenModalMoverCarpeta = payload ;
+        },
+        setOpenModalMoverCarpetaGobernacion: ( state, {payload} ) => {
+            state.isOpenModalMoverCarpetaGobernacion = payload ;
         },
         setOpenModalAsignar: ( state, {payload} ) => {
             state.isOpenModalAsignar = payload ;
@@ -94,6 +98,7 @@ export const {
     setIsDeletingCarpeta,
     setCarpetaActiva,
     setOpenModalMoverCarpeta,
+    setOpenModalMoverCarpetaGobernacion,
     setOpenModalAsignar,
     setArchivosDropbox,
     setIsLoadingDropbox,

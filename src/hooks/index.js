@@ -11,5 +11,6 @@ export * from './useVigenciaStore';
 export * from './useSoporteStore';
 export * from './useFrecuenciaStore';
 export * from './useDocumentoStore';
-export * from './useFormBasic';
+export * from './useFormBasic'
+export * from './useFormSelects';
 

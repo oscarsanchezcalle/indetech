@@ -26,6 +26,22 @@ export const useCajaStore = () => {
         }
     }
 
+    const startLoadingCajasByProyecto = async(proyectoId) => {
+       
+        try {
+           
+            const { data } = await indetechApi.get('/caja/BuscarCajasPorProyecto?proyectoId='+proyectoId);
+            
+            const cajasForSelect = convertCajasToSelect(data); 
+            
+            dispatch( onLoadCajas( cajasForSelect ) );
+
+        } catch (error) {
+          console.log('Error cargando cajas');
+          console.log(error)
+        }
+    }
+
     const buscarRotuloCaja = async(criteria = {}) => {
        
         try {
@@ -96,6 +112,7 @@ export const useCajaStore = () => {
         //* Métodos
         startLoadingCajas,
         buscarRotuloCaja,
-        buscarRotuloCajaById
+        buscarRotuloCajaById,
+        startLoadingCajasByProyecto
     }
 }

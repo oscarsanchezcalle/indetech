@@ -8,7 +8,7 @@ import {
      setIsDeletingCarpeta, setCarpetaActiva, setOpenModalMoverCarpeta,
      setOpenModalAsignar, setArchivosDropbox, setIsLoadingDropbox, setOpenModalVerPdf,
      setCarpetasConPdf, setCarpetasSinPdf, setIsLoadingBuscarEstadoAsignacionImagenes, 
-     setTipoOrigen, setOpenModalEditarCarpetaGobernacion, setIsLoading
+     setTipoOrigen, setOpenModalEditarCarpetaGobernacion, setOpenModalMoverCarpetaGobernacion
 } from '../store';
 
 export const useCarpetaStore = () => {
@@ -20,7 +20,8 @@ export const useCarpetaStore = () => {
          isDeletingCarpeta, carpetaActiva, isOpenModalMoverCarpeta, 
          isOpenModalAsignar, isOpenModalVerPdf, archivosDropbox, isLoadingDropbox, 
          isLoadingAsignarPdf, isLoadingQuitarPdf, carpetasConPdf, carpetasSinPdf,
-         isLoadingBuscarEstadoAsignacionImagenes,tipoOrigen, isOpenModalEditarCarpetaGobernacion
+         isLoadingBuscarEstadoAsignacionImagenes,tipoOrigen, isOpenModalEditarCarpetaGobernacion,
+         isOpenModalMoverCarpetaGobernacion
      } = useSelector( state => state.carpeta );
 
 
@@ -460,6 +461,45 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const moverCarpetaGobernacion = async(moverCriteria) => {
+       
+        try {
+            
+            dispatch( setIsLoadingAddCarpeta(true) );
+
+            await indetechApi.put('/Carpeta/MoverCarpetaGobernacion', moverCriteria);
+            
+            getCarpetasByCajaId(moverCriteria.cajaIdActual);
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Carpeta movida con éxito',
+                text: 'La carpeta reposa en la caja indicada',
+                showConfirmButton: true,
+                //timer: 1500
+            });
+            
+            dispatch( setIsLoadingAddCarpeta(false));
+
+            return true;
+            
+        } catch (error) {
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'No se pudo mover la carpeta',
+                text: 'Por favor intenta nuevamente',
+                showConfirmButton: true,
+                timer: 1500
+            });
+
+            dispatch( setIsLoadingAddCarpeta(false));
+            console.log(error)
+            return false;
+        }
+    }
+
     const openModalMoverCarpeta = (carpeta) => {
 
         dispatch( setCarpetaActiva(carpeta) );
@@ -470,6 +510,18 @@ export const useCarpetaStore = () => {
 
         dispatch( setCarpetaActiva({}) );
         dispatch( setOpenModalMoverCarpeta(false) );
+    }
+
+    const openModalMoverCarpetaGobernacion = (carpeta) => {
+
+        dispatch( setCarpetaActiva(carpeta) );
+        dispatch( setOpenModalMoverCarpetaGobernacion(true) );
+    }
+
+    const closeModalMoverCarpetaGobernacion = () => {
+
+        dispatch( setCarpetaActiva({}) );
+        dispatch( setOpenModalMoverCarpetaGobernacion(false) );
     }
 
     const openModalEditarCarpetaGobernacion = (carpeta) => {
@@ -701,6 +753,7 @@ export const useCarpetaStore = () => {
         isLoadingBuscarEstadoAsignacionImagenes,
         tipoOrigen,
         isOpenModalEditarCarpetaGobernacion,
+        isOpenModalMoverCarpetaGobernacion,
 
         //* Métodos
         crearCarpeta, 
@@ -711,9 +764,12 @@ export const useCarpetaStore = () => {
         editarCarpeta,
         editarCarpetaGobernacion,
         openModalMoverCarpeta,
+        openModalMoverCarpetaGobernacion,
+        closeModalMoverCarpetaGobernacion,
         getCarpetasByNumeroCaja,
         closeModalMoverCarpeta,
         moverCarpeta,
+        moverCarpetaGobernacion,
         setCarpetasByCajaId,
         openModalAsignar,
         closeModalAsignar,
