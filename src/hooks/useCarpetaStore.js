@@ -115,6 +115,98 @@ export const useCarpetaStore = () => {
         }
     }
 
+    const crearCarpetaPlaneacion = async (criteria = {}, proyectoId, username ) => {
+        
+        dispatch(setIsLoadingAddCarpeta(true));
+
+        try
+        {
+            const {
+                dependencia, oficina, vigencia, numeroCaja, serie, subserie,
+                tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
+                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre, numeroPlanos, numeroCds 
+            } = criteria;
+
+            const fechaIni = new Date(parseISO(fechaExtremaInicial));
+
+            const fechaFin = new Date(parseISO(fechaExtremaFinal));
+            
+            if((fechaExtremaInicial != '' && fechaExtremaFinal != '') ){
+                if(isAfter(fechaIni, fechaFin) ){
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Rango de fechas incorrecto',
+                            text: `Por favor verifica las fechas extremas`,
+                            showConfirmButton: true,
+                        });
+        
+                        dispatch(setIsLoadingAddCarpeta(false));
+                        return;
+                    }
+                }
+            
+             
+            const carpetaCajaCriteria = {
+                "proyectoId": proyectoId,
+                "dependenciaId": dependencia.value,
+                "oficinaId": oficina.value,
+                "numeroCaja": parseInt(numeroCaja),
+                "serieId": serie.value,
+                "subserieId": subserie.value,
+                "tipoDocumentoId": 1,
+                "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
+                "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
+                "tomoActual": tomoActual == "" ? 0 : tomoActual,
+                "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
+                "folioInicial": folioInicial == "" ? 0 : folioInicial,
+                "folioFinal": folioFinal == "" ? 0 : folioFinal,
+                "codigo": codigo,
+                "tipoSoporteId": tipoSoporte.value === 'undefined' ? 0 : tipoSoporte.value,
+                "frecuenciaUsoId": frecuenciaUso.value === 'undefined' ? 0 : frecuenciaUso.value,
+                "notas": notas,
+                "vigenciaId": vigencia.value,
+                "cedulaCatastral": cedulaCatastral,
+                "duplicidad": duplicidad == "" ? 0 : duplicidad,
+                "autoDeCierre": autoDeCierre.value === 1 ? true : false,
+                "Username": username,
+                "numeroPlanos": numeroPlanos,
+                "numeroCds": numeroCds
+            }
+
+            //llamar al end point que crea las carpetas y las asigna a la caja
+            const {data} = await indetechApi.post('/Carpeta/planeacion', carpetaCajaCriteria);
+            
+            //Actualizar la tabla de las carpetas by Caja.
+            getCarpetasByCajaId(data.cajaId);
+
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Registro correcto',
+                text: ``,
+                showConfirmButton: true,
+                timer: 1500
+            });
+        }
+        catch(error)
+        {
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            console.log(error);
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'Error de conexión al servidor',
+                text: `Por favor intente nuevamente`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
+        }
+    }
+
     const crearCarpetaGobernacion = async (formValues = {}, proyectoId, username ) => {
         
         dispatch(setIsLoadingAddCarpeta(true));
@@ -235,6 +327,93 @@ export const useCarpetaStore = () => {
             }
 
             await indetechApi.put('/Carpeta/'+id, updateCriteria);
+            
+            //Actualizar la tabla de las carpetas by Caja.
+            getCarpetasByCajaId(cajaId);
+            
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'success',
+                title: 'Registro correcto',
+                text: ``,
+                showConfirmButton: true,
+                timer: 1000
+            });
+        }
+        catch(error)
+        {
+            dispatch(setIsLoadingAddCarpeta(false));
+
+            console.log(error);
+            Swal.fire({
+                //position: 'top-end',
+                icon: 'error',
+                title: 'Error de conexión al servidor',
+                text: `Por favor intente nuevamente`,
+                showConfirmButton: true,
+                //timer: 1500
+            });
+        }
+    }
+
+    const editarCarpetaPlaneacion = async (criteria = {}, cajaId, username) => {
+        
+        dispatch(setIsLoadingAddCarpeta(true));
+
+        try
+        {
+            const {
+                id, serie, subserie, tipoDocumento,
+                tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
+                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre, numeroCaja,
+                numeroPlanos, numeroCds
+            } = criteria;
+
+            const fechaIni = new Date(parseISO(fechaExtremaInicial));
+
+            const fechaFin = new Date(parseISO(fechaExtremaFinal));
+            
+            if(isAfter(fechaIni, fechaFin)){
+
+                Swal.fire({
+                    //position: 'top-end',
+                    icon: 'error',
+                    title: 'Rango de fechas incorrecto',
+                    text: `Por favor verifica las fechas extremas`,
+                    showConfirmButton: true,
+                    //timer: 1500
+                });
+
+                dispatch(setIsLoadingAddCarpeta(false));
+                return;
+            }
+
+            const updateCriteria = {
+                "id": 0,
+                "codigo": codigo,
+                "folioInicial": folioInicial == "" ? 0 : folioInicial,
+                "folioFinal": folioFinal == "" ? 0 : folioFinal,
+                "descripcion": notas,
+                "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
+                "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
+                "serieId": serie.value,
+                "subserieId": subserie.value,
+                "tipoDocumentoId": 1,
+                "tipoSoporteId":  tipoSoporte.value === 'undefined' ? 0 : tipoSoporte.value,
+                "frecuenciaUsoId":  frecuenciaUso.value === 'undefined' ? 0 : frecuenciaUso.value,
+                "tomoInicial": tomoActual == "" ? 0 : tomoActual,
+                "tomoFinal": tomoFinal == "" ? 0 : tomoFinal,
+                "cedulaCatastral": cedulaCatastral,
+                "duplicidad": duplicidad == "" ? 0 : duplicidad,
+                "autoDeCierre": autoDeCierre.value === 1 ? true : false,
+                "Username": username,
+                "numeroPlanos": numeroPlanos,
+                "numeroCds": numeroCds
+            }
+
+            await indetechApi.put('/Carpeta/EditarPlaneacion'+id, updateCriteria);
             
             //Actualizar la tabla de las carpetas by Caja.
             getCarpetasByCajaId(cajaId);
@@ -758,11 +937,13 @@ export const useCarpetaStore = () => {
         //* Métodos
         crearCarpeta, 
         crearCarpetaGobernacion,
+        crearCarpetaPlaneacion,
         getCarpetasByCajaId,
         deleteCarpetaById,
         deleteCarpetaGobernacionById,
         editarCarpeta,
         editarCarpetaGobernacion,
+        editarCarpetaPlaneacion,
         openModalMoverCarpeta,
         openModalMoverCarpetaGobernacion,
         closeModalMoverCarpetaGobernacion,

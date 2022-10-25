@@ -101,9 +101,15 @@ export const AdminNavbar = () => {
                           <span className="nk-menu-text">Gestionar Carpetas SECRETARIA GENERAL</span> 
                       </Link> 
                     </li>
+                    <li className="nk-menu-item">
+                      <Link 
+                        className="nk-menu-link"
+                        to="/administrarFuidPlaneacion">
+                          <span className="nk-menu-text">Gestionar Carpetas PLANEACION</span> 
+                      </Link>  
+                    </li>
                     </>
                   }
-                 
                 </ul>
               </li>
               {proyectoId == 1 && 
