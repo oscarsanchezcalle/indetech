@@ -15,6 +15,8 @@ import { ListaCarpetas } from '../components/app/indexar/ListaCarpetas';
 import { FuidScreenSoacha } from '../components/app/organizar/FuidScreenSoacha';
 import { FuidScreenGobernacion } from '../components/app/organizar/FuidScreenGobernacion';
 import { FuidScreenPlaneacion } from '../components/app/organizar/FuidScreenPlaneacion';
+import { InventarioAnt } from '../components/app/organizar/InventarioAnt';
+import { ConsultarInventarioAnt } from '../components/app/organizar/ConsultarInventarioAnt';
 
   
 export const AppRouter = () => {
@@ -50,6 +52,8 @@ export const AppRouter = () => {
                             <Route path="/indexar" element={<IndexarDocumento />} />  
                             <Route path="/tareasAnalista" element={<TareasAsignadas />} />  
                             <Route path="/cargueMasivo" element={<CargueMasivo />}/>  
+                            <Route path="/inventarioAnt" element={<InventarioAnt/>}/>
+                            <Route path="/ConsultarInventarioAnt" element={<ConsultarInventarioAnt/>}/>
                             <Route index element={<Dashboard/>}/>
                             
                             <Route path="/auth/login"  element={  <Navigate to="/" /> } />

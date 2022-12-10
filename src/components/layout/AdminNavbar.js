@@ -41,7 +41,7 @@ export const AdminNavbar = () => {
               </div>
             </div>
             <ul className="nk-menu nk-menu-main ui-s2">
-              <li className="nk-menu-item has-sub">
+              {/* <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">Dashboards</span>
                 </a>
@@ -68,10 +68,17 @@ export const AdminNavbar = () => {
                     </a>
                   </li>
                 </ul>
-              </li>
+              </li> */}
               <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
-                  <span className="nk-menu-text">FUID</span>
+                {
+                    (proyectoId === "2" || proyectoId === "1") && 
+                        <span className="nk-menu-text">FUID</span>
+                }
+                {
+                    proyectoId === "3" && 
+                       <span className="nk-menu-text">Inventario ANT</span>
+                }
                 </a>
                 <ul className="nk-menu-sub">
                   {
@@ -110,6 +117,16 @@ export const AdminNavbar = () => {
                     </li>
                     </>
                   }
+                  {
+                    proyectoId === "3" && 
+                    <li className="nk-menu-item">
+                      <Link 
+                        className="nk-menu-link"
+                        to="/inventarioAnt">
+                          <span className="nk-menu-text">Gestionar Carpetas</span> 
+                      </Link>  
+                    </li>
+                  }
                 </ul>
               </li>
               {proyectoId == 1 && 
@@ -140,16 +157,7 @@ export const AdminNavbar = () => {
 
                 </li>
               }
-              {/* <li className="nk-menu-item has-sub">
-                <a href="#" className="nk-menu-link nk-menu-toggle">
-                  <span className="nk-menu-text">Asignación</span>
-                </a>
-                <ul className="nk-menu-sub">
-                  <li className="nk-menu-item">
-                    <a href="#"  className="nk-menu-link"><span className="nk-menu-text">Asignar Documentos</span></a>
-                  </li>
-                </ul>
-              </li> */}
+              {(proyectoId == 1 || proyectoId ==2 ) && 
               <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                   <span className="nk-menu-text">Carpetas</span>
@@ -160,119 +168,23 @@ export const AdminNavbar = () => {
                   </li>
                 </ul>
               </li>
-              {/* <li className="nk-menu-item has-sub">
-                <a href="#" className="nk-menu-link nk-menu-toggle">
-                  <span className="nk-menu-text">Reportes</span>
-                </a>
-                <ul className="nk-menu-sub">
-                  <li className="nk-menu-item">
-                    <a href="#" className="nk-menu-link"><span className="nk-menu-text">Reportes 1</span></a>
-                  </li>
-                  <li className="nk-menu-item">
-                    <a href="#" className="nk-menu-link"><span className="nk-menu-text">Reporte 2</span></a>
-                  </li>
-                </ul>
-              </li>
+              }
+               {(proyectoId === "3") && 
               <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
-                  <span className="nk-menu-text">Administrar</span>
+                  <span className="nk-menu-text">Consultas</span>
                 </a>
                 <ul className="nk-menu-sub">
-                  <li className="nk-menu-item has-sub">
-                    <a href="#" className="nk-menu-link nk-menu-toggle">
-                      <span className="nk-menu-text">Proyecto</span>
-                    </a>
-                    <ul className="nk-menu-sub">
-                      <li className="nk-menu-item">
-                        <a href="#"  className="nk-menu-link" target="_blank"><span className="nk-menu-text">Tabla de retención documental</span></a>
-                      </li>
-                      <li className="nk-menu-item">
-                        <a href="#"  className="nk-menu-link" target="_blank"><span className="nk-menu-text">Campos personalizados</span></a>
-                      </li>
-                    </ul>
-                  </li>
                   <li className="nk-menu-item">
-                    <a href="#" className="nk-menu-link"><span className="nk-menu-text">Usuarios</span></a>
+                    <Link to="/ConsultarInventarioAnt" className="nk-menu-link"><span className="nk-menu-text">Seguimiento en tiempo real</span> </Link>
                   </li>
                 </ul>
               </li>
-               */}
+              }
             </ul>
           </div>
           <div className="nk-header-tools">
             <ul className="nk-quick-nav">
-              {/* <li className="dropdown notification-dropdown">
-                <a href="#" className="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
-                  <div className="icon-status icon-status-info"><em className="icon ni ni-bell" /></div>
-                </a>
-                <div className="dropdown-menu dropdown-menu-xl dropdown-menu-end dropdown-menu-s1">
-                  <div className="dropdown-head">
-                    <span className="sub-title nk-dropdown-title">Notifications</span>
-                    <a href="#">Mark All as Read</a>
-                  </div>
-                  <div className="dropdown-body">
-                    <div className="nk-notification">
-                      <div className="nk-notification-item dropdown-inner">
-                        <div className="nk-notification-icon">
-                          <em className="icon icon-circle bg-warning-dim ni ni-curve-down-right" />
-                        </div>
-                        <div className="nk-notification-content">
-                          <div className="nk-notification-text">You have requested to <span>Widthdrawl</span></div>
-                          <div className="nk-notification-time">2 hrs ago</div>
-                        </div>
-                      </div>
-                      <div className="nk-notification-item dropdown-inner">
-                        <div className="nk-notification-icon">
-                          <em className="icon icon-circle bg-success-dim ni ni-curve-down-left" />
-                        </div>
-                        <div className="nk-notification-content">
-                          <div className="nk-notification-text">Your <span>Deposit Order</span> is placed</div>
-                          <div className="nk-notification-time">2 hrs ago</div>
-                        </div>
-                      </div>
-                      <div className="nk-notification-item dropdown-inner">
-                        <div className="nk-notification-icon">
-                          <em className="icon icon-circle bg-warning-dim ni ni-curve-down-right" />
-                        </div>
-                        <div className="nk-notification-content">
-                          <div className="nk-notification-text">You have requested to <span>Widthdrawl</span></div>
-                          <div className="nk-notification-time">2 hrs ago</div>
-                        </div>
-                      </div>
-                      <div className="nk-notification-item dropdown-inner">
-                        <div className="nk-notification-icon">
-                          <em className="icon icon-circle bg-success-dim ni ni-curve-down-left" />
-                        </div>
-                        <div className="nk-notification-content">
-                          <div className="nk-notification-text">Your <span>Deposit Order</span> is placed</div>
-                          <div className="nk-notification-time">2 hrs ago</div>
-                        </div>
-                      </div>
-                      <div className="nk-notification-item dropdown-inner">
-                        <div className="nk-notification-icon">
-                          <em className="icon icon-circle bg-warning-dim ni ni-curve-down-right" />
-                        </div>
-                        <div className="nk-notification-content">
-                          <div className="nk-notification-text">You have requested to <span>Widthdrawl</span></div>
-                          <div className="nk-notification-time">2 hrs ago</div>
-                        </div>
-                      </div>
-                      <div className="nk-notification-item dropdown-inner">
-                        <div className="nk-notification-icon">
-                          <em className="icon icon-circle bg-success-dim ni ni-curve-down-left" />
-                        </div>
-                        <div className="nk-notification-content">
-                          <div className="nk-notification-text">Your <span>Deposit Order</span> is placed</div>
-                          <div className="nk-notification-time">2 hrs ago</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="dropdown-foot center">
-                    <a href="#">View All</a>
-                  </div>
-                </div>
-              </li> */}
               <li className="dropdown user-dropdown order-sm-first">
                 <a href="#" className="dropdown-toggle" data-bs-toggle="dropdown">
                   <div className="user-toggle">
