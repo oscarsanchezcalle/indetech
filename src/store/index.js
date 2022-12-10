@@ -10,5 +10,6 @@ export * from './soporte/soporteSlice';
 export * from './frecuencia/frecuenciaSlice';
 export * from './vigencia/vigenciaSlice';
 export * from './documento/documentoSlice';
+export * from './inventario/inventarioSlice';
 
 export * from './store';

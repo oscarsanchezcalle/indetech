@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { 
           carpetaSlice, cajaSlice, oficinaSlice, serieSlice,
           subserieSlice, tipoDocumentoSlice, dependenciaSlice, authSlice, 
-          vigenciaSlice, soporteSlice, frecuenciaSlice, documentoSlice
+          vigenciaSlice, soporteSlice, frecuenciaSlice, documentoSlice, inventarioSlice
        } 
 from "./";
 
@@ -19,6 +19,7 @@ export const store = configureStore({
         soporte: soporteSlice.reducer,
         frecuencia: frecuenciaSlice.reducer,
         vigencia: vigenciaSlice.reducer,
-        documento: documentoSlice.reducer
+        documento: documentoSlice.reducer,
+        inventario: inventarioSlice.reducer
     }
 });
