@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { format } from 'date-fns';
 import Swal from 'sweetalert2';
 import { indetechApi } from '../api';
 
@@ -32,6 +33,8 @@ export const useInventarioStore = () => {
                 fechaInicial, fechaFinal, tipoDocumento, folios, notas, fechaRegistro 
             } = formData;
 
+            console.log(formData);
+
             const criteria = {
                 "proyectoId": proyectoId,
                 "dependenciaId": 0,
@@ -48,23 +51,23 @@ export const useInventarioStore = () => {
                 "nombrePersona": "string",
                 "documentoIdentificacion": "string",
                 "numeroMatricula": "string",
-                "numeroExpediente": 0,
-                "fechaExpediente": "2022-12-10T19:52:59.207Z",
+                "numeroExpediente": 0, // numero resolucion y auto
+                "fechaExpediente": "2022-12-10T19:52:59.207Z", // fecha resolucion y auto
                 "numeroPlano": "string",
                 "fechaInicial": "2022-12-10T19:52:59.207Z",
                 "fechaFinal": "2022-12-10T19:52:59.207Z",
                 "tipoDocumentoId": 0,
                 "folios": 0,
                 "notas": "string",
-                "fechaRegistro": "2022-12-10T19:52:59.207Z",
+                "fechaRegistro": format(new Date(), "yyyy-MM-dd HH:mm:ss.SSS"),
                 "usuarioId": username
             }
 
             //llamar al end point que crea el registro de inventario documental
-            const {data} = await indetechApi.post('/InventarioDocumental', criteria);
+            //const {data} = await indetechApi.post('/InventarioDocumental', criteria);
             
             //Actualizar la tabla
-            GetInventarioByCajaCarpeta(data.numeroCaja, data.numeroCarpeta);
+            //GetInventarioByCajaCarpeta(data.numeroCaja, data.numeroCarpeta);
 
             dispatch(setIsLoadingAddInventario(false));
 
@@ -105,7 +108,7 @@ export const useInventarioStore = () => {
           
           dispatch(setIsLoadingAddInventario(false));
 
-          console.log('Error cargando carpetas de la caja id'+ cajaId);
+          console.log('Error cargando carpetas de la caja id'+ numeroCaja + ' y carpeta id: ' + numeroCarpeta);
           console.log(error)
         }
     }

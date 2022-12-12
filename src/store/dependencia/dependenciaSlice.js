@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const dependenciaSlice = createSlice({
     name: 'dependencia',
     initialState:{
-        isLoadingDependencia: true,
+        isLoadingDependencia: false,
         isSuccessDependencia: true,
         dependencias: [
             // temp

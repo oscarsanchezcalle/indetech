@@ -22,9 +22,7 @@ export const useDependieciaStore = () => {
             
             const dependeciasForSelect = convertDependenciasToSelect(data);
             
-            dispatch( onLoadDependiencias( dependeciasForSelect ) );
-
-            dispatch( isLoadingDependencias( false ) );
+            dispatch( onLoadDependiencias( dependeciasForSelect ) ); // cierra el loader tambien
 
         } catch (error) 
         {

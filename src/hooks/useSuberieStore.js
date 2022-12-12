@@ -19,7 +19,7 @@ export const useSubserieStore = () => {
             
             const subseriesForSelect = convertSubseriesToSelect(data);
 
-            dispatch( onLoadSubseries( subseriesForSelect ) );
+            dispatch( onLoadSubseries( subseriesForSelect ) );  // cierra el loader tambien
 
         } catch (error) 
         {

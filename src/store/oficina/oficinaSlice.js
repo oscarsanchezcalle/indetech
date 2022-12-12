@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const oficinaSlice = createSlice({
     name: 'oficina',
     initialState:{
-        isLoadingOficina: true,
+        isLoadingOficina: false,
         isSuccessOficina: true,
         oficinas: [
             // temp

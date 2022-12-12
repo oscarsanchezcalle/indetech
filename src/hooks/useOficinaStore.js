@@ -19,7 +19,7 @@ export const useOficinaStore = () => {
              
             const oficinasForSelect = convertOficinasToSelect(data);
 
-            dispatch( onLoadOficinas( oficinasForSelect ) );
+            dispatch( onLoadOficinas( oficinasForSelect ) );  // cierra el loader tambien
             
         } catch (error) 
         {

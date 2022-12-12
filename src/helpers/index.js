@@ -8,6 +8,6 @@ export * from './convertFrecuenciaToSelect';
 export * from './convertVigenciasToSelect';
 export * from './convertSoportesToSelect';
 export * from './convertCajasToSelect';
+export * from './convertDepartamentosToSelect';
+export * from './convertMunicipiosToSelect';
 export * from './dropboxToRender';
-
-

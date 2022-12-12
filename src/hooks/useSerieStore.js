@@ -19,7 +19,7 @@ export const useSerieStore = () => {
                         
             const seriesForSelect = convertSeriesToSelect(data);
 
-            dispatch( onLoadSeries( seriesForSelect ) );
+            dispatch( onLoadSeries( seriesForSelect ) );  // cierra el loader tambien
 
         } catch (error) 
         {

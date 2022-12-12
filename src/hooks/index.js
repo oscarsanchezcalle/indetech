@@ -13,4 +13,5 @@ export * from './useFrecuenciaStore';
 export * from './useDocumentoStore';
 export * from './useFormBasic'
 export * from './useFormSelects';
-
+export * from './useDepartamentoStore';
+export * from './useMunicipioStore';

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const serieSlice = createSlice({
     name: 'serie',
     initialState:{
-        isLoadingSerie: true,
+        isLoadingSerie: false,
         isSuccessSerie: true,
         series: [
             // temp
