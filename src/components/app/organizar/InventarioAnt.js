@@ -109,9 +109,11 @@ export const InventarioAnt = () => {
     const handleSelectDepartamentoChange = ( selectedOption ) => { 
         startLoadingMunicipios(selectedOption.value);
         handleSelectChange(selectedOption, "departamento");
-        //setMunicipioSelected(selectedOption);
     }
 
+    const handleSelectMunicipioChange = ( selectedOption ) => { 
+        handleSelectChange(selectedOption, "municipio");
+    }
     
     const handleBtnAgregar = async () => {
        
@@ -258,6 +260,7 @@ export const InventarioAnt = () => {
                                         options={municipios}  
                                         value={municipio}
                                         isLoading={isLoadingMunicipio}
+                                        onChange={handleSelectMunicipioChange}
                                         placeholder='Municipios'
                                         />
                                 </div>
