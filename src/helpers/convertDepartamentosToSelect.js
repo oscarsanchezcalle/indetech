@@ -4,7 +4,7 @@ export const convertDepartamentosToSelect = ( departamentos = []) => {
 
     departamentos.map( departamento => {
 
-        result.push({ value: departamento.id_departamento, label: `${departamento.departamento}` });
+        result.push({ value: departamento.id, label: `${departamento.descripcion}` });
 
     });
 

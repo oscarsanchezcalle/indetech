@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { format } from 'date-fns';
+import { format, isAfter, parseISO } from 'date-fns';
 import Swal from 'sweetalert2';
 import { indetechApi } from '../api';
 
@@ -20,11 +20,27 @@ export const useInventarioStore = () => {
           } = useSelector( state => state.inventario );
 
     const addRegistro = async (formData = {}, proyectoId, username ) => {
-
+       
         dispatch(setIsLoadingAddInventario(true));
 
         try
         {
+            const {isValid, validationConditions} = isValidFormForSave(formData);
+        
+            if (!isValid){
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos incompletos',
+                    text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
+                    showConfirmButton: true,
+                });
+
+                dispatch(setIsLoadingAddInventario(false));
+
+                return false;
+            }
+
             const {
                 dependencia, oficina, numeroCaja, numeroCarpeta, serie,
                 subserie, departamento, municipio, numeroConsecutivo,
@@ -33,41 +49,39 @@ export const useInventarioStore = () => {
                 fechaInicial, fechaFinal, tipoDocumento, folios, notas, fechaRegistro 
             } = formData;
 
-            console.log(formData);
-
             const criteria = {
-                "proyectoId": proyectoId,
-                "dependenciaId": 0,
-                "oficinaId": 0,
-                "numeroCaja": 0,
-                "numeroCarpeta": 0,
-                "serieId": 0,
-                "subserieId": 0,
-                "departamentoId": 0,
-                "municipioId": 0,
+                "proyectoId": parseInt(proyectoId),
+                "dependenciaId":  dependencia.value === 'undefined' ? 0 : dependencia.value,
+                "oficinaId": oficina.value === 'undefined' ? 0 : oficina.value,
+                "numeroCaja": parseInt(numeroCaja),
+                "numeroCarpeta": parseInt(numeroCarpeta),
+                "serieId": serie.value === 'undefined' ? 0 : serie.value,
+                "subserieId": subserie.value === 'undefined' ? 0 : subserie.value,
+                "departamentoId": departamento.value === 'undefined' ? 0 : departamento.value,
+                "municipioId": municipio.value === 'undefined' ? 0 : municipio.value,
                 "numeroConsecutivo": 0,
-                "nombre": "string",
-                "nombrePredio": "string",
-                "nombrePersona": "string",
-                "documentoIdentificacion": "string",
-                "numeroMatricula": "string",
-                "numeroExpediente": 0, // numero resolucion y auto
-                "fechaExpediente": "2022-12-10T19:52:59.207Z", // fecha resolucion y auto
-                "numeroPlano": "string",
-                "fechaInicial": "2022-12-10T19:52:59.207Z",
-                "fechaFinal": "2022-12-10T19:52:59.207Z",
+                "nombre": nombre,
+                "nombrePredio": nombrePredio,
+                "nombrePersona": nombrePersona,
+                "documentoIdentificacion": documentoIdentificacion,
+                "numeroMatricula": numeroMatricula,
+                "numeroExpediente": numeroExpediente, // numero resolucion y auto
+                "fechaExpediente": fechaExpediente === '' ? '0001-01-01' : fechaExpediente, // fecha resolucion y auto
+                "numeroPlano": numeroPlano,
+                "fechaInicial": fechaInicial === '' ? '0001-01-01' : fechaInicial,
+                "fechaFinal": fechaFinal === '' ? '0001-01-01' : fechaFinal,
                 "tipoDocumentoId": 0,
-                "folios": 0,
-                "notas": "string",
-                "fechaRegistro": format(new Date(), "yyyy-MM-dd HH:mm:ss.SSS"),
+                "folios": folios == "" ? 0 : folios,
+                "notas": notas,
+                "fechaRegistro": new Date(),
                 "usuarioId": username
             }
 
             //llamar al end point que crea el registro de inventario documental
-            //const {data} = await indetechApi.post('/InventarioDocumental', criteria);
+            const {data} = await indetechApi.post('/InventarioDocumental', criteria);
             
             //Actualizar la tabla
-            //GetInventarioByCajaCarpeta(data.numeroCaja, data.numeroCarpeta);
+            GetInventarioByCajaCarpeta(data.numeroCaja, data.numeroCarpeta);
 
             dispatch(setIsLoadingAddInventario(false));
 
@@ -78,6 +92,8 @@ export const useInventarioStore = () => {
                 showConfirmButton: true,
                 timer: 1500
             });
+
+            return true;
         }
         catch(error)
         {
@@ -98,7 +114,7 @@ export const useInventarioStore = () => {
         try {
             dispatch(setIsLoadingGetInventario(true));
 
-            const { data } = await indetechApi.get('/carpeta/GetInventarioByCajaCarpeta?numeroCaja='+numeroCaja+'&numeroCarpeta='+numeroCarpeta);            
+            const { data } = await indetechApi.get('/InventarioDocumental/GetInventarioByCajaCarpeta?numeroCaja='+numeroCaja+'&numeroCarpeta='+numeroCarpeta);            
             
             dispatch( onGetInventario( data ) );
 
@@ -107,6 +123,8 @@ export const useInventarioStore = () => {
         } catch (error) {
           
           dispatch(setIsLoadingAddInventario(false));
+
+          dispatch(setIsLoadingGetInventario(false));
 
           console.log('Error cargando carpetas de la caja id'+ numeroCaja + ' y carpeta id: ' + numeroCarpeta);
           console.log(error)
@@ -142,6 +160,64 @@ export const useInventarioStore = () => {
           console.log(error)
         }
     }
+
+    const isValidFormForSave = (criteria = {}) => {
+
+        const {
+                numeroCaja, numeroCarpeta, dependencia, oficina,
+                serie, fechaInicial, fechaFinal 
+              } = criteria;
+
+        const validationConditions = [];
+        let isValid = true;
+        let isValidFechas = true; 
+       
+        if(fechaInicial != '' && fechaFinal != ''){
+            
+            const fechaIni = new Date(parseISO(fechaInicial));
+            const fechaFin = new Date(parseISO(fechaFinal));
+
+            if(isAfter(fechaIni, fechaFin)){
+                isValidFechas = false; 
+            }else{
+                isValidFechas = true; 
+            }
+        }  
+
+        if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
+             ||  typeof serie.value === 'undefined'
+             || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" )
+             || (typeof numeroCarpeta === 'undefined' || numeroCarpeta === 0 || numeroCarpeta === "" )
+             || !isValidFechas
+            )
+        {            
+            
+            if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
+                validationConditions.push(' Número de Caja');
+            }
+            if(typeof numeroCarpeta === 'undefined' || numeroCarpeta === 0 || numeroCarpeta === ""){
+                validationConditions.push(' Número de Carpeta');
+            }
+            if(typeof dependencia.value === 'undefined'){
+                validationConditions.push(' Dependencia');
+            }
+            if(typeof oficina.value === 'undefined'){
+                validationConditions.push(' Sub Dependencia');
+            }
+            if(typeof serie.value === 'undefined'){
+                validationConditions.push(' Serie');
+            }
+            if(!isValidFechas){
+                validationConditions.push(' Rango de fechas extremas');
+            }
+            isValid = false;
+        }
+       
+        return {
+            isValid,
+            validationConditions
+        };            
+    } 
 
     return {
         //* Propiedades

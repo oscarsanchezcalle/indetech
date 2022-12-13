@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Select from 'react-select';
+
 import { LoadingInButton } from '../LoadingInButton';
 
 import 
@@ -9,6 +10,7 @@ import
 } from '../../../hooks';
 import Swal from 'sweetalert2';
 import { useInventarioStore } from '../../../hooks/useInventarioStore';
+import { TablaInventario } from './TablaInventario';
 
 export const InventarioAnt = () => {
 
@@ -117,9 +119,11 @@ export const InventarioAnt = () => {
     
     const handleBtnAgregar = async () => {
        
-        await addRegistro(formValues, proyectoId, username);
+        const isSuccess = await addRegistro(formValues, proyectoId, username);
 
-        reset();
+        if(isSuccess){
+            reset();
+        }
     }
 
     const handleBtnBuscar = () => {
@@ -416,11 +420,11 @@ export const InventarioAnt = () => {
             </div>
         </div>
     </div>
-    {/* <div className='row pt-1'>
+    <div className='row pt-1'>
         <div className='col-md-12'>
-            <TablaCarpetas  tipoOrigen={3}/>
+            <TablaInventario/>
         </div>
-    </div> */}
+    </div>
     </>
   )
 }  

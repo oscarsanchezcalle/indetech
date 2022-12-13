@@ -4,7 +4,7 @@ export const convertMunicipiosToSelect = ( municipios = []) => {
 
     municipios.map( municipio => {
 
-        result.push({ value: municipio.id_municipio, label: `${municipio.municipio}` });
+        result.push({ value: municipio.id, label: `${municipio.descripcion}` });
 
     });
 
