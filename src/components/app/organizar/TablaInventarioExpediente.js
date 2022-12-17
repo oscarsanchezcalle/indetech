@@ -47,7 +47,7 @@ export const TablaInventarioExpediente = () => {
                         <table className="table table-sm table-hover">
                             <thead className="tb-odr-head">
                                 <tr>
-                                <th>
+                                    <th>
                                         <span># Caja</span>
                                     </th>
                                     <th>
