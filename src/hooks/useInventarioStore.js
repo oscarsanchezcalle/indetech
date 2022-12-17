@@ -43,10 +43,11 @@ export const useInventarioStore = () => {
 
             const {
                 dependencia, oficina, numeroCaja, numeroCarpeta, serie,
-                subserie, departamento, municipio, numeroConsecutivo,
+                subserie, departamento, municipio,
                 nombre, nombrePredio, nombrePersona, documentoIdentificacion,
                 numeroMatricula, numeroExpediente, fechaExpediente, numeroPlano,
-                fechaInicial, fechaFinal, tipoDocumento, folios, notas, fechaRegistro 
+                fechaInicial, fechaFinal, notas,  expedientePreexistente, estante, modulo,
+                entrepano
             } = formData;
 
             const criteria = {
@@ -56,7 +57,7 @@ export const useInventarioStore = () => {
                 "numeroCaja": parseInt(numeroCaja),
                 "numeroCarpeta": parseInt(numeroCarpeta),
                 "serieId": serie.value === 'undefined' ? 0 : serie.value,
-                "subserieId": subserie.value === 'undefined' ? 0 : subserie.value,
+                "subserieId": 0,
                 "departamentoId": departamento.value === 'undefined' ? 0 : departamento.value,
                 "municipioId": municipio.value === 'undefined' ? 0 : municipio.value,
                 "numeroConsecutivo": 0,
@@ -71,10 +72,111 @@ export const useInventarioStore = () => {
                 "fechaInicial": fechaInicial === '' ? '0001-01-01' : fechaInicial,
                 "fechaFinal": fechaFinal === '' ? '0001-01-01' : fechaFinal,
                 "tipoDocumentoId": 0,
-                "folios": folios == "" ? 0 : folios,
+                "folios": 0,
                 "notas": notas,
                 "fechaRegistro": new Date(),
-                "usuarioId": username
+                "usuarioId": username,
+                "expedientePreexistente": expedientePreexistente,
+                "estante": estante,
+                "modulo": modulo,
+                "entrepano": entrepano,
+                "estado": 0
+            }
+
+            //llamar al end point que crea el registro de inventario documental
+            const {data} = await indetechApi.post('/InventarioDocumental', criteria);
+            
+            //Actualizar la tabla
+            GetInventarioByCajaCarpeta(data.numeroCaja, data.numeroCarpeta);
+
+            dispatch(setIsLoadingAddInventario(false));
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Registro correcto',
+                text: '',
+                showConfirmButton: true,
+                timer: 1500
+            });
+
+            return true;
+        }
+        catch(error)
+        {
+            dispatch(setIsLoadingAddInventario(false));
+
+            console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión al servidor',
+                text: `Por favor intente nuevamente`,
+                showConfirmButton: true
+            });
+        }
+    }
+
+    const addRegistroExpediente = async (formData = {}, proyectoId, username ) => {
+       
+        dispatch(setIsLoadingAddInventario(true));
+
+        try
+        {
+            const {isValid, validationConditions} = isValidFormForSave(formData);
+        
+            if (!isValid){
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos incompletos',
+                    text: `Los siguientes campos son obligatorios: ${String(validationConditions)}`,
+                    showConfirmButton: true,
+                });
+
+                dispatch(setIsLoadingAddInventario(false));
+
+                return false;
+            }
+
+            const {
+                dependencia, oficina, numeroCaja, serie,
+                departamento, municipio,
+                nombre, nombrePredio, nombrePersona, documentoIdentificacion,
+                numeroMatricula, numeroExpediente, fechaExpediente, numeroPlano,
+                fechaInicial, fechaFinal, notas,  expedientePreexistente, estante, modulo,
+                entrepano
+            } = formData;
+
+            const criteria = {
+                "proyectoId": parseInt(proyectoId),
+                "dependenciaId":  dependencia.value === 'undefined' ? 0 : dependencia.value,
+                "oficinaId": oficina.value === 'undefined' ? 0 : oficina.value,
+                "numeroCaja": parseInt(numeroCaja),
+                "numeroCarpeta": 0,
+                "serieId": serie.value === 'undefined' ? 0 : serie.value,
+                "subserieId": 0,
+                "departamentoId": departamento.value === 'undefined' ? 0 : departamento.value,
+                "municipioId": municipio.value === 'undefined' ? 0 : municipio.value,
+                "numeroConsecutivo": 0,
+                "nombre": nombre,
+                "nombrePredio": nombrePredio,
+                "nombrePersona": nombrePersona,
+                "documentoIdentificacion": documentoIdentificacion,
+                "numeroMatricula": numeroMatricula,
+                "numeroExpediente": numeroExpediente, // numero resolucion y auto
+                "fechaExpediente": fechaExpediente === '' ? '0001-01-01' : fechaExpediente, // fecha resolucion y auto
+                "numeroPlano": numeroPlano,
+                "fechaInicial": fechaInicial === '' ? '0001-01-01' : fechaInicial,
+                "fechaFinal": fechaFinal === '' ? '0001-01-01' : fechaFinal,
+                "tipoDocumentoId": 0,
+                "folios": 0,
+                "notas": notas,
+                "fechaRegistro": new Date(),
+                "usuarioId": username,
+                "expedientePreexistente": expedientePreexistente,
+                "estante": estante,
+                "modulo": modulo,
+                "entrepano": entrepano,
+                "estado": 0
             }
 
             //llamar al end point que crea el registro de inventario documental
@@ -126,7 +228,29 @@ export const useInventarioStore = () => {
 
           dispatch(setIsLoadingGetInventario(false));
 
-          console.log('Error cargando carpetas de la caja id'+ numeroCaja + ' y carpeta id: ' + numeroCarpeta);
+          console.log('Error cargando carpetas de la caja: '+ numeroCaja + ' y carpeta: ' + numeroCarpeta);
+          console.log(error)
+        }
+    }
+
+    const GetInventarioByCaja = async (numeroCaja) => {
+        
+        try {
+            dispatch(setIsLoadingGetInventario(true));
+
+            const { data } = await indetechApi.get('/InventarioDocumental/GetInventarioByCaja?numeroCaja='+numeroCaja);            
+            
+            dispatch( onGetInventario( data ) );
+
+            dispatch(setIsLoadingGetInventario(false));
+
+        } catch (error) {
+          
+          dispatch(setIsLoadingAddInventario(false));
+
+          dispatch(setIsLoadingGetInventario(false));
+
+          console.log('Error cargando carpetas de la caja '+ numeroCaja);
           console.log(error)
         }
     }
@@ -139,8 +263,14 @@ export const useInventarioStore = () => {
             
             await indetechApi.delete('/InventarioDocumental/'+registroId); 
             
-            //Actualizar la tabla
-            GetInventarioByCajaCarpeta(numeroCaja, numeroCarpeta);
+            if(numeroCarpeta > parseInt(0)){
+                 //Actualizar la tabla caja y carpeta
+                 GetInventarioByCajaCarpeta(numeroCaja, numeroCarpeta);
+            }else{
+                //Actualizar la tabla caja
+                GetInventarioByCaja(numeroCaja);
+            }
+            
 
             Swal.fire({
                 //position: 'top-end',
@@ -233,7 +363,9 @@ export const useInventarioStore = () => {
        
         //* Métodos
         addRegistro,
+        addRegistroExpediente,
         GetInventarioByCajaCarpeta,
+        GetInventarioByCaja,
         deleteRegistroById
     }
 }

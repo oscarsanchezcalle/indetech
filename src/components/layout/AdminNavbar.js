@@ -119,14 +119,23 @@ export const AdminNavbar = () => {
                   }
                   {
                     proyectoId === "3" && 
-                    <li className="nk-menu-item">
-                      <Link 
-                        className="nk-menu-link"
-                        to="/inventarioAnt">
-                          <span className="nk-menu-text">Gestionar Carpetas</span> 
-                      </Link>  
-                    </li>
-                  }
+                    <>
+                      <li className="nk-menu-item">
+                        <Link 
+                          className="nk-menu-link"
+                          to="/inventarioAnt">
+                            <span className="nk-menu-text">Gestionar RESOLUCIONES</span> 
+                        </Link>  
+                      </li>
+                      <li className="nk-menu-item">
+                        <Link 
+                          className="nk-menu-link"
+                          to="/inventarioAntExpediente">
+                            <span className="nk-menu-text">Gestionar EXPEDIENTES</span> 
+                        </Link> 
+                      </li>
+                    </>
+                    }
                 </ul>
               </li>
               {proyectoId == 1 && 

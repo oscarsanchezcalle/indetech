@@ -17,6 +17,7 @@ import { FuidScreenGobernacion } from '../components/app/organizar/FuidScreenGob
 import { FuidScreenPlaneacion } from '../components/app/organizar/FuidScreenPlaneacion';
 import { InventarioAnt } from '../components/app/organizar/InventarioAnt';
 import { ConsultarInventarioAnt } from '../components/app/organizar/ConsultarInventarioAnt';
+import { InventarioAntExpediente } from '../components/app/organizar/InventarioAntExpediente';
 
   
 export const AppRouter = () => {
@@ -53,6 +54,7 @@ export const AppRouter = () => {
                             <Route path="/tareasAnalista" element={<TareasAsignadas />} />  
                             <Route path="/cargueMasivo" element={<CargueMasivo />}/>  
                             <Route path="/inventarioAnt" element={<InventarioAnt/>}/>
+                            <Route path="/inventarioAntExpediente" element={<InventarioAntExpediente/>}/>
                             <Route path="/ConsultarInventarioAnt" element={<ConsultarInventarioAnt/>}/>
                             <Route index element={<Dashboard/>}/>
                             

@@ -5,14 +5,15 @@ import { LoadingInButton } from '../LoadingInButton';
 
 import 
 { 
-    useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore,
+    useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore, useSubserieStore,
     useFormBasic, useDepartamentoStore, useMunicipioStore
 } from '../../../hooks';
 import Swal from 'sweetalert2';
 import { useInventarioStore } from '../../../hooks/useInventarioStore';
 import { TablaInventario } from './TablaInventario';
+import { TablaInventarioExpediente } from './TablaInventarioExpediente';
 
-export const InventarioAnt = () => {
+export const InventarioAntExpediente = () => {
 
     const { proyectoId, proyecto, username } = useAuthStore();
     const { startLoadingDependencias, dependencias, setDependenciaSelected, isLoadingDependencia } = useDependieciaStore();
@@ -22,7 +23,7 @@ export const InventarioAnt = () => {
     const { startLoadingDepartamentos, departamentos, isLoadingDepartamento } = useDepartamentoStore();
     const { startLoadingMunicipios, municipios, isLoadingMunicipio } = useMunicipioStore();
     const { isLoadingAdd, isLoadingGet,
-            addRegistro, GetInventarioByCajaCarpeta, GetInventarioByCaja       
+        addRegistroExpediente, GetInventarioByCaja       
           } = useInventarioStore();
 
     //useForm
@@ -30,7 +31,6 @@ export const InventarioAnt = () => {
             dependencia: {},
             oficina: {},
             numeroCaja: '',
-            numeroCarpeta: '',
             serie: {},
             //subserie: {},
             departamento: {},
@@ -62,7 +62,6 @@ export const InventarioAnt = () => {
             dependencia,
             oficina,
             numeroCaja,
-            numeroCarpeta,
             serie,
             //subserie,
             departamento,
@@ -139,30 +138,13 @@ export const InventarioAnt = () => {
     
     const handleBtnAgregar = async () => {
        
-        const isSuccess = await addRegistro(formValues, proyectoId, username);
+        const isSuccess = await addRegistroExpediente(formValues, proyectoId, username);
 
         if(isSuccess){
             reset();
             handleSelectDependenciaChange(dependencias[0]);
         }
     }
-
-    const handleBtnBuscar = () => {
-
-        if (numeroCaja == '' || numeroCarpeta == '' || numeroCaja == 0 || numeroCarpeta == 0){
-
-            Swal.fire({
-                icon: 'warning',
-                title: 'Campos incompletos',
-                text: `Ingresa un número válido de caja o carpeta`,
-                showConfirmButton: true
-            });
-
-            return;
-        }
-
-        GetInventarioByCajaCarpeta(numeroCaja, numeroCarpeta);
-    }    
 
     const handleBtnBuscarByCaja = () => {
 
@@ -185,7 +167,7 @@ export const InventarioAnt = () => {
     <>
     <div className='row'>
         <div className='col-md-7'>
-            <h6 className="title pb-2">Registro de Inventario <strong className="text-danger">RESOLUCIONES</strong></h6>
+            <h6 className="title pb-2">Registro de Inventario <strong className="text-danger">EXPEDIENTES</strong></h6>
             <div className="row">
                 <label className="col-sm-3 col-form-label form-label">Entidad</label>
                 <div className="col-sm-9">
@@ -205,31 +187,9 @@ export const InventarioAnt = () => {
                                 value={numeroCaja}  
                                 autoComplete="off"                       
                                 onChange={handleInputChange}/>
-                            {/* <div className="input-group-append">
+                            <div className="input-group-append">
                                 <button onClick={handleBtnBuscarByCaja}  disabled={isLoadingGet} className="btn btn-outline-primary btn-dim">
                                     <LoadingInButton isLoading={isLoadingGet} btnText="Buscar por Caja" />
-                                </button>
-                            </div> */}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className=" row">
-                <label className="col-sm-3 col-form-label form-label">Carpeta</label>
-                <div className="col-sm-9">
-                    <div className="form-control-wrap">
-                        <div className="input-group">
-                            <input 
-                                type="number" 
-                                className="form-control" 
-                                placeholder='Número de la carpeta'  
-                                name="numeroCarpeta"   
-                                value={numeroCarpeta}  
-                                autoComplete="off"                       
-                                onChange={handleInputChange}/>
-                            <div className="input-group-append">
-                                <button onClick={handleBtnBuscar}  disabled={isLoadingGet} className="btn btn-outline-primary btn-dim">
-                                    <LoadingInButton isLoading={isLoadingGet} btnText="Buscar por Caja y Carpeta" />
                                 </button>
                             </div>
                         </div>
@@ -485,7 +445,7 @@ export const InventarioAnt = () => {
     </div>
     <div className='row pt-1'>
         <div className='col-md-12'>
-            <TablaInventario/>
+            <TablaInventarioExpediente/>
         </div>
     </div>
     </>
