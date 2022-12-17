@@ -121,7 +121,7 @@ export const useInventarioStore = () => {
 
         try
         {
-            const {isValid, validationConditions} = isValidFormForSave(formData);
+            const {isValid, validationConditions} = isValidFormForSaveExpediente(formData);
         
             if (!isValid){
 
@@ -183,7 +183,7 @@ export const useInventarioStore = () => {
             const {data} = await indetechApi.post('/InventarioDocumental', criteria);
             
             //Actualizar la tabla
-            GetInventarioByCajaCarpeta(data.numeroCaja, data.numeroCarpeta);
+            GetInventarioByCaja(data.numeroCaja);
 
             dispatch(setIsLoadingAddInventario(false));
 
@@ -327,6 +327,60 @@ export const useInventarioStore = () => {
             }
             if(typeof numeroCarpeta === 'undefined' || numeroCarpeta === 0 || numeroCarpeta === ""){
                 validationConditions.push(' Número de Carpeta');
+            }
+            if(typeof dependencia.value === 'undefined'){
+                validationConditions.push(' Dependencia');
+            }
+            if(typeof oficina.value === 'undefined'){
+                validationConditions.push(' Sub Dependencia');
+            }
+            if(typeof serie.value === 'undefined'){
+                validationConditions.push(' Serie');
+            }
+            if(!isValidFechas){
+                validationConditions.push(' Rango de fechas extremas');
+            }
+            isValid = false;
+        }
+       
+        return {
+            isValid,
+            validationConditions
+        };            
+    } 
+
+    const isValidFormForSaveExpediente = (criteria = {}) => {
+
+        const {
+                numeroCaja, dependencia, oficina,
+                serie, fechaInicial, fechaFinal 
+              } = criteria;
+
+        const validationConditions = [];
+        let isValid = true;
+        let isValidFechas = true; 
+       
+        if(fechaInicial != '' && fechaFinal != ''){
+            
+            const fechaIni = new Date(parseISO(fechaInicial));
+            const fechaFin = new Date(parseISO(fechaFinal));
+
+            if(isAfter(fechaIni, fechaFin)){
+                isValidFechas = false; 
+            }else{
+                isValidFechas = true; 
+            }
+        }  
+
+        if (     typeof dependencia.value === 'undefined' || typeof oficina.value === 'undefined'
+             ||  typeof serie.value === 'undefined'
+             || (typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === "" )
+             || !isValidFechas
+            )
+        {            
+            
+            if(typeof numeroCaja === 'undefined' || numeroCaja === 0 || numeroCaja === ""){
+                validationConditions.push(' Número de Caja');
             }
             if(typeof dependencia.value === 'undefined'){
                 validationConditions.push(' Dependencia');

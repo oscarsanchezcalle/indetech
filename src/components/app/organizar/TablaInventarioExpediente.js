@@ -48,7 +48,7 @@ export const TablaInventarioExpediente = () => {
                             <thead className="tb-odr-head">
                                 <tr>
                                 <th>
-                                        <span># Caja - Carpeta</span>
+                                        <span># Caja</span>
                                     </th>
                                     <th>
                                         <span>Dependencia</span>
@@ -85,7 +85,7 @@ export const TablaInventarioExpediente = () => {
                                     <tr key={registro.id }>
                                          <td>
                                             <span className="">
-                                                {registro.numeroCaja} - {registro.numeroCarpeta}
+                                                {registro.numeroCaja}
                                             </span>
                                         </td>
                                         <td>
