@@ -10,13 +10,22 @@ import { setIsLoadingAddInventario,
          onGetInventario,
          setRegistroActivoInventario,
          setTipoOrigenInventario,
-         setOpenModalEditarInventario } from '../store';
+         setOpenModalEditarInventario,
+         setGetDepartamentosFilter,
+         setGetNumeroResolucionFilter,
+         setGetFechaResolucionFilter,
+         setGetNumeroCajaFilter,
+         setGetSerieSubserieFilter, } from '../store';
+import { convertDepartamentosFilterToSelect, convertNumeroResolucionFilterToSelect } from '../helpers';
 
 export const useInventarioStore = () => {
   
     const dispatch = useDispatch();
     const { isLoadingGet, isLoadingAdd, isLoadingDelete, isLoadingUpdate,
-            registros, registroActivo, isOpenModalEditar, tipoOrigen 
+            registros, registroActivo, isOpenModalEditar, tipoOrigen,
+            isLoadingDepartamentosFilter, isLoadingNumeroResolucionFilter,
+            isLoadingFechaResolucionFilter, isLoadingNumeroCajaFilter,
+            isLoadingSerieSubserieFilter            
           } = useSelector( state => state.inventario );
 
     const addRegistro = async (formData = {}, proyectoId, username ) => {
@@ -403,6 +412,48 @@ export const useInventarioStore = () => {
         };            
     } 
 
+    const getDepartamentosFilter = async() => {
+       
+        try 
+        {
+            dispatch( isLoadingDepartamentosFilter( true ) );
+            
+            const { data } = await indetechApi.get('/InventarioDocumental/departamentosFilter');
+                        
+            const resultForSelect = convertDepartamentosFilterToSelect(data);
+
+            dispatch( setGetDepartamentosFilter( resultForSelect ) );  
+
+            dispatch( isLoadingDepartamentosFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( isLoadingDepartamentosFilter( false ) );
+
+        }
+    }
+
+    const getNumeroResolucionFilter = async() => {
+       
+        try 
+        {
+            dispatch( isLoadingNumeroResolucionFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/numeroResolucionFilter');
+                        
+            const resultForSelect = convertNumeroResolucionFilterToSelect(data);
+
+            dispatch( setGetNumeroResolucionFilter( resultForSelect ) );  
+
+            dispatch( isLoadingNumeroResolucionFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( isLoadingNumeroResolucionFilter( false ) );
+
+        }
+    }
+
     return {
         //* Propiedades
         registros,
@@ -420,6 +471,9 @@ export const useInventarioStore = () => {
         addRegistroExpediente,
         GetInventarioByCajaCarpeta,
         GetInventarioByCaja,
-        deleteRegistroById
+        deleteRegistroById,
+        
+        getDepartamentosFilter,
+        getNumeroResolucionFilter
     }
 }
