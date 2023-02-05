@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import Select from 'react-select';
 
-import { LoadingInButton } from '../LoadingInButton';
+import { LoadingInButton } from '../../LoadingInButton';
 
 import 
 { 
     useAuthStore, useDependieciaStore, useOficinaStore, useSerieStore, useSubserieStore,
     useFormBasic, useDepartamentoStore, useMunicipioStore
-} from '../../../hooks';
+} from '../../../../hooks';
 import Swal from 'sweetalert2';
-import { useInventarioStore } from '../../../hooks/useInventarioStore';
+import { useInventarioStore } from '../../../../hooks/useInventarioStore';
 import { TablaInventario } from './TablaInventario';
 import { TablaInventarioExpediente } from './TablaInventarioExpediente';
 

@@ -1,14 +1,14 @@
 import React from 'react'
 import Swal from 'sweetalert2';
-import { useInventarioStore } from '../../../hooks/useInventarioStore';
-import { NumeroCaja } from './NumeroCaja';
-import { NumeroCarpeta } from './NumeroCarpeta';
+import { useInventarioStore } from '../../../../hooks/useInventarioStore';
+import { NumeroCaja } from '../NumeroCaja';
+import { NumeroCarpeta } from '../NumeroCarpeta';
 
-export const TablaInventarioExpediente = () => {
+export const TablaInventario = () => {
 
   const { registros, deleteRegistroById, isLoadingDelete } = useInventarioStore();
 
-  const handleBtnEliminar = async (id, numeroCaja) => {
+  const handleBtnEliminar = async (id, numeroCaja, numeroCarpeta) => {
         Swal.fire({  
         title: '¿Está seguro de eliminar?',  
         showCancelButton: true,  
@@ -17,7 +17,7 @@ export const TablaInventarioExpediente = () => {
         
         }).then((result) => {  
             if (result.isConfirmed) {   
-                deleteRegistroById(id, numeroCaja, 0);
+                deleteRegistroById(id, numeroCaja, numeroCarpeta);
             }
         });
     }
@@ -47,8 +47,8 @@ export const TablaInventarioExpediente = () => {
                         <table className="table table-sm table-hover">
                             <thead className="tb-odr-head">
                                 <tr>
-                                    <th>
-                                        <span># Caja</span>
+                                <th>
+                                        <span># Caja - Carpeta</span>
                                     </th>
                                     <th>
                                         <span>Dependencia</span>
@@ -85,7 +85,7 @@ export const TablaInventarioExpediente = () => {
                                     <tr key={registro.id }>
                                          <td>
                                             <span className="">
-                                                {registro.numeroCaja}
+                                                {registro.numeroCaja} - {registro.numeroCarpeta}
                                             </span>
                                         </td>
                                         <td>
@@ -146,7 +146,7 @@ export const TablaInventarioExpediente = () => {
                                                 <div className="dropdown-menu dropdown-menu-end" style={{}}>
                                                     <ul className="link-list-opt no-bdr">
                                                         <li>
-                                                            <a href='#' onClick={() => handleBtnEliminar(registro.id, registro.numeroCaja)}>
+                                                            <a href='#' onClick={() => handleBtnEliminar(registro.id, registro.numeroCaja, registro.numeroCarpeta)}>
                                                                 <em className="icon ni ni-trash" />
                                                                 <span>Eliminar</span>
                                                             </a>

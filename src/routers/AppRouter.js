@@ -15,9 +15,9 @@ import { ListaCarpetas } from '../components/app/indexar/ListaCarpetas';
 import { FuidScreenSoacha } from '../components/app/organizar/FuidScreenSoacha';
 import { FuidScreenGobernacion } from '../components/app/organizar/FuidScreenGobernacion';
 import { FuidScreenPlaneacion } from '../components/app/organizar/FuidScreenPlaneacion';
-import { InventarioAnt } from '../components/app/organizar/InventarioAnt';
-import { ConsultarInventarioAnt } from '../components/app/organizar/ConsultarInventarioAnt';
-import { InventarioAntExpediente } from '../components/app/organizar/InventarioAntExpediente';
+import { InventarioAnt } from '../components/app/organizar/ANT/InventarioAnt';
+import { InventarioAntExpediente } from '../components/app/organizar/ANT/InventarioAntExpediente';
+import { ConsultarInventarioAnt } from '../components/app/organizar/ANT/ConsultarInventarioAnt';
 
   
 export const AppRouter = () => {
