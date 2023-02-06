@@ -1,5 +1,4 @@
-export const convertDepartamentosFilterToSelect = ( data = []) => {
-
+export const convertDepartamentosFilterToSelect = ( data = []) => {    
     const result = [];
 
     data.map( item => {

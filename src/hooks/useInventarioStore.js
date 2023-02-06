@@ -549,8 +549,8 @@ export const useInventarioStore = () => {
                 });
             }
 
-            if(criteria.numeroResolucion.constructor.name == "Array"){
-                criteria.numeroResolucion.map( item => {                   
+            if(criteria.fechaResolucion.constructor.name == "Array"){
+                criteria.fechaResolucion.map( item => {                   
                     fechaResoluciones.push(item.value)   
                 });
             }
@@ -573,13 +573,11 @@ export const useInventarioStore = () => {
                 "fechaResoluciones"  :fechaResoluciones,
                 "numeroCajas"        :numeroCajas,
                 "seriesSubseries"    :seriesSubseries
-              }
-
-              console.log(JSON.stringify(searchCriteria));
+              }              
 
               const { data } = await indetechApi.post('/InventarioDocumental/busquedaBasica', searchCriteria);            
-            
-              // dispatch( onGetInventario( data ) );
+                          
+              dispatch( onGetInventario( data ) );
 
               dispatch(setIsLoadingGetInventario(false));
 

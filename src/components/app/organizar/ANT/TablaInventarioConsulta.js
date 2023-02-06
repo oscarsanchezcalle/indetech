@@ -6,7 +6,7 @@ export const TablaInventarioConsulta = () => {
 
   const { registros, deleteRegistroById, isLoadingDelete } = useInventarioStore();
 
-  const handleBtnEliminar = async (id, numeroCaja, numeroCarpeta) => {
+  const handleBtnExcel = async (id, numeroCaja, numeroCarpeta) => {
         Swal.fire({  
         title: '¿Está seguro de eliminar?',  
         showCancelButton: true,  
@@ -15,7 +15,7 @@ export const TablaInventarioConsulta = () => {
         
         }).then((result) => {  
             if (result.isConfirmed) {   
-                deleteRegistroById(id, numeroCaja, numeroCarpeta);
+                //deleteRegistroById(id, numeroCaja, numeroCarpeta);
             }
         });
     }
@@ -68,37 +68,37 @@ export const TablaInventarioConsulta = () => {
                                     <tr key={registro.id }>
                                          <td>
                                             <span className="">
-                                                {registro.numeroCaja} - {registro.numeroCarpeta}
+                                                {i + 1}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="">
-                                                {registro.dependencia} <br/> {registro.oficina}
+                                                {registro.serieName}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="">
-                                                {registro.serie} <br/> {registro.subserie}
+                                                {registro.departamentoName}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="">
-                                                {registro.departamento} <br/> {registro.municipio}
+                                                {registro.numeroExpediente}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="">
-                                                {registro.nombre}
+                                                {registro.fechaExpediente}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="">
-                                                {registro.nombrePredio}
+                                                {registro.fechasExtremas}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="">
-                                                {registro.documentoIdentificacion}
+                                                {registro.numeroCaja}
                                             </span>
                                         </td>                                       
                                         <td>
@@ -114,9 +114,9 @@ export const TablaInventarioConsulta = () => {
                                                 <div className="dropdown-menu dropdown-menu-end" style={{}}>
                                                     <ul className="link-list-opt no-bdr">
                                                         <li>
-                                                            <a href='#' onClick={() => handleBtnEliminar(registro.id, registro.numeroCaja, registro.numeroCarpeta)}>
-                                                                <em className="icon ni ni-trash" />
-                                                                <span>Eliminar</span>
+                                                            <a href='#' onClick={() => handleBtnExcel(registro.id, registro.numeroCaja, registro.numeroCarpeta)}>
+                                                                <em className="icon ni ni-file-xls"></em>
+                                                                <span>Exportar excel</span>
                                                             </a>
                                                         </li>
                                                     </ul>

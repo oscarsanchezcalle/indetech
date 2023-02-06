@@ -14,15 +14,16 @@ export const ConsultarInventarioAnt = () => {
           isLoadingFechaResolucionFilter, isLoadingNumeroCajaFilter,
           isLoadingNumeroResolucionFilter, isLoadingSerieSubserieFilter,
           departamentosFilter, numeroResolucionFilter,
-          numeroCajaFilter, fechaResolucionFilter, serieSubserieFilter
+          numeroCajaFilter, fechaResolucionFilter, serieSubserieFilter,
+          isLoadingGet
         } = useInventarioStore();
 
   const filterForm = {
-    departamento: {},
-    numeroResolucion: {},
+    departamento: '',
+    numeroResolucion: '',
     fechaResolucion: '',          
     numeroCaja: '',          
-    serieSubserie: {}
+    serieSubserie: ''
   };
 
   const [formValues, handleInputChange, handleSelectChange, reset] = useFormBasic(filterForm);
@@ -41,12 +42,12 @@ export const ConsultarInventarioAnt = () => {
         getNumeroResolucionFilter();
         getFechaResolucionFilter();
         getNumeroCajaFilter();
-        getSerieSubserieFilter();
+        getSerieSubserieFilter();            
     }
   }, [proyectoId]);
 
   const handleSelectDepartamentoChange = ( selectedOption ) => {        
-    handleSelectChange(selectedOption, "departamento");    
+    handleSelectChange(selectedOption, "departamento");        
   }
 
   const handleSelectNumeroResolucionChange = ( selectedOption ) => {        
@@ -62,11 +63,10 @@ export const ConsultarInventarioAnt = () => {
   }
 
   const handleSelectSerieSubserieChange = ( selectedOption ) => {        
-    handleSelectChange(selectedOption, "serieSubserie");    
+    handleSelectChange(selectedOption, "serieSubserie");        
   }
 
-  const handleBtnAgregar = async () => {
-    console.log(formValues);
+  const handleBtnAgregar = async () => {    
     getBusquedaBasica(formValues)
   }
 
@@ -159,9 +159,9 @@ export const ConsultarInventarioAnt = () => {
               <button 
                   onClick={handleBtnAgregar}
                   type="button"
-                  disabled={false}
+                  disabled={isLoadingGet}
                   className="btn btn-outline-primary btn-dim  mt-1 btn-block">
-                      <LoadingInButton isLoading={false} btnText="Buscar" />
+                      <LoadingInButton isLoading={isLoadingGet} btnText="Buscar" />
               </button>
             </div>
           </div>
