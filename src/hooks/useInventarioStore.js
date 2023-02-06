@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { format, isAfter, parseISO } from 'date-fns';
+import { isAfter, parseISO } from 'date-fns';
 import Swal from 'sweetalert2';
 import { indetechApi } from '../api';
 
@@ -15,8 +15,16 @@ import { setIsLoadingAddInventario,
          setGetNumeroResolucionFilter,
          setGetFechaResolucionFilter,
          setGetNumeroCajaFilter,
-         setGetSerieSubserieFilter, } from '../store';
-import { convertDepartamentosFilterToSelect, convertNumeroResolucionFilterToSelect } from '../helpers';
+         setGetSerieSubserieFilter,
+         setIsLoadingDepartamentosFilter,
+         setIsLoadingNumeroCajaFilter,
+         setIsLoadingSerieSubserieFilter,
+         setIsLoadingFechaResolucionFilter,
+         setIsLoadingNumeroResolucionFilter, } from '../store';
+
+import { convertDepartamentosFilterToSelect, convertNumeroResolucionFilterToSelect,
+         convertFechaResolucionFilterToSelect, convertNumeroCajaFilterToSelect,
+         convertSerieSubserieFilterToSelect } from '../helpers';
 
 export const useInventarioStore = () => {
   
@@ -25,7 +33,9 @@ export const useInventarioStore = () => {
             registros, registroActivo, isOpenModalEditar, tipoOrigen,
             isLoadingDepartamentosFilter, isLoadingNumeroResolucionFilter,
             isLoadingFechaResolucionFilter, isLoadingNumeroCajaFilter,
-            isLoadingSerieSubserieFilter            
+            isLoadingSerieSubserieFilter, departamentosFilter,
+            numeroResolucionFilter, fechaResolucionFilter, numeroCajaFilter,
+            serieSubserieFilter           
           } = useSelector( state => state.inventario );
 
     const addRegistro = async (formData = {}, proyectoId, username ) => {
@@ -416,7 +426,7 @@ export const useInventarioStore = () => {
        
         try 
         {
-            dispatch( isLoadingDepartamentosFilter( true ) );
+            dispatch( setIsLoadingDepartamentosFilter( true ) );
             
             const { data } = await indetechApi.get('/InventarioDocumental/departamentosFilter');
                         
@@ -424,11 +434,11 @@ export const useInventarioStore = () => {
 
             dispatch( setGetDepartamentosFilter( resultForSelect ) );  
 
-            dispatch( isLoadingDepartamentosFilter( false ) );
+            dispatch( setIsLoadingDepartamentosFilter( false ) );
 
         } catch (error) 
         {            
-            dispatch( isLoadingDepartamentosFilter( false ) );
+            dispatch( setIsLoadingDepartamentosFilter( false ) );
 
         }
     }
@@ -437,7 +447,7 @@ export const useInventarioStore = () => {
        
         try 
         {
-            dispatch( isLoadingNumeroResolucionFilter( true ) );
+            dispatch( setIsLoadingNumeroResolucionFilter( true ) );
             
             const { data } = await indetechApi.get('InventarioDocumental/numeroResolucionFilter');
                         
@@ -445,23 +455,162 @@ export const useInventarioStore = () => {
 
             dispatch( setGetNumeroResolucionFilter( resultForSelect ) );  
 
-            dispatch( isLoadingNumeroResolucionFilter( false ) );
+            dispatch( setIsLoadingNumeroResolucionFilter( false ) );
 
         } catch (error) 
         {            
-            dispatch( isLoadingNumeroResolucionFilter( false ) );
+            dispatch( setIsLoadingNumeroResolucionFilter( false ) );
 
+        }
+    }
+
+    const getFechaResolucionFilter = async() => {
+       
+        try 
+        {
+            dispatch( setIsLoadingFechaResolucionFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/fechaResolucionFilter');
+                        
+            const resultForSelect = convertFechaResolucionFilterToSelect(data);
+
+            dispatch( setGetFechaResolucionFilter( resultForSelect ) );  
+
+            dispatch( setIsLoadingFechaResolucionFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( setIsLoadingFechaResolucionFilter( false ) );
+
+        }
+    }
+
+    const getNumeroCajaFilter = async() => {
+       
+        try 
+        {
+            dispatch( setIsLoadingNumeroCajaFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/numeroCajaFilter');
+                        
+            const resultForSelect = convertNumeroCajaFilterToSelect(data);
+
+            dispatch( setGetNumeroCajaFilter( resultForSelect ) );  
+
+            dispatch( setIsLoadingNumeroCajaFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( setIsLoadingNumeroCajaFilter( false ) );
+
+        }
+    }
+
+    const getSerieSubserieFilter = async() => {
+       
+        try 
+        {
+            dispatch( setIsLoadingSerieSubserieFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/serieSubserieFilter');
+                        
+            const resultForSelect = convertSerieSubserieFilterToSelect(data);
+
+            dispatch( setGetSerieSubserieFilter( resultForSelect ) );  
+
+            dispatch( setIsLoadingSerieSubserieFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( setIsLoadingSerieSubserieFilter( false ) );
+        }
+    }
+
+    const getBusquedaBasica = async( criteria ) => {
+      
+        try {            
+            const departamentos = [];
+            const numeroResoluciones = [];
+            const fechaResoluciones = [];
+            const numeroCajas = [];
+            const seriesSubseries = [];
+
+            dispatch(setIsLoadingGetInventario(true));
+            
+            if(criteria.departamento.constructor.name == "Array"){
+                criteria.departamento.map( item => {                   
+                    departamentos.push(item.value)   
+                });
+            }
+            
+            if(criteria.numeroResolucion.constructor.name == "Array"){
+                criteria.numeroResolucion.map( item => {                   
+                    numeroResoluciones.push(item.value)   
+                });
+            }
+
+            if(criteria.numeroResolucion.constructor.name == "Array"){
+                criteria.numeroResolucion.map( item => {                   
+                    fechaResoluciones.push(item.value)   
+                });
+            }
+
+            if(criteria.numeroCaja.constructor.name == "Array"){
+                criteria.numeroCaja.map( item => {                   
+                    numeroCajas.push(item.value)   
+                });
+            }
+
+            if(criteria.serieSubserie.constructor.name == "Array"){
+                criteria.serieSubserie.map( item => {                   
+                    seriesSubseries.push(item.value)   
+                });
+            }
+
+            const searchCriteria = {
+                "departamentos"      :departamentos,
+                "numeroResoluciones" :numeroResoluciones,
+                "fechaResoluciones"  :fechaResoluciones,
+                "numeroCajas"        :numeroCajas,
+                "seriesSubseries"    :seriesSubseries
+              }
+
+              console.log(JSON.stringify(searchCriteria));
+
+              const { data } = await indetechApi.post('/InventarioDocumental/busquedaBasica', searchCriteria);            
+            
+              // dispatch( onGetInventario( data ) );
+
+              dispatch(setIsLoadingGetInventario(false));
+
+        } catch (error) {
+          
+          dispatch(setIsLoadingGetInventario(false));
+ 
+          console.log('Error buscando los datos con el criteria' + criteria );
+          console.log(error)
         }
     }
 
     return {
         //* Propiedades
         registros,
-       
+        departamentosFilter,
+        numeroResolucionFilter, 
+        fechaResolucionFilter,
+        numeroCajaFilter,
+        serieSubserieFilter,  
+
         isLoadingAdd,
         isLoadingGet,
         isLoadingDelete,
         isLoadingUpdate,
+        isLoadingDepartamentosFilter,
+        isLoadingFechaResolucionFilter,
+        isLoadingNumeroCajaFilter,
+        isLoadingNumeroResolucionFilter,
+        isLoadingSerieSubserieFilter,
+
         registroActivo,
         isOpenModalEditar,
         tipoOrigen,
@@ -474,6 +623,10 @@ export const useInventarioStore = () => {
         deleteRegistroById,
         
         getDepartamentosFilter,
-        getNumeroResolucionFilter
+        getNumeroResolucionFilter,
+        getFechaResolucionFilter,
+        getNumeroCajaFilter,
+        getSerieSubserieFilter,
+        getBusquedaBasica
     }
 }

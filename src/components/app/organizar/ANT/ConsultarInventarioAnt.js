@@ -1,12 +1,73 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Select from 'react-select';
+import { useAuthStore, useFormBasic } from '../../../../hooks';
+import { useInventarioStore } from '../../../../hooks/useInventarioStore';
 import { LoadingInButton } from '../../LoadingInButton';
 import { TablaInventarioConsulta } from './TablaInventarioConsulta';
 
 export const ConsultarInventarioAnt = () => {
 
-  const handleBtnAgregar = async () => {
+  const { proyectoId, proyecto, username } = useAuthStore();
+  const { getDepartamentosFilter, getFechaResolucionFilter, 
+          getNumeroCajaFilter, getNumeroResolucionFilter, 
+          getSerieSubserieFilter, getBusquedaBasica,isLoadingDepartamentosFilter,
+          isLoadingFechaResolucionFilter, isLoadingNumeroCajaFilter,
+          isLoadingNumeroResolucionFilter, isLoadingSerieSubserieFilter,
+          departamentosFilter, numeroResolucionFilter,
+          numeroCajaFilter, fechaResolucionFilter, serieSubserieFilter
+        } = useInventarioStore();
 
+  const filterForm = {
+    departamento: {},
+    numeroResolucion: {},
+    fechaResolucion: '',          
+    numeroCaja: '',          
+    serieSubserie: {}
+  };
+
+  const [formValues, handleInputChange, handleSelectChange, reset] = useFormBasic(filterForm);
+
+  const {
+    departamento,
+    numeroResolucion,
+    fechaResolucion,          
+    numeroCaja,          
+    serieSubserie
+  } = formValues;
+
+  useEffect(() => {
+    if(proyectoId > 0){
+        getDepartamentosFilter();
+        getNumeroResolucionFilter();
+        getFechaResolucionFilter();
+        getNumeroCajaFilter();
+        getSerieSubserieFilter();
+    }
+  }, [proyectoId]);
+
+  const handleSelectDepartamentoChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "departamento");    
+  }
+
+  const handleSelectNumeroResolucionChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "numeroResolucion");    
+  }
+
+  const handleSelectFechaResolucionChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "fechaResolucion");    
+  }
+
+  const handleSelectNumeroCajaChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "numeroCaja");    
+  }
+
+  const handleSelectSerieSubserieChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "serieSubserie");    
+  }
+
+  const handleBtnAgregar = async () => {
+    console.log(formValues);
+    getBusquedaBasica(formValues)
   }
 
   return (
@@ -34,41 +95,49 @@ export const ConsultarInventarioAnt = () => {
             <div className='col-md-3'>
                 <label className='form-label'>Departamento</label>
                 <Select
-                    //options={dependencias}    
-                    // value={dependencia}    
+                    options={departamentosFilter}    
+                    value={departamento}    
                     placeholder=''
-                    // isLoading={isLoadingDependencia}
-                    // onChange={(selectedOption) => handleSelectDependenciaChange(selectedOption)}
+                    isLoading={isLoadingDepartamentosFilter}
+                    onChange={(selectedOption) => handleSelectDepartamentoChange(selectedOption)}
+                    isClearable={true}
+                    isMulti
                 />
             </div>
             <div className='col-md-3'>
                 <label className='form-label'>N° Resolución</label>
                 <Select
-                    //options={dependencias}    
-                    // value={dependencia}    
+                    options={numeroResolucionFilter}    
+                    value={numeroResolucion}    
                     placeholder=''
-                    // isLoading={isLoadingDependencia}
-                    // onChange={(selectedOption) => handleSelectDependenciaChange(selectedOption)}
+                    isLoading={isLoadingNumeroResolucionFilter}
+                    onChange={(selectedOption) => handleSelectNumeroResolucionChange(selectedOption)}
+                    isClearable={true}
+                    isMulti
                 />
             </div>
             <div className='col-md-3'>
                 <label className='form-label'>Fecha de Resolución</label>
                 <Select
-                    //options={dependencias}    
-                    // value={dependencia}    
+                    options={fechaResolucionFilter}    
+                    value={fechaResolucion}    
                     placeholder=''
-                    // isLoading={isLoadingDependencia}
-                    // onChange={(selectedOption) => handleSelectDependenciaChange(selectedOption)}
+                    isLoading={isLoadingFechaResolucionFilter}
+                    onChange={(selectedOption) => handleSelectFechaResolucionChange(selectedOption)}
+                    isClearable={true}
+                    isMulti
                 />
             </div>
             <div className='col-md-3'>
                 <label className='form-label'>N° Caja</label>
                 <Select
-                    //options={dependencias}    
-                    // value={dependencia}    
+                    options={numeroCajaFilter}    
+                    value={numeroCaja}    
                     placeholder=''
-                    // isLoading={isLoadingDependencia}
-                    // onChange={(selectedOption) => handleSelectDependenciaChange(selectedOption)}
+                    isLoading={isLoadingNumeroCajaFilter}
+                    onChange={(selectedOption) => handleSelectNumeroCajaChange(selectedOption)}
+                    isClearable={true}
+                    isMulti
                 />
             </div>
           </div>
@@ -76,11 +145,13 @@ export const ConsultarInventarioAnt = () => {
             <div className='col-md-6'>
               <label className='form-label'>Nombre de la serie o subserie</label>
               <Select
-                  //options={dependencias}    
-                  // value={dependencia}    
+                  options={serieSubserieFilter}    
+                  value={serieSubserie}    
                   placeholder=''
-                  // isLoading={isLoadingDependencia}
-                  // onChange={(selectedOption) => handleSelectDependenciaChange(selectedOption)}
+                  isLoading={isLoadingSerieSubserieFilter}
+                  onChange={(selectedOption) => handleSelectSerieSubserieChange(selectedOption)}
+                  isClearable={true}
+                  isMulti
               />
             </div>
             <div className='col-md-2'>
@@ -96,7 +167,7 @@ export const ConsultarInventarioAnt = () => {
           </div>
         </div>
         <div className="tab-pane" id="tabItem2">
-          <p>advance</p>                   
+          <p>filtros busqueda avanzada</p>                   
         </div>
      </div>
      <div className='row pt-3'>
