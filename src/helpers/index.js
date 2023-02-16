@@ -15,4 +15,8 @@ export * from './convertFechaResolucionFilterToSelect';
 export * from './convertNumeroCajaFilterToSelect';
 export * from './convertNumeroResolucionFilterToSelect';
 export * from './convertSerieSubserieFilterToSelect';
+export * from './convertNombrePersonaFilterToSelect';
+export * from './convertNombrePredioFilterToSelect';
+export * from './convertDocumentoIdentificacionFilterToSelect';
+export * from './convertNumeroMatriculaFilterToSelect';
 export * from './dropboxToRender';

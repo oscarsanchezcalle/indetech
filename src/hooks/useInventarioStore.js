@@ -20,11 +20,23 @@ import { setIsLoadingAddInventario,
          setIsLoadingNumeroCajaFilter,
          setIsLoadingSerieSubserieFilter,
          setIsLoadingFechaResolucionFilter,
-         setIsLoadingNumeroResolucionFilter, } from '../store';
+         setIsLoadingNumeroResolucionFilter,
+         setIsLoadingNombrePersonaFilter,
+         setGetNombrePersonaFilter,
+         setIsLoadingNombrePredioFilter,
+         setGetNombrePredioFilter,
+         setIsLoadingDocumentoIdentificacionFilter,
+         setGetDocumentoIdentificacionFilter,
+         setIsLoadingNumeroMatriculaFilter,
+         setGetNumeroMatriculaFilter, } from '../store';
 
 import { convertDepartamentosFilterToSelect, convertNumeroResolucionFilterToSelect,
          convertFechaResolucionFilterToSelect, convertNumeroCajaFilterToSelect,
-         convertSerieSubserieFilterToSelect } from '../helpers';
+         convertSerieSubserieFilterToSelect, 
+         convertNombrePersonaFilterToSelect,
+         convertNombrePredioFilterToSelect,
+         convertDocumentoIdentificacionFilterToSelect,
+         convertNumeroMatriculaFilterToSelect} from '../helpers';
 
 export const useInventarioStore = () => {
   
@@ -33,9 +45,10 @@ export const useInventarioStore = () => {
             registros, registroActivo, isOpenModalEditar, tipoOrigen,
             isLoadingDepartamentosFilter, isLoadingNumeroResolucionFilter,
             isLoadingFechaResolucionFilter, isLoadingNumeroCajaFilter,
-            isLoadingSerieSubserieFilter, departamentosFilter,
-            numeroResolucionFilter, fechaResolucionFilter, numeroCajaFilter,
-            serieSubserieFilter           
+            isLoadingSerieSubserieFilter, isLoadingNombrePredioFilter, isLoadingNombrePersonaFilter,
+            isLoadingDocumentoIdentificacionFilter, isLoadingNumeroMatriculaFilter,
+            departamentosFilter, numeroResolucionFilter, fechaResolucionFilter, numeroCajaFilter,
+            serieSubserieFilter, nombrePersonaFilter, nombrePredioFilter, documentoIdentificacionFilter, numeroMatriculaFilter
           } = useSelector( state => state.inventario );
 
     const addRegistro = async (formData = {}, proyectoId, username ) => {
@@ -526,6 +539,86 @@ export const useInventarioStore = () => {
         }
     }
 
+    const getNombrePersonaFilter = async() => {
+       
+        try 
+        {
+            dispatch( setIsLoadingNombrePersonaFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/nombrePersonaFilter');
+                        
+            const resultForSelect = convertNombrePersonaFilterToSelect(data);            
+
+            dispatch( setGetNombrePersonaFilter( resultForSelect ) );  
+
+            dispatch( setIsLoadingNombrePersonaFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( setIsLoadingNombrePersonaFilter( false ) );
+        }
+    }
+
+    const getNombrePredioFilter = async() => {
+       
+        try 
+        {
+            dispatch( setIsLoadingNombrePredioFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/nombrePredioFilter');
+                        
+            const resultForSelect = convertNombrePredioFilterToSelect(data);
+
+            dispatch( setGetNombrePredioFilter( resultForSelect ) );  
+
+            dispatch( setIsLoadingNombrePredioFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( setIsLoadingNombrePredioFilter( false ) );
+        }
+    }
+
+    const getDocumentoIdentificacionFilter = async() => {
+       
+        try 
+        {
+            dispatch( setIsLoadingDocumentoIdentificacionFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/documentoIdentificacionFilter');
+                        
+            const resultForSelect = convertDocumentoIdentificacionFilterToSelect(data);
+
+            dispatch( setGetDocumentoIdentificacionFilter( resultForSelect ) );  
+
+            dispatch( setIsLoadingDocumentoIdentificacionFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( setIsLoadingDocumentoIdentificacionFilter( false ) );
+        }
+    }
+
+    const getNumeroMatriculaFilter = async() => {
+       
+        try 
+        {
+            dispatch( setIsLoadingNumeroMatriculaFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/numeroMatriculaFilter');
+                        
+            const resultForSelect = convertNumeroMatriculaFilterToSelect(data);
+
+            dispatch( setGetNumeroMatriculaFilter( resultForSelect ) );  
+
+            dispatch( setIsLoadingNumeroMatriculaFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( setIsLoadingNumeroMatriculaFilter( false ) );
+        }
+    }
+
     const getBusquedaBasica = async( criteria ) => {
       
         try {            
@@ -534,6 +627,10 @@ export const useInventarioStore = () => {
             const fechaResoluciones = [];
             const numeroCajas = [];
             const seriesSubseries = [];
+            const nombrePredios = [];
+            const nombrePersonas = [];
+            const documentoIdentificaciones = [];
+            const numeroMatriculas = [];
 
             dispatch(setIsLoadingGetInventario(true));
             
@@ -567,12 +664,40 @@ export const useInventarioStore = () => {
                 });
             }
 
+            if(criteria.nombrePersona.constructor.name == "Array"){
+                criteria.nombrePersona.map( item => {                   
+                    nombrePersonas.push(item.value)   
+                });
+            }
+
+            if(criteria.nombrePredio.constructor.name == "Array"){
+                criteria.nombrePredio.map( item => {                   
+                    nombrePredios.push(item.value)   
+                });
+            }
+            
+            if(criteria.documentoIdentificacion.constructor.name == "Array"){
+                criteria.documentoIdentificacion.map( item => {                   
+                    documentoIdentificaciones.push(item.value)   
+                });
+            }
+
+            if(criteria.numeroMatricula.constructor.name == "Array"){
+                criteria.numeroMatricula.map( item => {                   
+                    numeroMatriculas.push(item.value)   
+                });
+            }
+
             const searchCriteria = {
-                "departamentos"      :departamentos,
-                "numeroResoluciones" :numeroResoluciones,
-                "fechaResoluciones"  :fechaResoluciones,
-                "numeroCajas"        :numeroCajas,
-                "seriesSubseries"    :seriesSubseries
+                "departamentos"           :departamentos,
+                "numeroResoluciones"      :numeroResoluciones,
+                "fechaResoluciones"       :fechaResoluciones,
+                "numeroCajas"             :numeroCajas,
+                "seriesSubseries"         :seriesSubseries,
+                "nombrePredio"            :nombrePredios, 
+                "nombrePersona"           :nombrePersonas, 
+                "documentoIdentificacion" :documentoIdentificaciones, 
+                "numeroMatricula"         :numeroMatriculas 
               }              
 
               const { data } = await indetechApi.post('/InventarioDocumental/busquedaBasica', searchCriteria);            
@@ -598,6 +723,10 @@ export const useInventarioStore = () => {
         fechaResolucionFilter,
         numeroCajaFilter,
         serieSubserieFilter,  
+        nombrePersonaFilter, 
+        nombrePredioFilter, 
+        documentoIdentificacionFilter, 
+        numeroMatriculaFilter,
 
         isLoadingAdd,
         isLoadingGet,
@@ -607,7 +736,11 @@ export const useInventarioStore = () => {
         isLoadingFechaResolucionFilter,
         isLoadingNumeroCajaFilter,
         isLoadingNumeroResolucionFilter,
-        isLoadingSerieSubserieFilter,
+        isLoadingSerieSubserieFilter,      
+        isLoadingNombrePredioFilter,
+        isLoadingNombrePersonaFilter,
+        isLoadingDocumentoIdentificacionFilter,
+        isLoadingNumeroMatriculaFilter,  
 
         registroActivo,
         isOpenModalEditar,
@@ -625,6 +758,10 @@ export const useInventarioStore = () => {
         getFechaResolucionFilter,
         getNumeroCajaFilter,
         getSerieSubserieFilter,
+        getNombrePersonaFilter,
+        getNombrePredioFilter,
+        getDocumentoIdentificacionFilter,
+        getNumeroMatriculaFilter,
         getBusquedaBasica
     }
 }

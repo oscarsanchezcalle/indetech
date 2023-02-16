@@ -10,9 +10,14 @@ export const ConsultarInventarioAnt = () => {
   const { proyectoId, proyecto, username } = useAuthStore();
   const { getDepartamentosFilter, getFechaResolucionFilter, 
           getNumeroCajaFilter, getNumeroResolucionFilter, 
-          getSerieSubserieFilter, getBusquedaBasica,isLoadingDepartamentosFilter,
+          getSerieSubserieFilter, getBusquedaBasica, getNombrePersonaFilter,
+          getNombrePredioFilter, getDocumentoIdentificacionFilter, getNumeroMatriculaFilter,
+          isLoadingDepartamentosFilter,
           isLoadingFechaResolucionFilter, isLoadingNumeroCajaFilter,
-          isLoadingNumeroResolucionFilter, isLoadingSerieSubserieFilter,
+          isLoadingNumeroResolucionFilter, isLoadingSerieSubserieFilter,   
+          isLoadingNombrePredioFilter, isLoadingNombrePersonaFilter,
+          isLoadingDocumentoIdentificacionFilter, isLoadingNumeroMatriculaFilter,                 
+          nombrePersonaFilter,nombrePredioFilter, documentoIdentificacionFilter, numeroMatriculaFilter,
           departamentosFilter, numeroResolucionFilter,
           numeroCajaFilter, fechaResolucionFilter, serieSubserieFilter,
           isLoadingGet
@@ -23,7 +28,11 @@ export const ConsultarInventarioAnt = () => {
     numeroResolucion: '',
     fechaResolucion: '',          
     numeroCaja: '',          
-    serieSubserie: ''
+    serieSubserie: '',
+    nombrePredio: '',
+    nombrePersona: '',
+    documentoIdentificacion: '',
+    numeroMatricula: '',
   };
 
   const [formValues, handleInputChange, handleSelectChange, reset] = useFormBasic(filterForm);
@@ -33,7 +42,11 @@ export const ConsultarInventarioAnt = () => {
     numeroResolucion,
     fechaResolucion,          
     numeroCaja,          
-    serieSubserie
+    serieSubserie,
+    nombrePredio,
+    nombrePersona,
+    documentoIdentificacion,
+    numeroMatricula
   } = formValues;
 
   useEffect(() => {
@@ -41,8 +54,12 @@ export const ConsultarInventarioAnt = () => {
         getDepartamentosFilter();
         getNumeroResolucionFilter();
         getFechaResolucionFilter();
-        getNumeroCajaFilter();
-        getSerieSubserieFilter();            
+        //getNumeroCajaFilter();
+        getSerieSubserieFilter();      
+        getNombrePersonaFilter();  
+        getNombrePredioFilter();
+        getDocumentoIdentificacionFilter();
+        getNumeroMatriculaFilter();    
     }
   }, [proyectoId]);
 
@@ -60,6 +77,22 @@ export const ConsultarInventarioAnt = () => {
 
   const handleSelectNumeroCajaChange = ( selectedOption ) => {        
     handleSelectChange(selectedOption, "numeroCaja");    
+  }
+
+  const handleSelectNombrePredioChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "nombrePredio");        
+  }
+
+  const handleSelectNombrePersonaChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "nombrePersona");        
+  }
+
+  const handleSelectDocumentoIdentificacionChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "documentoIdentificacion");        
+  }
+
+  const handleSelectNumeroMatriculaChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "numeroMatricula");        
   }
 
   const handleSelectSerieSubserieChange = ( selectedOption ) => {        
@@ -80,14 +113,14 @@ export const ConsultarInventarioAnt = () => {
      <ul className="nav nav-tabs">
         <li className="nav-item">
           <a className="nav-link active" data-bs-toggle="tab" href="#tabItem1">
-          <em className="icon ni ni-search"></em> &nbsp;Busqueda Básica
+          <em className="icon ni ni-search"></em> &nbsp;Busqueda
           </a>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <a className="nav-link" data-bs-toggle="tab" href="#tabItem2">
             <em className="icon ni ni-zoom-in"></em> &nbsp;Busqueda Avanzada
           </a>
-        </li>         
+        </li>          */}
      </ul>
      <div className="tab-content">
         <div className="tab-pane active" id="tabItem1">
@@ -129,20 +162,44 @@ export const ConsultarInventarioAnt = () => {
                 />
             </div>
             <div className='col-md-3'>
-                <label className='form-label'>N° Caja</label>
+                <label className='form-label'>Nombre del Predio</label>
                 <Select
-                    options={numeroCajaFilter}    
-                    value={numeroCaja}    
+                    options={nombrePredioFilter}    
+                    value={nombrePredio}    
                     placeholder=''
-                    isLoading={isLoadingNumeroCajaFilter}
-                    onChange={(selectedOption) => handleSelectNumeroCajaChange(selectedOption)}
+                    isLoading={isLoadingNombrePredioFilter}
+                    onChange={(selectedOption) => handleSelectNombrePredioChange(selectedOption)}
                     isClearable={true}
                     isMulti
                 />
             </div>
           </div>
           <div className="row pt-3">
-            <div className='col-md-6'>
+            <div className='col-md-3'>
+                <label className='form-label'>Nombre de persona natural o jurídica</label>
+                <Select
+                    options={nombrePersonaFilter}    
+                    value={nombrePersona}    
+                    placeholder=''
+                    isLoading={isLoadingNombrePersonaFilter}
+                    onChange={(selectedOption) => handleSelectNombrePersonaChange(selectedOption)}
+                    isClearable={true}
+                    isMulti
+                />
+            </div>
+            <div className='col-md-3'>
+                <label className='form-label'>Documento de identificación</label>
+                <Select
+                    options={documentoIdentificacionFilter}    
+                    value={documentoIdentificacion}    
+                    placeholder=''
+                    isLoading={isLoadingDocumentoIdentificacionFilter}
+                    onChange={(selectedOption) => handleSelectDocumentoIdentificacionChange(selectedOption)}
+                    isClearable={true}
+                    isMulti
+                />
+            </div>
+            <div className='col-md-3'>
               <label className='form-label'>Nombre de la serie o subserie</label>
               <Select
                   options={serieSubserieFilter}    
@@ -153,8 +210,22 @@ export const ConsultarInventarioAnt = () => {
                   isClearable={true}
                   isMulti
               />
+            </div>  
+            <div className='col-md-3'>
+                <label className='form-label'>Número de matricula inmobiliaria</label>
+                <Select
+                    options={numeroMatriculaFilter}    
+                    value={numeroMatricula}    
+                    placeholder=''
+                    isLoading={isLoadingNumeroMatriculaFilter}
+                    onChange={(selectedOption) => handleSelectNumeroMatriculaChange(selectedOption)}
+                    isClearable={true}
+                    isMulti
+                />
             </div>
-            <div className='col-md-2'>
+          </div>
+          <div className='row pt-3'>
+            <div className='col-md-3'>
               <br />
               <button 
                   onClick={handleBtnAgregar}
@@ -164,6 +235,18 @@ export const ConsultarInventarioAnt = () => {
                       <LoadingInButton isLoading={isLoadingGet} btnText="Buscar" />
               </button>
             </div>
+            {/* <div className='col-md-3'>
+                <label className='form-label'>N° Caja</label>
+                <Select
+                    options={numeroCajaFilter}    
+                    value={numeroCaja}    
+                    placeholder=''
+                    isLoading={isLoadingNumeroCajaFilter}
+                    onChange={(selectedOption) => handleSelectNumeroCajaChange(selectedOption)}
+                    isClearable={true}
+                    isMulti
+                />
+            </div> */}
           </div>
         </div>
         <div className="tab-pane" id="tabItem2">

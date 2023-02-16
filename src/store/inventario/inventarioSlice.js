@@ -12,6 +12,10 @@ export const inventarioSlice = createSlice({
         isLoadingFechaResolucionFilter: false,
         isLoadingNumeroCajaFilter: false,
         isLoadingSerieSubserieFilter: false,
+        isLoadingNombrePredioFilter: false,
+        isLoadingNombrePersonaFilter: false,
+        isLoadingDocumentoIdentificacionFilter: false,
+        isLoadingNumeroMatriculaFilter: false,
         registros: [
             // tempRegistros
         ],
@@ -22,7 +26,11 @@ export const inventarioSlice = createSlice({
         numeroResolucionFilter: [],
         fechaResolucionFilter: [],
         numeroCajaFilter: [],
-        serieSubserieFilter: []
+        serieSubserieFilter: [],
+        nombrePredioFilter: [],
+        nombrePersonaFilter: [],
+        documentoIdentificacionFilter: [],
+        numeroMatriculaFilter: []
     },
     reducers: {
         setGetDepartamentosFilter: ( state, {payload} ) => {
@@ -40,6 +48,18 @@ export const inventarioSlice = createSlice({
         setGetSerieSubserieFilter: ( state, {payload} ) => {
             state.serieSubserieFilter = payload ;
         },
+        setGetNombrePredioFilter: ( state, {payload} ) => {
+            state.nombrePredioFilter = payload ;
+        },
+        setGetNombrePersonaFilter: ( state, {payload} ) => {
+            state.nombrePersonaFilter = payload ;
+        },
+        setGetDocumentoIdentificacionFilter: ( state, {payload} ) => {
+            state.documentoIdentificacionFilter = payload ;
+        },
+        setGetNumeroMatriculaFilter: ( state, {payload} ) => {
+            state.numeroMatriculaFilter = payload ;
+        },
         setIsLoadingDepartamentosFilter: ( state, {payload} ) => {
             state.isLoadingDepartamentosFilter = payload ;
         },
@@ -54,6 +74,18 @@ export const inventarioSlice = createSlice({
         },
         setIsLoadingSerieSubserieFilter: ( state, {payload} ) => {
             state.isLoadingSerieSubserieFilter = payload ;
+        },
+        setIsLoadingNombrePredioFilter: ( state, {payload} ) => {
+            state.isLoadingNombrePredioFilter = payload ;
+        },
+        setIsLoadingNombrePersonaFilter: ( state, {payload} ) => {
+            state.isLoadingNombrePersonaFilter = payload ;
+        },
+        setIsLoadingDocumentoIdentificacionFilter: ( state, {payload} ) => {
+            state.isLoadingDocumentoIdentificacionFilter = payload ;
+        },
+        setIsLoadingNumeroMatriculaFilter: ( state, {payload} ) => {
+            state.isLoadingNumeroMatriculaFilter = payload ;
         },
         onGetInventario: (state, { payload = [] }) => {
             state.isLoadingGet = false;
@@ -98,9 +130,17 @@ export const {
     setGetFechaResolucionFilter,
     setGetNumeroCajaFilter,
     setGetSerieSubserieFilter,
+    setGetNombrePredioFilter,
+    setGetNombrePersonaFilter,
+    setGetDocumentoIdentificacionFilter,
+    setGetNumeroMatriculaFilter,
     setIsLoadingDepartamentosFilter,
     setIsLoadingNumeroResolucionFilter,
     setIsLoadingFechaResolucionFilter,
     setIsLoadingNumeroCajaFilter,
-    setIsLoadingSerieSubserieFilter
+    setIsLoadingSerieSubserieFilter,
+    setIsLoadingNombrePredioFilter,
+    setIsLoadingNombrePersonaFilter,
+    setIsLoadingDocumentoIdentificacionFilter,
+    setIsLoadingNumeroMatriculaFilter
 } = inventarioSlice.actions;

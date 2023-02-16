@@ -1,24 +1,13 @@
 import React from 'react'
-import Swal from 'sweetalert2';
 import { useInventarioStore } from '../../../../hooks/useInventarioStore';
 
 export const TablaInventarioConsulta = () => {
 
-  const { registros, deleteRegistroById, isLoadingDelete } = useInventarioStore();
+  const { registros } = useInventarioStore();
 
-  const handleBtnExcel = async (id, numeroCaja, numeroCarpeta) => {
-        Swal.fire({  
-        title: '¿Está seguro de eliminar?',  
-        showCancelButton: true,  
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: `Si`,  
-        
-        }).then((result) => {  
-            if (result.isConfirmed) {   
-                //deleteRegistroById(id, numeroCaja, numeroCarpeta);
-            }
-        });
-    }
+  const handleBtnExportar = async (numeroCaja, formato) => {
+    window.open('https://protechreporting.azurewebsites.net/fuidANT/'+formato+'/file?numerocaja='+numeroCaja);
+  }
 
   return (
     <>
@@ -113,10 +102,19 @@ export const TablaInventarioConsulta = () => {
                                                 </a>
                                                 <div className="dropdown-menu dropdown-menu-end" style={{}}>
                                                     <ul className="link-list-opt no-bdr">
+                                                        <li className='center'>
+                                                             <small>Exportar FUID - Caja # {registro.numeroCaja}</small>
+                                                        </li>
                                                         <li>
-                                                            <a href='#' onClick={() => handleBtnExcel(registro.id, registro.numeroCaja, registro.numeroCarpeta)}>
+                                                            <a href='#' onClick={() => handleBtnExportar(registro.numeroCaja, 'xls')}>
                                                                 <em className="icon ni ni-file-xls"></em>
-                                                                <span>Exportar excel</span>
+                                                                <span>Excel</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href='#' onClick={() => handleBtnExportar(registro.numeroCaja, 'csv')}>
+                                                                <em className="icon ni ni-file-text"></em>
+                                                                <span>CSV</span>
                                                             </a>
                                                         </li>
                                                     </ul>
