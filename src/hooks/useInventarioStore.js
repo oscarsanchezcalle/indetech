@@ -539,13 +539,13 @@ export const useInventarioStore = () => {
         }
     }
 
-    const getNombrePersonaFilter = async() => {
+    const getNombrePersonaFilter = async(criteria) => {
        
         try 
         {
             dispatch( setIsLoadingNombrePersonaFilter( true ) );
             
-            const { data } = await indetechApi.get('InventarioDocumental/nombrePersonaFilter');
+            const { data } = await indetechApi.get('InventarioDocumental/nombrePersonaFilter?criteria='+criteria);
                         
             const resultForSelect = convertNombrePersonaFilterToSelect(data);            
 
@@ -559,13 +559,13 @@ export const useInventarioStore = () => {
         }
     }
 
-    const getNombrePredioFilter = async() => {
+    const getNombrePredioFilter = async(criteria) => {
        
         try 
         {
             dispatch( setIsLoadingNombrePredioFilter( true ) );
             
-            const { data } = await indetechApi.get('InventarioDocumental/nombrePredioFilter');
+            const { data } = await indetechApi.get('InventarioDocumental/nombrePredioFilter?criteria='+criteria);
                         
             const resultForSelect = convertNombrePredioFilterToSelect(data);
 
@@ -579,13 +579,13 @@ export const useInventarioStore = () => {
         }
     }
 
-    const getDocumentoIdentificacionFilter = async() => {
+    const getDocumentoIdentificacionFilter = async(criteria) => {
        
         try 
         {
             dispatch( setIsLoadingDocumentoIdentificacionFilter( true ) );
             
-            const { data } = await indetechApi.get('InventarioDocumental/documentoIdentificacionFilter');
+            const { data } = await indetechApi.get('InventarioDocumental/documentoIdentificacionFilter?criteria='+criteria);
                         
             const resultForSelect = convertDocumentoIdentificacionFilterToSelect(data);
 
@@ -599,13 +599,13 @@ export const useInventarioStore = () => {
         }
     }
 
-    const getNumeroMatriculaFilter = async() => {
+    const getNumeroMatriculaFilter = async(criteria) => {
        
         try 
         {
             dispatch( setIsLoadingNumeroMatriculaFilter( true ) );
             
-            const { data } = await indetechApi.get('InventarioDocumental/numeroMatriculaFilter');
+            const { data } = await indetechApi.get('InventarioDocumental/numeroMatriculaFilter?criteria='+criteria);
                         
             const resultForSelect = convertNumeroMatriculaFilterToSelect(data);
 

@@ -56,10 +56,6 @@ export const ConsultarInventarioAnt = () => {
         getFechaResolucionFilter();
         //getNumeroCajaFilter();
         getSerieSubserieFilter();      
-        getNombrePersonaFilter();  
-        getNombrePredioFilter();
-        getDocumentoIdentificacionFilter();
-        getNumeroMatriculaFilter();    
     }
   }, [proyectoId]);
 
@@ -83,23 +79,47 @@ export const ConsultarInventarioAnt = () => {
     handleSelectChange(selectedOption, "nombrePredio");        
   }
 
-  const handleSelectNombrePersonaChange = ( selectedOption ) => {        
+  const handleSelectNombrePredioSearch = ( selectedOption ) => {        
+    if(selectedOption.length >= 3){
+      getNombrePredioFilter(selectedOption);
+    }
+  }
+
+  const handleSelectNombrePersonaChange = ( selectedOption ) => {     
     handleSelectChange(selectedOption, "nombrePersona");        
+  }
+
+  const handleSelectNombrePersonaSearch = ( selectedOption ) => {        
+    if(selectedOption.length >= 3){
+      getNombrePersonaFilter(selectedOption);
+    }
   }
 
   const handleSelectDocumentoIdentificacionChange = ( selectedOption ) => {        
     handleSelectChange(selectedOption, "documentoIdentificacion");        
   }
 
+  const handleSelectDocumentoIdentificacionSearch = ( selectedOption ) => {        
+    if(selectedOption.length >= 2){
+      getDocumentoIdentificacionFilter(selectedOption);
+    }
+  }
+
   const handleSelectNumeroMatriculaChange = ( selectedOption ) => {        
     handleSelectChange(selectedOption, "numeroMatricula");        
+  }
+
+  const handleSelectNumeroMatriculaSearch = ( selectedOption ) => {        
+    if(selectedOption.length >= 2){
+      getNumeroMatriculaFilter(selectedOption);
+    }
   }
 
   const handleSelectSerieSubserieChange = ( selectedOption ) => {        
     handleSelectChange(selectedOption, "serieSubserie");        
   }
 
-  const handleBtnAgregar = async () => {    
+  const handleBtnAgregar = async () => {   
     getBusquedaBasica(formValues)
   }
 
@@ -169,6 +189,8 @@ export const ConsultarInventarioAnt = () => {
                     placeholder=''
                     isLoading={isLoadingNombrePredioFilter}
                     onChange={(selectedOption) => handleSelectNombrePredioChange(selectedOption)}
+                    onInputChange={(selectedOption) => handleSelectNombrePredioSearch(selectedOption)}
+                    loadingMessage={() => 'buscando...'}
                     isClearable={true}
                     isMulti
                 />
@@ -183,7 +205,9 @@ export const ConsultarInventarioAnt = () => {
                     placeholder=''
                     isLoading={isLoadingNombrePersonaFilter}
                     onChange={(selectedOption) => handleSelectNombrePersonaChange(selectedOption)}
+                    onInputChange={(selectedOption) => handleSelectNombrePersonaSearch(selectedOption)}
                     isClearable={true}
+                    loadingMessage={() => 'buscando...'}
                     isMulti
                 />
             </div>
@@ -195,6 +219,8 @@ export const ConsultarInventarioAnt = () => {
                     placeholder=''
                     isLoading={isLoadingDocumentoIdentificacionFilter}
                     onChange={(selectedOption) => handleSelectDocumentoIdentificacionChange(selectedOption)}
+                    onInputChange={(selectedOption) => handleSelectDocumentoIdentificacionSearch(selectedOption)}
+                    loadingMessage={() => 'buscando...'}
                     isClearable={true}
                     isMulti
                 />
@@ -219,6 +245,8 @@ export const ConsultarInventarioAnt = () => {
                     placeholder=''
                     isLoading={isLoadingNumeroMatriculaFilter}
                     onChange={(selectedOption) => handleSelectNumeroMatriculaChange(selectedOption)}
+                    onInputChange={(selectedOption) => handleSelectNumeroMatriculaSearch(selectedOption)}
+                    loadingMessage={() => 'buscando...'}
                     isClearable={true}
                     isMulti
                 />
