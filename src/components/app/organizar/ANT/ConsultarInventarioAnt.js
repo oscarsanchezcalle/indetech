@@ -12,13 +12,14 @@ export const ConsultarInventarioAnt = () => {
           getNumeroCajaFilter, getNumeroResolucionFilter, 
           getSerieSubserieFilter, getBusquedaBasica, getNombrePersonaFilter,
           getNombrePredioFilter, getDocumentoIdentificacionFilter, getNumeroMatriculaFilter,
+          getMunicipioFilter,
           isLoadingDepartamentosFilter,
           isLoadingFechaResolucionFilter, isLoadingNumeroCajaFilter,
           isLoadingNumeroResolucionFilter, isLoadingSerieSubserieFilter,   
           isLoadingNombrePredioFilter, isLoadingNombrePersonaFilter,
-          isLoadingDocumentoIdentificacionFilter, isLoadingNumeroMatriculaFilter,                 
+          isLoadingDocumentoIdentificacionFilter, isLoadingNumeroMatriculaFilter,isLoadingMunicipioFilter,                 
           nombrePersonaFilter,nombrePredioFilter, documentoIdentificacionFilter, numeroMatriculaFilter,
-          departamentosFilter, numeroResolucionFilter,
+          municipioFilter, departamentosFilter, numeroResolucionFilter,
           numeroCajaFilter, fechaResolucionFilter, serieSubserieFilter,
           isLoadingGet
         } = useInventarioStore();
@@ -33,6 +34,7 @@ export const ConsultarInventarioAnt = () => {
     nombrePersona: '',
     documentoIdentificacion: '',
     numeroMatricula: '',
+    municipio: ''
   };
 
   const [formValues, handleInputChange, handleSelectChange, reset] = useFormBasic(filterForm);
@@ -46,7 +48,8 @@ export const ConsultarInventarioAnt = () => {
     nombrePredio,
     nombrePersona,
     documentoIdentificacion,
-    numeroMatricula
+    numeroMatricula,
+    municipio
   } = formValues;
 
   useEffect(() => {
@@ -112,6 +115,16 @@ export const ConsultarInventarioAnt = () => {
   const handleSelectNumeroMatriculaSearch = ( selectedOption ) => {        
     if(selectedOption.length >= 2){
       getNumeroMatriculaFilter(selectedOption);
+    }
+  }
+
+  const handleSelectMunicipioChange = ( selectedOption ) => {        
+    handleSelectChange(selectedOption, "municipio");        
+  }
+
+  const handleSelectMunicipioSearch = ( selectedOption ) => {        
+    if(selectedOption.length >= 3){
+      getMunicipioFilter(selectedOption);
     }
   }
 
@@ -253,6 +266,20 @@ export const ConsultarInventarioAnt = () => {
             </div>
           </div>
           <div className='row pt-3'>
+            <div className='col-md-3'>
+                <label className='form-label'>Municipio</label>
+                <Select
+                    options={municipioFilter}    
+                    value={municipio}    
+                    placeholder=''
+                    isLoading={isLoadingMunicipioFilter}
+                    onChange={(selectedOption) => handleSelectMunicipioChange(selectedOption)}
+                    onInputChange={(selectedOption) => handleSelectMunicipioSearch(selectedOption)}
+                    loadingMessage={() => 'buscando...'}
+                    isClearable={true}
+                    isMulti
+                />
+            </div>
             <div className='col-md-3'>
               <br />
               <button 

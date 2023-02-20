@@ -16,6 +16,7 @@ export const inventarioSlice = createSlice({
         isLoadingNombrePersonaFilter: false,
         isLoadingDocumentoIdentificacionFilter: false,
         isLoadingNumeroMatriculaFilter: false,
+        isLoadingMunicipioFilter: false,
         registros: [
             // tempRegistros
         ],
@@ -30,7 +31,8 @@ export const inventarioSlice = createSlice({
         nombrePredioFilter: [],
         nombrePersonaFilter: [],
         documentoIdentificacionFilter: [],
-        numeroMatriculaFilter: []
+        numeroMatriculaFilter: [],
+        municipioFilter: []
     },
     reducers: {
         setGetDepartamentosFilter: ( state, {payload} ) => {
@@ -60,6 +62,9 @@ export const inventarioSlice = createSlice({
         setGetNumeroMatriculaFilter: ( state, {payload} ) => {
             state.numeroMatriculaFilter = payload ;
         },
+        setGetMunicipioFilter: ( state, {payload} ) => {
+            state.municipioFilter = payload ;
+        },
         setIsLoadingDepartamentosFilter: ( state, {payload} ) => {
             state.isLoadingDepartamentosFilter = payload ;
         },
@@ -86,6 +91,9 @@ export const inventarioSlice = createSlice({
         },
         setIsLoadingNumeroMatriculaFilter: ( state, {payload} ) => {
             state.isLoadingNumeroMatriculaFilter = payload ;
+        },
+        setIsLoadingMunicipioFilter: ( state, {payload} ) => {
+            state.isLoadingMunicipioFilter = payload ;
         },
         onGetInventario: (state, { payload = [] }) => {
             state.isLoadingGet = false;
@@ -134,6 +142,7 @@ export const {
     setGetNombrePersonaFilter,
     setGetDocumentoIdentificacionFilter,
     setGetNumeroMatriculaFilter,
+    setGetMunicipioFilter,
     setIsLoadingDepartamentosFilter,
     setIsLoadingNumeroResolucionFilter,
     setIsLoadingFechaResolucionFilter,
@@ -142,5 +151,6 @@ export const {
     setIsLoadingNombrePredioFilter,
     setIsLoadingNombrePersonaFilter,
     setIsLoadingDocumentoIdentificacionFilter,
-    setIsLoadingNumeroMatriculaFilter
+    setIsLoadingNumeroMatriculaFilter,
+    setIsLoadingMunicipioFilter
 } = inventarioSlice.actions;

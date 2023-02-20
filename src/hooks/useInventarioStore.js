@@ -28,7 +28,10 @@ import { setIsLoadingAddInventario,
          setIsLoadingDocumentoIdentificacionFilter,
          setGetDocumentoIdentificacionFilter,
          setIsLoadingNumeroMatriculaFilter,
-         setGetNumeroMatriculaFilter, } from '../store';
+         setIsLoadingMunicipioFilter,
+         setGetNumeroMatriculaFilter,
+         setGetMunicipioFilter,
+         } from '../store';
 
 import { convertDepartamentosFilterToSelect, convertNumeroResolucionFilterToSelect,
          convertFechaResolucionFilterToSelect, convertNumeroCajaFilterToSelect,
@@ -36,7 +39,7 @@ import { convertDepartamentosFilterToSelect, convertNumeroResolucionFilterToSele
          convertNombrePersonaFilterToSelect,
          convertNombrePredioFilterToSelect,
          convertDocumentoIdentificacionFilterToSelect,
-         convertNumeroMatriculaFilterToSelect} from '../helpers';
+         convertNumeroMatriculaFilterToSelect, convertMunicipioFilterToSelect} from '../helpers';
 
 export const useInventarioStore = () => {
   
@@ -47,8 +50,10 @@ export const useInventarioStore = () => {
             isLoadingFechaResolucionFilter, isLoadingNumeroCajaFilter,
             isLoadingSerieSubserieFilter, isLoadingNombrePredioFilter, isLoadingNombrePersonaFilter,
             isLoadingDocumentoIdentificacionFilter, isLoadingNumeroMatriculaFilter,
+            isLoadingMunicipioFilter,
             departamentosFilter, numeroResolucionFilter, fechaResolucionFilter, numeroCajaFilter,
-            serieSubserieFilter, nombrePersonaFilter, nombrePredioFilter, documentoIdentificacionFilter, numeroMatriculaFilter
+            serieSubserieFilter, nombrePersonaFilter, nombrePredioFilter, documentoIdentificacionFilter, 
+            numeroMatriculaFilter, municipioFilter
           } = useSelector( state => state.inventario );
 
     const addRegistro = async (formData = {}, proyectoId, username ) => {
@@ -619,6 +624,26 @@ export const useInventarioStore = () => {
         }
     }
 
+    const getMunicipioFilter = async(criteria) => {
+       
+        try 
+        {
+            dispatch( setIsLoadingMunicipioFilter( true ) );
+            
+            const { data } = await indetechApi.get('InventarioDocumental/municipioFilter?criteria='+criteria);
+                        
+            const resultForSelect = convertMunicipioFilterToSelect(data);
+
+            dispatch( setGetMunicipioFilter( resultForSelect ) );  
+
+            dispatch( setIsLoadingMunicipioFilter( false ) );
+
+        } catch (error) 
+        {            
+            dispatch( setIsLoadingMunicipioFilter( false ) );
+        }
+    }
+
     const getBusquedaBasica = async( criteria ) => {
       
         try {            
@@ -631,6 +656,7 @@ export const useInventarioStore = () => {
             const nombrePersonas = [];
             const documentoIdentificaciones = [];
             const numeroMatriculas = [];
+            const municipios = [];
 
             dispatch(setIsLoadingGetInventario(true));
             
@@ -687,6 +713,12 @@ export const useInventarioStore = () => {
                     numeroMatriculas.push(item.value)   
                 });
             }
+            
+            if(criteria.municipio.constructor.name == "Array"){
+                criteria.municipio.map( item => {                   
+                    municipios.push(item.value)   
+                });
+            }
 
             const searchCriteria = {
                 "departamentos"           :departamentos,
@@ -697,7 +729,8 @@ export const useInventarioStore = () => {
                 "nombrePredio"            :nombrePredios, 
                 "nombrePersona"           :nombrePersonas, 
                 "documentoIdentificacion" :documentoIdentificaciones, 
-                "numeroMatricula"         :numeroMatriculas 
+                "numeroMatricula"         :numeroMatriculas, 
+                "municipios"              :municipios 
               }              
 
               const { data } = await indetechApi.post('/InventarioDocumental/busquedaBasica', searchCriteria);            
@@ -727,6 +760,7 @@ export const useInventarioStore = () => {
         nombrePredioFilter, 
         documentoIdentificacionFilter, 
         numeroMatriculaFilter,
+        municipioFilter,
 
         isLoadingAdd,
         isLoadingGet,
@@ -741,6 +775,7 @@ export const useInventarioStore = () => {
         isLoadingNombrePersonaFilter,
         isLoadingDocumentoIdentificacionFilter,
         isLoadingNumeroMatriculaFilter,  
+        isLoadingMunicipioFilter,  
 
         registroActivo,
         isOpenModalEditar,
@@ -762,6 +797,7 @@ export const useInventarioStore = () => {
         getNombrePredioFilter,
         getDocumentoIdentificacionFilter,
         getNumeroMatriculaFilter,
+        getMunicipioFilter,
         getBusquedaBasica
     }
 }

@@ -32,23 +32,29 @@ export const TablaInventarioConsulta = () => {
                                         ITEM
                                     </th>
                                     <th>
+                                        <span>Persona Natural / Jurídica</span>
+                                    </th>
+                                    <th>
+                                        <span>Doc. Identificación</span>
+                                    </th>
+                                    <th>
                                         <span>Serie / Subserie</span>
                                     </th>
                                     <th>
                                         <span>Departamento</span>
                                     </th>
                                      <th>
-                                        <span>N° Resolución</span>
-                                     </th>
-                                     <th>
-                                        <span>Fecha Resolución</span>
-                                     </th>
-                                     <th>
-                                        <span>Fechas Extremas</span>
+                                        <span>Municipio</span>
                                      </th>
                                      <th>
                                         <span>N° Caja</span>
-                                     </th>                                    
+                                     </th>    
+                                     <th>
+                                        <span>N° Carpeta</span>
+                                     </th>    
+                                     <th>
+                                        <span>Predio</span>
+                                     </th>                           
                                      <th></th>
                                 </tr>
                             </thead>
@@ -58,6 +64,16 @@ export const TablaInventarioConsulta = () => {
                                          <td>
                                             <span className="">
                                                 {i + 1}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="">
+                                                {registro.nombrePersona}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="">
+                                                {registro.documentoIdentificacion}
                                             </span>
                                         </td>
                                         <td>
@@ -72,22 +88,22 @@ export const TablaInventarioConsulta = () => {
                                         </td>
                                         <td>
                                             <span className="">
-                                                {registro.numeroExpediente}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className="">
-                                                {registro.fechaExpediente}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className="">
-                                                {registro.fechasExtremas}
+                                                {registro.municipioName}
                                             </span>
                                         </td>
                                         <td>
                                             <span className="">
                                                 {registro.numeroCaja}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="">
+                                                {registro.numeroCarpeta}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="">
+                                                {registro.nombrePredio}
                                             </span>
                                         </td>                                       
                                         <td>
