@@ -55,9 +55,6 @@ export const ConsultarInventarioAnt = () => {
   useEffect(() => {
     if(proyectoId > 0){
         getDepartamentosFilter();
-        getNumeroResolucionFilter();
-        getFechaResolucionFilter();
-        //getNumeroCajaFilter();
         getSerieSubserieFilter();      
     }
   }, [proyectoId]);
@@ -70,8 +67,20 @@ export const ConsultarInventarioAnt = () => {
     handleSelectChange(selectedOption, "numeroResolucion");    
   }
 
+  const handleSelectNumeroResolucionSearch = ( selectedOption ) => {        
+    if(selectedOption.length >= 1){
+      getNumeroResolucionFilter(selectedOption);
+    }
+  }
+
   const handleSelectFechaResolucionChange = ( selectedOption ) => {        
     handleSelectChange(selectedOption, "fechaResolucion");    
+  }
+
+  const handleSelectFechaResolucionSearch = ( selectedOption ) => {        
+    if(selectedOption.length >= 7){
+      getFechaResolucionFilter(selectedOption);
+    }
   }
 
   const handleSelectNumeroCajaChange = ( selectedOption ) => {        
@@ -83,7 +92,7 @@ export const ConsultarInventarioAnt = () => {
   }
 
   const handleSelectNombrePredioSearch = ( selectedOption ) => {        
-    if(selectedOption.length >= 3){
+    if(selectedOption.length >= 2){
       getNombrePredioFilter(selectedOption);
     }
   }
@@ -93,7 +102,7 @@ export const ConsultarInventarioAnt = () => {
   }
 
   const handleSelectNombrePersonaSearch = ( selectedOption ) => {        
-    if(selectedOption.length >= 3){
+    if(selectedOption.length >= 2){
       getNombrePersonaFilter(selectedOption);
     }
   }
@@ -113,7 +122,7 @@ export const ConsultarInventarioAnt = () => {
   }
 
   const handleSelectNumeroMatriculaSearch = ( selectedOption ) => {        
-    if(selectedOption.length >= 2){
+    if(selectedOption.length >= 1){
       getNumeroMatriculaFilter(selectedOption);
     }
   }
@@ -123,7 +132,7 @@ export const ConsultarInventarioAnt = () => {
   }
 
   const handleSelectMunicipioSearch = ( selectedOption ) => {        
-    if(selectedOption.length >= 3){
+    if(selectedOption.length >= 2){
       getMunicipioFilter(selectedOption);
     }
   }
@@ -171,13 +180,15 @@ export const ConsultarInventarioAnt = () => {
                 />
             </div>
             <div className='col-md-3'>
-                <label className='form-label'>N° Resolución</label>
+                <label className='form-label'>N° Resolución / Auto</label>
                 <Select
                     options={numeroResolucionFilter}    
                     value={numeroResolucion}    
                     placeholder=''
                     isLoading={isLoadingNumeroResolucionFilter}
                     onChange={(selectedOption) => handleSelectNumeroResolucionChange(selectedOption)}
+                    onInputChange={(selectedOption) => handleSelectNumeroResolucionSearch(selectedOption)}
+                    loadingMessage={() => 'buscando...'}
                     isClearable={true}
                     isMulti
                 />
@@ -190,6 +201,8 @@ export const ConsultarInventarioAnt = () => {
                     placeholder=''
                     isLoading={isLoadingFechaResolucionFilter}
                     onChange={(selectedOption) => handleSelectFechaResolucionChange(selectedOption)}
+                    onInputChange={(selectedOption) => handleSelectFechaResolucionSearch(selectedOption)}
+                    loadingMessage={() => 'buscando...'}
                     isClearable={true}
                     isMulti
                 />

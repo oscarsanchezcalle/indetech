@@ -32,20 +32,23 @@ export const TablaInventarioConsulta = () => {
                                         ITEM
                                     </th>
                                     <th>
+                                        <span>Serie / Subserie</span>
+                                    </th>
+                                    <th>
                                         <span>Persona Natural / Jurídica</span>
                                     </th>
                                     <th>
                                         <span>Doc. Identificación</span>
-                                    </th>
+                                    </th>    
                                     <th>
-                                        <span>Serie / Subserie</span>
-                                    </th>
-                                    <th>
-                                        <span>Departamento</span>
-                                    </th>
+                                        <span>Predio</span>
+                                     </th>                                 
                                      <th>
-                                        <span>Municipio</span>
-                                     </th>
+                                        <span>N° Resolución / Auto</span>
+                                     </th> 
+                                     <th>
+                                        <span>Fecha Resolución / Auto</span>
+                                     </th> 
                                      <th>
                                         <span>N° Caja</span>
                                      </th>    
@@ -53,8 +56,8 @@ export const TablaInventarioConsulta = () => {
                                         <span>N° Carpeta</span>
                                      </th>    
                                      <th>
-                                        <span>Predio</span>
-                                     </th>                           
+                                        <span>Tomo</span>
+                                    </th>                   
                                      <th></th>
                                 </tr>
                             </thead>
@@ -67,45 +70,51 @@ export const TablaInventarioConsulta = () => {
                                             </span>
                                         </td>
                                         <td>
-                                            <span className="">
-                                                {registro.nombrePersona}
+                                            <span className="">                                           
+                                                { (registro.serieName != '' || registro.serieName != null)  ? registro.serieName : 'S/I' }
                                             </span>
                                         </td>
                                         <td>
-                                            <span className="">
-                                                {registro.documentoIdentificacion}
+                                            <span className="">                                              
+                                                { (registro.nombrePersona != '' || registro.nombrePersona != null)  ? registro.nombrePersona : 'S/I' }
                                             </span>
                                         </td>
                                         <td>
-                                            <span className="">
-                                                {registro.serieName}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className="">
-                                                {registro.departamentoName}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className="">
-                                                {registro.municipioName}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className="">
-                                                {registro.numeroCaja}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className="">
-                                                {registro.numeroCarpeta}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <span className="">
-                                                {registro.nombrePredio}
+                                            <span className="">                                                
+                                                { (registro.documentoIdentificacion != '' || registro.documentoIdentificacion != null ) ? registro.documentoIdentificacion : 'S/I' }
                                             </span>
                                         </td>                                       
+                                        <td>
+                                            <span className="">                                                
+                                                { (registro.nombrePredio != '' || registro.nombrePredio != null) ? registro.nombrePredio : 'S/I' }
+                                            </span>
+                                        </td>   
+                                        <td>
+                                            <span className="">
+                                            { (registro.numeroExpediente != null || registro.numeroExpediente != null) ? registro.numeroExpediente : 'S/I' }                                                
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="">                                                
+                                                { (registro.fechaExpediente != null) ? registro.fechaExpediente : 'S/I' }                                                
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="">
+                                            { (registro.numeroCaja != null || registro.numeroCaja != null ) ? registro.numeroCaja : 'S/I' }                                                      
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="">                                                
+                                                { (registro.numeroCarpeta != null || registro.numeroCarpeta != null ) ? registro.numeroCarpeta : 'S/I' }      
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span className="">                                                
+                                                { (registro.tomo != null || registro.tomo != '' ) ? registro.tomo : 'S/I' }      
+                                            </span>
+                                        </td>
+                                                                            
                                         <td>
                                             <div className="drodown">
                                                 <a

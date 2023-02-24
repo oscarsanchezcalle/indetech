@@ -39,7 +39,7 @@ import { convertDepartamentosFilterToSelect, convertNumeroResolucionFilterToSele
          convertNombrePersonaFilterToSelect,
          convertNombrePredioFilterToSelect,
          convertDocumentoIdentificacionFilterToSelect,
-         convertNumeroMatriculaFilterToSelect, convertMunicipioFilterToSelect} from '../helpers';
+         convertNumeroMatriculaFilterToSelect, convertMunicipioFilterToSelect, convertAntFilterToSelect} from '../helpers';
 
 export const useInventarioStore = () => {
   
@@ -461,15 +461,15 @@ export const useInventarioStore = () => {
         }
     }
 
-    const getNumeroResolucionFilter = async() => {
+    const getNumeroResolucionFilter = async(criteria) => {
        
         try 
         {
             dispatch( setIsLoadingNumeroResolucionFilter( true ) );
             
-            const { data } = await indetechApi.get('InventarioDocumental/numeroResolucionFilter');
+            const { data } = await indetechApi.get('InventarioDocumental/numeroResolucionFilter?criteria='+criteria);
                         
-            const resultForSelect = convertNumeroResolucionFilterToSelect(data);
+            const resultForSelect = convertAntFilterToSelect(data);
 
             dispatch( setGetNumeroResolucionFilter( resultForSelect ) );  
 
@@ -482,15 +482,15 @@ export const useInventarioStore = () => {
         }
     }
 
-    const getFechaResolucionFilter = async() => {
+    const getFechaResolucionFilter = async(criteria) => {
        
         try 
         {
             dispatch( setIsLoadingFechaResolucionFilter( true ) );
             
-            const { data } = await indetechApi.get('InventarioDocumental/fechaResolucionFilter');
+            const { data } = await indetechApi.get('InventarioDocumental/fechaResolucionFilter?criteria='+criteria);
                         
-            const resultForSelect = convertFechaResolucionFilterToSelect(data);
+            const resultForSelect = convertAntFilterToSelect(data);
 
             dispatch( setGetFechaResolucionFilter( resultForSelect ) );  
 

@@ -20,4 +20,5 @@ export * from './convertNombrePredioFilterToSelect';
 export * from './convertDocumentoIdentificacionFilterToSelect';
 export * from './convertNumeroMatriculaFilterToSelect';
 export * from './convertMunicipioFilterToSelect';
+export * from './convertAntFilterToSelect';
 export * from './dropboxToRender';
