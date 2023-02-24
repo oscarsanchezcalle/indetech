@@ -672,10 +672,8 @@ export const useInventarioStore = () => {
                 });
             }
 
-            if(criteria.fechaResolucion.constructor.name == "Array"){
-                criteria.fechaResolucion.map( item => {                   
-                    fechaResoluciones.push(item.value)   
-                });
+            if(criteria.fechaResolucion != ""){
+                fechaResoluciones.push(criteria.fechaResolucion)   
             }
 
             if(criteria.numeroCaja.constructor.name == "Array"){

@@ -73,7 +73,7 @@ export const ConsultarInventarioAnt = () => {
     }
   }
 
-  const handleSelectFechaResolucionChange = ( selectedOption ) => {        
+  const handleSelectFechaResolucionChange = ( selectedOption ) => {     
     handleSelectChange(selectedOption, "fechaResolucion");    
   }
 
@@ -141,7 +141,7 @@ export const ConsultarInventarioAnt = () => {
     handleSelectChange(selectedOption, "serieSubserie");        
   }
 
-  const handleBtnAgregar = async () => {   
+  const handleBtnAgregar = async () => {      
     getBusquedaBasica(formValues)
   }
 
@@ -194,18 +194,14 @@ export const ConsultarInventarioAnt = () => {
                 />
             </div>
             <div className='col-md-3'>
-                <label className='form-label'>Fecha de Resolución</label>
-                <Select
-                    options={fechaResolucionFilter}    
-                    value={fechaResolucion}    
-                    placeholder=''
-                    isLoading={isLoadingFechaResolucionFilter}
-                    onChange={(selectedOption) => handleSelectFechaResolucionChange(selectedOption)}
-                    onInputChange={(selectedOption) => handleSelectFechaResolucionSearch(selectedOption)}
-                    loadingMessage={() => 'buscando...'}
-                    isClearable={true}
-                    isMulti
-                />
+                <label className='form-label'>Fecha de Resolución</label>               
+                   <input
+                    name="fechaResolucion" 
+                    onChange={handleInputChange} 
+                    type="date" 
+                    value={fechaResolucion}
+                    className="form-control"/>
+              
             </div>
             <div className='col-md-3'>
                 <label className='form-label'>Nombre del Predio</label>

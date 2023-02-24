@@ -1,4 +1,5 @@
 import React from 'react'
+import { parseISO, format } from 'date-fns'
 import { useInventarioStore } from '../../../../hooks/useInventarioStore';
 
 export const TablaInventarioConsulta = () => {
@@ -90,13 +91,13 @@ export const TablaInventarioConsulta = () => {
                                             </span>
                                         </td>   
                                         <td>
-                                            <span className="">
+                                            <span className="">                                                
                                             { (registro.numeroExpediente != null || registro.numeroExpediente != null) ? registro.numeroExpediente : 'S/I' }                                                
                                             </span>
                                         </td>
                                         <td>
                                             <span className="">                                                
-                                                { (registro.fechaExpediente != null) ? registro.fechaExpediente : 'S/I' }                                                
+                                                { (registro.fechaExpediente != null) ? format(parseISO(registro.fechaExpediente), 'dd/MM/yyyy')  : 'S/I' }                                                
                                             </span>
                                         </td>
                                         <td>
