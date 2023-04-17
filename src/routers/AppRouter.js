@@ -18,6 +18,7 @@ import { FuidScreenPlaneacion } from '../components/app/organizar/FuidScreenPlan
 import { InventarioAnt } from '../components/app/organizar/ANT/InventarioAnt';
 import { InventarioAntExpediente } from '../components/app/organizar/ANT/InventarioAntExpediente';
 import { ConsultarInventarioAnt } from '../components/app/organizar/ANT/ConsultarInventarioAnt';
+import { FuidScreenCartagena } from '../components/app/organizar/AlcaldiaCartagena/FuidScreenAlcaldiaCartagena';
 
   
 export const AppRouter = () => {
@@ -45,6 +46,7 @@ export const AppRouter = () => {
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/administrarFuid" element={<FuidScreen/>}/>
                             <Route path="/administrarFuidPlaneacion" element={<FuidScreenPlaneacion/>}/>
+                            <Route path="/administrarFuidCartagena" element={<FuidScreenCartagena/>}/>                            
                             <Route path="/administrarFuidSoacha" element={<FuidScreenSoacha />}/>  
                             <Route path="/administrarFuidGobernacion" element={<FuidScreenGobernacion />}/>  
                             <Route path="/asociarImagen" element={<AsociarImagenCarpeta />}/>                    

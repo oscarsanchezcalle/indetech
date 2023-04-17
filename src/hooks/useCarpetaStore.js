@@ -34,7 +34,7 @@ export const useCarpetaStore = () => {
             const {
                 dependencia, oficina, vigencia, numeroCaja, serie, subserie,
                 tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
-                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre 
+                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre , tipoDocumento
             } = criteria;
 
             const fechaIni = new Date(parseISO(fechaExtremaInicial));
@@ -55,7 +55,12 @@ export const useCarpetaStore = () => {
                         return;
                     }
                 }
-            
+               
+                let tipoDoc = 1;
+                if(proyectoId == 4){
+                    tipoDoc = tipoDocumento.value;
+                }
+           
              
             const carpetaCajaCriteria = {
                 "proyectoId": proyectoId,
@@ -64,7 +69,7 @@ export const useCarpetaStore = () => {
                 "numeroCaja": parseInt(numeroCaja),
                 "serieId": serie.value,
                 "subserieId": subserie.value,
-                "tipoDocumentoId": 1,
+                "tipoDocumentoId": tipoDoc,
                 "fechaInicial": fechaExtremaInicial === '' ? '0001-01-01' : fechaExtremaInicial,
                 "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
                 "tomoActual": tomoActual == "" ? 0 : tomoActual,
@@ -124,7 +129,7 @@ export const useCarpetaStore = () => {
             const {
                 dependencia, oficina, vigencia, numeroCaja, serie, subserie,
                 tipoSoporte, frecuenciaUso,  fechaExtremaFinal, fechaExtremaInicial, tomoActual, tomoFinal,
-                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre, numeroPlanos, numeroCds 
+                folioInicial, folioFinal, codigo, notas, cedulaCatastral, duplicidad, autoDeCierre, numeroPlanos, numeroCds
             } = criteria;
 
             const fechaIni = new Date(parseISO(fechaExtremaInicial));
@@ -304,7 +309,7 @@ export const useCarpetaStore = () => {
                 dispatch(setIsLoadingAddCarpeta(false));
                 return;
             }
-
+                       
             const updateCriteria = {
                 "id": 0,
                 "codigo": codigo,
@@ -315,7 +320,7 @@ export const useCarpetaStore = () => {
                 "fechaFinal": fechaExtremaFinal === '' ? '0001-01-01' : fechaExtremaFinal,
                 "serieId": serie.value,
                 "subserieId": subserie.value,
-                "tipoDocumentoId": 1,
+                "tipoDocumentoId": tipoDocumento.value === 'undefined' ? 1 : tipoDocumento.value,
                 "tipoSoporteId":  tipoSoporte.value === 'undefined' ? 0 : tipoSoporte.value,
                 "frecuenciaUsoId":  frecuenciaUso.value === 'undefined' ? 0 : frecuenciaUso.value,
                 "tomoInicial": tomoActual == "" ? 0 : tomoActual,

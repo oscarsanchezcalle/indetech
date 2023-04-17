@@ -23,10 +23,7 @@ export const AdminNavbar = () => {
           <div className="nk-header-brand">
               <div className="user-avatar">
                 <h4 className='text-white'><em className="icon ni ni-file-docs"></em></h4>
-              </div>
-            {/* <a href="#"  className="logo-link">
-              <img className="logo-light logo-img" src="~/images/logo.png" srcSet="~/images/logo2x.png 2x" />             
-            </a> */}
+              </div>         
           </div>
           <div className="nk-header-menu" data-content="headerNav">
             <div className="nk-header-mobile">
@@ -40,39 +37,11 @@ export const AdminNavbar = () => {
                 <a href="#" className="nk-nav-toggle nk-quick-nav-icon" data-target="headerNav"><em className="icon ni ni-arrow-left" /></a>
               </div>
             </div>
-            <ul className="nk-menu nk-menu-main ui-s2">
-              {/* <li className="nk-menu-item has-sub">
-                <a href="#" className="nk-menu-link nk-menu-toggle">
-                  <span className="nk-menu-text">Dashboards</span>
-                </a>
-                <ul className="nk-menu-sub">
-                  <li className="nk-menu-item">
-                    <a href="#"  className="nk-menu-link">
-                      <span className="nk-menu-text">Análisis General</span>
-                    </a>
-                  </li>
-                  <li className="nk-menu-item">
-                    <a href="#" className="nk-menu-link">
-                      <span className="nk-menu-text">FUID</span>
-                    </a>
-                  </li>
-                  <li className="nk-menu-item">
-                    <a href="#" className="nk-menu-link">
-                      <span className="nk-menu-text">Indexación de documentos</span>
-                    </a>
-                  </li>
-                  <li className="nk-menu-item">
-                    <a href="#"  className="nk-menu-link">
-                      <span className="nk-menu-text">Seguimiento</span>
-                      <span className="nk-menu-badge">Celular</span>
-                    </a>
-                  </li>
-                </ul>
-              </li> */}
+            <ul className="nk-menu nk-menu-main ui-s2">             
               <li className="nk-menu-item has-sub">
                 <a href="#" className="nk-menu-link nk-menu-toggle">
                 {
-                    (proyectoId === "2" || proyectoId === "1") && 
+                    (proyectoId === "2" || proyectoId === "1" || proyectoId === "4") && 
                         <span className="nk-menu-text">FUID</span>
                 }
                 {
@@ -136,6 +105,16 @@ export const AdminNavbar = () => {
                       </li>
                     </>
                     }
+                     {
+                    proyectoId === "4" && 
+                    <li className="nk-menu-item">
+                      <Link 
+                        className="nk-menu-link"
+                        to="/administrarFuidCartagena">
+                          <span className="nk-menu-text">Gestionar Inventario</span> 
+                      </Link>  
+                    </li>
+                  }
                 </ul>
               </li>
               {proyectoId == 1 && 
@@ -217,13 +196,7 @@ export const AdminNavbar = () => {
                         <span className="sub-text">{rol}</span>
                       </div>
                     </div>
-                  </div>
-                  {/* <div className="dropdown-inner user-account-info">
-                    <h6 className="overline-title-alt">Folios Indexados</h6>
-                    <div className="user-balance">1,494</div>
-                    <div className="user-balance-sub">Folios por indexar <span>15,495</span></div>
-                    
-                  </div> */}
+                  </div>                
                   <div className="dropdown-inner">
                     <ul className="link-list">
                       {/* <li><a href="html/user-profile-regular.html"><em className="icon ni ni-user-alt" /><span>Administrar Usuario</span></a></li> */}
